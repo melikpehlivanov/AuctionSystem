@@ -5,6 +5,7 @@
     using AutoMapper;
     using Common.AutoMapping.Profiles;
     using Data;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -52,7 +53,10 @@
                 .AddEntityFrameworkStores<AuctionSystemDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication();
+            services
+                .AddDomainServices()
+                .AddApplicationServices()
+                .AddAuthentication();
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
