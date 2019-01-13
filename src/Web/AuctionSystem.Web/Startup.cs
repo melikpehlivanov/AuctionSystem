@@ -1,6 +1,7 @@
 ﻿namespace AuctionSystem.Web
 {
     using System;
+    using AuctionSystem.Models;
     using AutoMapper;
     using Common.AutoMapping.Profiles;
     using Data;
@@ -40,7 +41,7 @@
             services.AddDbContext<AuctionSystemDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<AuctionUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
@@ -50,6 +51,8 @@
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<AuctionSystemDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication();
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {

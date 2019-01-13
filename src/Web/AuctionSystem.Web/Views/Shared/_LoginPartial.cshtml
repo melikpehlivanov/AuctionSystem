@@ -1,6 +1,7 @@
+@using AuctionSystem.Models
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<AuctionUser> SignInManager
+@inject UserManager<AuctionUser> UserManager
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
