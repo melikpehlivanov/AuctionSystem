@@ -1,6 +1,8 @@
 ﻿namespace AuctionSystem.Web
 {
     using System;
+    using AutoMapper;
+    using Common.AutoMapping.Profiles;
     using Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -68,6 +70,8 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            Mapper.Initialize(config => config.AddProfile<DefaultProfile>());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
