@@ -12,4 +12,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\AuctionSystem.Data\AuctionSystem.Data.csproj" />
+    <ProjectReference Include="..\..\Data\AuctionSystem.Models\AuctionSystem.Models.csproj" />
+    <ProjectReference Include="..\..\Services\AuctionSystem.Services\AuctionSystem.Services.csproj" />
+  </ItemGroup>
+
 </Project>
