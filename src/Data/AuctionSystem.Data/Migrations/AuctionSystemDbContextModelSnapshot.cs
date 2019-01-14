@@ -2,6 +2,7 @@
 namespace AuctionSystem.Data.Migrations
 {
     using System;
+    using AuctionSystem.Data;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.EntityFrameworkCore.Metadata;
@@ -115,9 +116,6 @@ namespace AuctionSystem.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired();
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500);
@@ -130,6 +128,9 @@ namespace AuctionSystem.Data.Migrations
 
                     b.Property<decimal>("StartingPrice");
 
+                    b.Property<string>("SubCategoryId")
+                        .IsRequired();
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(120);
@@ -139,7 +140,7 @@ namespace AuctionSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("SubCategoryId");
 
                     b.HasIndex("UserId");
 
@@ -289,9 +290,9 @@ namespace AuctionSystem.Data.Migrations
 
             modelBuilder.Entity("AuctionSystem.Models.Item", b =>
                 {
-                    b.HasOne("AuctionSystem.Models.Category", "Category")
+                    b.HasOne("AuctionSystem.Models.SubCategory", "SubCategory")
                         .WithMany("Items")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AuctionSystem.Models.AuctionUser", "User")
