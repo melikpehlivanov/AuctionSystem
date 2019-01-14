@@ -30,9 +30,9 @@
         public DateTime EndTime { get; set; }
 
         [Required]
-        public string CategoryId { get; set; }
+        public string SubCategoryId { get; set; }
 
-        public Category Category { get; set; }
+        public SubCategory SubCategory { get; set; }
 
         [Required]
         public string UserId { get; set; }
