@@ -1,7 +1,7 @@
 @model ItemDetailsViewModel
 
 @{
-    ViewData["Title"] = "Item Details";
+    ViewData["Title"] = Model.Title;
 }
 
 @{
@@ -12,10 +12,12 @@
         <div class="col-12 col-md-8">
             <div>
                 <div class="tt-mobile-product-layout">
+                    @*TODO: Add images when we implement add image functionality*@
                     <img class="zoom-product" src="/default-img.jpg" data-zoom-image="/default-img.jpg" alt="">
                 </div>
                 <div class="images-carousel">
                     <ul id="smallGallery">
+                        @*TODO: Add images when we implement add image functionality*@
                         @*<li><a href="#" class="zoomGalleryActive" data-image="/default-img.jpg" data-zoom-image="/default-img.jpg"><img src="/default-img.jpg" alt="" /></a></li>*@
                     </ul>
                 </div>
