@@ -17,7 +17,8 @@
     {
         public static IApplicationBuilder SeedData(this IApplicationBuilder builder)
         {
-            using (var serviceScope = builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope =
+                builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<AuctionSystemDbContext>();
                 var userManager = serviceScope.ServiceProvider.GetService<UserManager<AuctionUser>>();
@@ -30,7 +31,8 @@
             return builder;
         }
 
-        private static async Task SeedRequiredData(AuctionSystemDbContext dbContext, UserManager<AuctionUser> userManager,
+        private static async Task SeedRequiredData(AuctionSystemDbContext dbContext,
+            UserManager<AuctionUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             await SeedCategories(dbContext);
@@ -43,18 +45,19 @@
         {
             if (!dbContext.Categories.Any())
             {
-                var categories = File.ReadAllText(WebConstants.ManufacturersPath);
+                var categories = File.ReadAllText(WebConstants.CategoriesPath);
 
                 var deserializedCategoriesWithSubCategories =
-                    JsonConvert.DeserializeObject<ManufacturerDto[]>(categories);
+                    JsonConvert.DeserializeObject<CategoryDto[]>(categories);
 
                 var allCategories = deserializedCategoriesWithSubCategories.Select(deserializedCategory => new Category
                 {
                     Name = deserializedCategory.Name,
-                    SubCategories = deserializedCategory.SubCategoryNames.Select(deserializedSubCategory => new SubCategory
-                    {
-                        Name = deserializedSubCategory.Name
-                    }).ToList()
+                    SubCategories = deserializedCategory.SubCategoryNames.Select(deserializedSubCategory =>
+                        new SubCategory
+                        {
+                            Name = deserializedSubCategory.Name
+                        }).ToList()
                 }).ToList();
 
                 await dbContext.AddRangeAsync(allCategories);
@@ -69,16 +72,29 @@
                 var allUsers = new List<AuctionUser>();
                 for (int i = 1; i <= 2; i++)
                 {
-                    var user = new AuctionUser { Email = $"test{i}@test.com", FullName = $"Test Testov{i}", UserName = $"test{i}@test.com" };
+                    var user = new AuctionUser
+                        {
+                            Email = $"test{i}@test.com",
+                            FullName = $"Test Testov{i}",
+                            UserName = $"test{i}@test.com"
+                        }
+                        ;
                     allUsers.Add(user);
                 }
+
                 foreach (var user in allUsers)
                 {
                     user.EmailConfirmed = true;
 
                     await userManager.CreateAsync(user, "test123");
                 }
-                var admin = new AuctionUser { Email = "admin@admin.com", FullName = "Admin Adminski", UserName = "admin@admin.com" };
+
+                var admin = new AuctionUser
+                {
+                    Email = "admin@admin.com",
+                    FullName = "Admin Adminski",
+                    UserName = "admin@admin.com"
+                };
                 await userManager.CreateAsync(admin, "admin123");
                 await userManager.AddToRoleAsync(admin, WebConstants.AdministratorRole);
             }
@@ -128,7 +144,7 @@
         }
     }
 
-    internal class ManufacturerDto
+    internal class CategoryDto
     {
         public string Name { get; set; }
 
