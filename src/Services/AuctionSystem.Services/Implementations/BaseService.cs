@@ -5,7 +5,7 @@ namespace AuctionSystem.Services.Implementations
     using Data;
     using Interfaces;
 
-    public abstract class BaseService : IService
+    public abstract class BaseService
     {
         protected readonly AuctionSystemDbContext Context;
 
