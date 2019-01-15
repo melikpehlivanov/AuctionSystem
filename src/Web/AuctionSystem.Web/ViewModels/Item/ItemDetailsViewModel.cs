@@ -20,6 +20,6 @@ namespace AuctionSystem.Web.ViewModels.Item
 
         public DateTime EndTime { get; set; }
 
-        public TimeSpan RemainingTime => DateTime.UtcNow - this.EndTime;
+        public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
     }
 }
