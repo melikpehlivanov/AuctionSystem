@@ -1,10 +1,71 @@
 @model ItemDetailsViewModel
 
 @{
-    ViewData["Title"] = "Item Details";
+    ViewData["Title"] = Model.Title;
 }
 
-<div class="text-center">
-    <p>id = @Model.Id</p>
-    <p>title = @Model.Title</p>
+@{
+    var calculatedPriceForPlaceHolder = Model.StartingPrice * 10;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <div>
+                <div class="tt-mobile-product-layout">
+                    @*TODO: Add images when we implement add image functionality*@
+                    <img class="zoom-product" src="/default-img.jpg" data-zoom-image="/default-img.jpg" alt="">
+                </div>
+                <div class="images-carousel">
+                    <ul id="smallGallery">
+                        @*TODO: Add images when we implement add image functionality*@
+                        @*<li><a href="#" class="zoomGalleryActive" data-image="/default-img.jpg" data-zoom-image="/default-img.jpg"><img src="/default-img.jpg" alt="" /></a></li>*@
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <div class="card">
+                    <div class="card-header py-3">
+                        <ul class="nav nav-pills card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Details</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <p>@Model.Description</p>
+                        <h5 class="card-title">Starting Bid</h5>
+                        <p class="card-text">$@Model.StartingPrice</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <h1>@Model.Title</h1>
+            @* TODO: implement this feature with signalr so that the user can know in real time how much time is left until the sale ends*@
+            @if (Model.EndTime > DateTime.UtcNow)
+            {
+                <span class="float-right">
+                    <span style="color: red">@Model.RemainingTime.Hours h</span>
+                    <span style="color: red">@Model.RemainingTime.Minutes m</span>
+                    <span style="color: red">@Model.RemainingTime.Seconds s</span>
+                </span>
+            }
+            <div class="pt-5 pb-5">
+                <div class="card border-dark" style="width: 22rem; background: #fbf6f4"                                                                                                                                                                      ">
+                    <div class="card-body">
+                        <p class="card-text">$@Model.StartingPrice</p>
+                        <div>
+                            <label>Your Bid:</label>
+                        </div>
+                        <div>
+                            <input class="form-control border-primary" type="number" placeholder="$@calculatedPriceForPlaceHolder"/>
+                        </div>
+                        <div class="p-2">
+                            <button class="btn btn-primary btn-lg btn-block">PLACE BID</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
