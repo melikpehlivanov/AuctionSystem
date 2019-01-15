@@ -2,7 +2,7 @@
 {
     public class WebConstants
     {
-        public const string ManufacturersPath = @"Resources/seedfiles/categories.json";
+        public const string CategoriesPath = "Resources/seedfiles/categories.json";
         public const string AdministratorRole = "Administrator";
     }
 }
