@@ -54,9 +54,13 @@
     </footer>
 
     <environment include="Development">
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.js" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
         <script src="/js/elevatezoom/jquery.elevatezoom.js"></script>
         <script src="/js/slick/slick.min.js"></script>
 
