@@ -42,7 +42,7 @@ namespace AuctionSystem.Web.Controllers
         {
             var model = new ItemCreateBindingModel
             {
-                SubCategories = await this.GetAllSubCategories()
+                SubCategories = await this.GetAllSubCategoriesAsync()
             };
 
             return this.View(model);
@@ -54,7 +54,7 @@ namespace AuctionSystem.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                model.SubCategories = await this.GetAllSubCategories();
+                model.SubCategories = await this.GetAllSubCategoriesAsync();
 
                 return this.View(model);
             }
@@ -69,7 +69,7 @@ namespace AuctionSystem.Web.Controllers
             {
                 //TODO: Add notification
 
-                model.SubCategories = await this.GetAllSubCategories();
+                model.SubCategories = await this.GetAllSubCategoriesAsync();
 
                 return this.View(model);
             }
@@ -78,7 +78,7 @@ namespace AuctionSystem.Web.Controllers
         }
 
         // Get all SubCategories and add them into SelectListGroups based on their parent categories
-        private async Task<IEnumerable<SelectListItem>> GetAllSubCategories()
+        private async Task<IEnumerable<SelectListItem>> GetAllSubCategoriesAsync()
         {
             var subCategories = (await this.categoriesService
                     .GetAllSubCategoriesAsync<SubCategoryListingServiceModel>())

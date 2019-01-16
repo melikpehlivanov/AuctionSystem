@@ -12,12 +12,12 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title"></label>
-                <input class="form-control" asp-for="Title" class="form-control"/>
+                <input class="form-control" asp-for="Title" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <textarea class="form-control" asp-for="Description" class="form-control"></textarea>
+                <textarea class="form-control" asp-for="Description"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,14 +34,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartingPrice"></label>
-                <input class="form-control" asp-for="StartingPrice" class="form-control"
-                       type="number" step="0.01" min="0.01"/>
+                <input class="form-control" asp-for="StartingPrice"
+                       type="number" placeholder="$300" value="" step="0.01" min="0.01"/>
                 <span asp-validation-for="StartingPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MinIncrease"></label>
-                <input class="form-control" asp-for="MinIncrease" class="form-control"
-                       type="number" step="0.01" min="0.01"/>
+                <input class="form-control" asp-for="MinIncrease"
+                     type="number" placeholder="$10" value="" step="0.01" min="0.01"/>
                 <span asp-validation-for="MinIncrease" class="text-danger"></span>
             </div>
             <div class="form-group">
