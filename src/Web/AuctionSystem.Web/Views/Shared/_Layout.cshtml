@@ -15,7 +15,12 @@
               crossorigin="anonymous"
               integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" 
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    
     <link rel="stylesheet" href="~/css/site.css" />
+
+    @RenderSection("CustomCss", required: false)
 </head>
 <body>
     <header>
@@ -80,6 +85,11 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/moment-helper.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
 
     @RenderSection("Scripts", required: false)
 </body>
