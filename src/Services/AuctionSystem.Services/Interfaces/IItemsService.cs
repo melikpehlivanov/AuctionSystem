@@ -7,5 +7,7 @@ namespace AuctionSystem.Services.Interfaces
     {
         Task<T> GetByIdAsync<T>(string id)
             where T : BaseItemServiceModel;
+
+        Task<string> CreateAsync(ItemCreateServiceModel serviceModel);
     }
 }
