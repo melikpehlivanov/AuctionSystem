@@ -41,13 +41,10 @@
         </div>
         <div class="col-12 col-md-4">
             <h1>@Model.Title</h1>
-            @* TODO: implement this feature with signalr so that the user can know in real time how much time is left until the sale ends*@
             @if (Model.EndTime > DateTime.UtcNow)
             {
-                <span class="float-right">
-                    <span style="color: red">@Model.RemainingTime.Hours h</span>
-                    <span style="color: red">@Model.RemainingTime.Minutes m</span>
-                    <span style="color: red">@Model.RemainingTime.Seconds s</span>
+                <span id="identifier" class="float-right">
+                    <span id="countdown" class="t-color-red"></span>
                 </span>
             }
             <div class="pt-5 pb-5">
@@ -58,7 +55,7 @@
                             <label>Your Bid:</label>
                         </div>
                         <div>
-                            <input class="form-control border-primary" type="number" placeholder="$@calculatedPriceForPlaceHolder"/>
+                            <input class="form-control border-primary" type="number" placeholder="$@calculatedPriceForPlaceHolder" />
                         </div>
                         <div class="p-2">
                             <button class="btn btn-primary btn-lg btn-block">PLACE BID</button>
@@ -69,3 +66,23 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        var eventTime = moment.utc('@Model.EndTime.ToString("O")').local();
+        var currentTime = moment();
+        var duration = moment.duration(eventTime.diff(currentTime));
+        var interval = 1000;
+        var identifier = $('#identifier').val();
+
+        setInterval(function () {
+                if (identifier == null) {
+                    return;
+                }
+                duration = moment.duration(duration - interval, 'milliseconds');
+                $('#countdown')
+                    .text(`${Math.round(duration.asDays())}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`);
+            },
+            interval);
+    </script>
+}
