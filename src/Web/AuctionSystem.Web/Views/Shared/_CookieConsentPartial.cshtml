@@ -7,20 +7,47 @@
 
 @if (showBanner)
 {
-    <div id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
-        Use this space to summarize your privacy and cookie use policy. <a asp-area="" asp-controller="Home" asp-action="Privacy">Learn More</a>.
-        <button type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
-            <span aria-hidden="true">Accept</span>
-        </button>
+    <div id="cookieConsent" class="alert alert-dismissible text-center cookiealert fade show" role="alert">
+        <div class="cookiealert-container">
+            &#x1F36A; We use cookies to ensure you get the best experience on our website. <a asp-controller="Home" asp-action="Privacy">Learn more</a>
+
+            <button type="button" class="btn btn-primary btn-sm" data-cookie-string="@cookieString" aria-label="Close">
+                I agree
+            </button>
+        </div>
     </div>
+
     <script>
-        (function() {
-            var button = document.querySelector("#cookieConsent button[data-cookie-string]");
-            button.addEventListener("click",
-                function(event) {
-                    document.cookie = button.dataset.cookieString;
-                },
-                false);
-        })();
+        var cookieAlert = document.querySelector(".cookiealert");
+        var acceptCookies = document.querySelector("#cookieConsent button[data-cookie-string]");
+        cookieAlert.offsetHeight; // Force browser to trigger reflow (https://stackoverflow.com/a/39451131)
+
+        // Show the alert if we cant find the "acceptCookies" cookie
+        if (!getCookie(".AspNet.Consent")) {
+            cookieAlert.classList.add("show");
+        }
+        
+        // cookie to remember user's choice and close the banner
+        acceptCookies.addEventListener("click",
+            function () {
+                document.cookie = acceptCookies.dataset.cookieString;
+                cookieAlert.classList.remove("show");
+            }, false);
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) === 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        };
     </script>
 }
