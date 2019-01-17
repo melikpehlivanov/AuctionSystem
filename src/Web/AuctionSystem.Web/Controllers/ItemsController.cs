@@ -23,6 +23,15 @@ namespace AuctionSystem.Web.Controllers
             this.categoriesService = categoriesService;
         }
 
+        public async Task<IActionResult> List(string id)
+        {
+            var items = (await this.itemsService.GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id))
+                .Select(Mapper.Map<ItemListingViewModel>)
+                .ToArray();
+
+            return this.View(items);
+        }
+
         public async Task<IActionResult> Details(string id)
         {
             var serviceModel = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
@@ -74,7 +83,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.View(model);
             }
 
-            return this.RedirectToAction("Details", new {id});
+            return this.RedirectToAction("Details", new { id });
         }
 
         // Get all SubCategories and add them into SelectListGroups based on their parent categories

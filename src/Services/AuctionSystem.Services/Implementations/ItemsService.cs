@@ -1,5 +1,7 @@
 namespace AuctionSystem.Services.Implementations
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AuctionSystem.Models;
     using AutoMapper;
@@ -11,7 +13,8 @@ namespace AuctionSystem.Services.Implementations
 
     public class ItemsService : BaseService, IItemsService
     {
-        public ItemsService(AuctionSystemDbContext context) : base(context)
+        public ItemsService(AuctionSystemDbContext context)
+            : base(context)
         {
         }
 
@@ -54,6 +57,23 @@ namespace AuctionSystem.Services.Implementations
             await this.Context.SaveChangesAsync();
 
             return item.Id;
+        }
+
+        public async Task<IEnumerable<T>> GetAllItemsInGivenCategoryByCategoryIdAsync<T>(string id)
+            where T : BaseItemServiceModel
+        {
+            if (id == null)
+            {
+                return null;
+            }
+            
+            var allItemsInGivenCategory = await this.Context
+                .Items
+                .Where(i => i.SubCategoryId == id)
+                .ProjectTo<T>()
+                .ToListAsync();
+
+            return allItemsInGivenCategory;
         }
     }
 }
