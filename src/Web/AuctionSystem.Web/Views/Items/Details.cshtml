@@ -81,7 +81,7 @@
                 }
                 duration = moment.duration(duration - interval, 'milliseconds');
                 $('#countdown')
-                    .text(`${Math.round(duration.asDays())}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`);
+                    .text(`${duration.asDays().toFixed()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`);
             },
             interval);
     </script>
