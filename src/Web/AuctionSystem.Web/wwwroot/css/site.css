@@ -86,6 +86,10 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
+.text-red {
+    color: red
+}
+
 /*-------  3.2 Slider Slick  --------*/
 /* Slider */
 .slick-slider {
