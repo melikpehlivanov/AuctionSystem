@@ -1,9 +1,11 @@
 namespace AuctionSystem.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Infrastructure.Collections;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,12 +25,25 @@ namespace AuctionSystem.Web.Controllers
             this.categoriesService = categoriesService;
         }
 
-        public async Task<IActionResult> List(string id)
+        public async Task<IActionResult> List(string id, int page = 1)
         {
-            var items = (await this.itemsService.GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id))
-                .Select(Mapper.Map<ItemListingViewModel>)
-                .ToArray();
+            var allItems = await this.itemsService
+                .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
+            
+            if (!allItems.Any())
+            {
+                return this.NotFound();
+            }
 
+            var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
+            page = Math.Min(page, Math.Max(1, totalPages));
+
+            var itemsToShow = allItems
+                .Skip((page - 1) * WebConstants.ItemsCountPerPage)
+                .Take(WebConstants.ItemsCountPerPage)
+                .ToList();
+
+            var items = new ItemListingViewModel { Items = new PaginatedList<ItemListingServiceModel>(itemsToShow, page, totalPages) };
             return this.View(items);
         }
 

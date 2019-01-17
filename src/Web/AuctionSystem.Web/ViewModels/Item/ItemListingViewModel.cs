@@ -1,14 +1,10 @@
 ﻿namespace AuctionSystem.Web.ViewModels.Item
 {
-    using Common.AutoMapping.Interfaces;
+    using Infrastructure.Collections;
     using Services.Models.Item;
 
-    public class ItemListingViewModel : IMapWith<ItemListingServiceModel>
+    public class ItemListingViewModel
     {
-        public string Id { get; set; }
-
-        public string Title { get; set; }
-
-        public decimal StartingPrice { get; set; }
+        public PaginatedList<ItemListingServiceModel> Items { get; set; }
     }
 }
