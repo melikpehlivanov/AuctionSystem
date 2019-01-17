@@ -18,14 +18,9 @@
     </div>
 
     <script>
-        var cookieAlert = document.querySelector(".cookiealert");
+        var cookieAlert = document.querySelector("#cookieConsent");
         var acceptCookies = document.querySelector("#cookieConsent button[data-cookie-string]");
         cookieAlert.offsetHeight; // Force browser to trigger reflow (https://stackoverflow.com/a/39451131)
-
-        // Show the alert if we cant find the "acceptCookies" cookie
-        if (!getCookie(".AspNet.Consent")) {
-            cookieAlert.classList.add("show");
-        }
         
         // cookie to remember user's choice and close the banner
         acceptCookies.addEventListener("click",
@@ -33,21 +28,5 @@
                 document.cookie = acceptCookies.dataset.cookieString;
                 cookieAlert.classList.remove("show");
             }, false);
-
-        function getCookie(cname) {
-            var name = cname + "=";
-            var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) === ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) === 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        };
     </script>
 }
