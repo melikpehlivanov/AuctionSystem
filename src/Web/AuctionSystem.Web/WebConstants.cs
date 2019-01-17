@@ -5,6 +5,6 @@
         public const string CategoriesPath = "Resources/SeedFiles/categories.json";
         public const string AdministratorRole = "Administrator";
 
-        public const int ItemsCountPerPage = 22;
+        public const int ItemsCountPerPage = 24;
     }
 }

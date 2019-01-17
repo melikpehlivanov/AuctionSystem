@@ -25,7 +25,7 @@ namespace AuctionSystem.Web.Controllers
             this.categoriesService = categoriesService;
         }
 
-        public async Task<IActionResult> List(string id, int page = 1)
+        public async Task<IActionResult> List(string id, int pageIndex = 1)
         {
             var allItems = await this.itemsService
                 .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
@@ -36,14 +36,14 @@ namespace AuctionSystem.Web.Controllers
             }
 
             var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
-            page = Math.Min(page, Math.Max(1, totalPages));
+            pageIndex = Math.Min(pageIndex, Math.Max(1, totalPages));
 
             var itemsToShow = allItems
-                .Skip((page - 1) * WebConstants.ItemsCountPerPage)
+                .Skip((pageIndex - 1) * WebConstants.ItemsCountPerPage)
                 .Take(WebConstants.ItemsCountPerPage)
                 .ToList();
 
-            var items = new ItemListingViewModel { Items = new PaginatedList<ItemListingServiceModel>(itemsToShow, page, totalPages) };
+            var items = new ItemListingViewModel { Items = new PaginatedList<ItemListingServiceModel>(itemsToShow, pageIndex, totalPages) };
             return this.View(items);
         }
 
