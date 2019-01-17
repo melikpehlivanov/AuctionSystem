@@ -62,16 +62,23 @@ namespace AuctionSystem.Services.Implementations
         public async Task<IEnumerable<T>> GetAllItemsInGivenCategoryByCategoryIdAsync<T>(string id)
             where T : BaseItemServiceModel
         {
+            List<T> allItemsInGivenCategory;
+
             if (id == null)
             {
-                return null;
+                allItemsInGivenCategory = await this.Context
+                    .Items
+                    .ProjectTo<T>()
+                    .ToListAsync();
             }
-            
-            var allItemsInGivenCategory = await this.Context
-                .Items
-                .Where(i => i.SubCategoryId == id)
-                .ProjectTo<T>()
-                .ToListAsync();
+            else
+            {
+                allItemsInGivenCategory = await this.Context
+                    .Items
+                    .Where(i => i.SubCategoryId == id)
+                    .ProjectTo<T>()
+                    .ToListAsync();
+            }
 
             return allItemsInGivenCategory;
         }

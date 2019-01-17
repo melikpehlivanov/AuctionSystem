@@ -29,7 +29,7 @@ namespace AuctionSystem.Web.Controllers
         {
             var allItems = await this.itemsService
                 .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
-            
+
             if (!allItems.Any())
             {
                 return this.NotFound();

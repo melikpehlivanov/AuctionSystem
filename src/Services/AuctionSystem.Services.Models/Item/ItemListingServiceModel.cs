@@ -6,5 +6,7 @@
         public string Title { get; set; }
 
         public decimal StartingPrice { get; set; }
+
+        public string UserFullName { get; set; }
     }
 }

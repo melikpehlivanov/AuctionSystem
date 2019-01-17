@@ -90,6 +90,10 @@ body {
     color: red
 }
 
+.text-gray {
+    color: gray;
+}
+
 /*-------  3.2 Slider Slick  --------*/
 /* Slider */
 .slick-slider {
