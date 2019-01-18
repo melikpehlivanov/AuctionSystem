@@ -13,6 +13,9 @@ namespace AuctionSystem.Services.Implementations
 
     public class ItemsService : BaseService, IItemsService
     {
+        private const string DefaultPictureUrl =
+            "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg";
+
         private readonly IPictureService pictureService;
 
         public ItemsService(AuctionSystemDbContext context, IPictureService pictureService)
@@ -63,6 +66,14 @@ namespace AuctionSystem.Services.Implementations
 
                     item.Pictures = pictureUrls;
                 }
+                else
+                {
+                    item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
+                }
+            }
+            else
+            {
+                item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
             }
 
             await this.Context.AddAsync(item);
