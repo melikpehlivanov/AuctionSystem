@@ -1,5 +1,6 @@
 namespace AuctionSystem.Services.Interfaces
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Models.Item;
 
@@ -9,5 +10,10 @@ namespace AuctionSystem.Services.Interfaces
             where T : BaseItemServiceModel;
 
         Task<string> CreateAsync(ItemCreateServiceModel serviceModel);
+
+        Task<IEnumerable<T>> GetAllItemsInGivenCategoryByCategoryIdAsync<T>(string id)
+            where T : BaseItemServiceModel;
+
+        Task<IEnumerable<T>> GetAllItems<T>();
     }
 }

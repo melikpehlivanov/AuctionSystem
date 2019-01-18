@@ -1,9 +1,11 @@
 namespace AuctionSystem.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Infrastructure.Collections;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,6 +23,38 @@ namespace AuctionSystem.Web.Controllers
         {
             this.itemsService = itemsService;
             this.categoriesService = categoriesService;
+        }
+
+        public async Task<IActionResult> List(string id, int pageIndex = 1)
+        {
+            IEnumerable<ItemListingServiceModel> allItems;
+
+            if (id == null)
+            {
+                allItems = await this.itemsService
+                    .GetAllItems<ItemListingServiceModel>();
+            }
+            else
+            {
+                allItems = await this.itemsService
+                    .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
+            }
+
+            if (!allItems.Any())
+            {
+                return this.NotFound();
+            }
+
+            var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
+            pageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
+
+            var itemsToShow = allItems
+                .Skip((pageIndex - 1) * WebConstants.ItemsCountPerPage)
+                .Take(WebConstants.ItemsCountPerPage)
+                .ToList();
+
+            var items = new ItemListingViewModel { Items = new PaginatedList<ItemListingServiceModel>(itemsToShow, pageIndex, totalPages) };
+            return this.View(items);
         }
 
         public async Task<IActionResult> Details(string id)
@@ -74,7 +108,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.View(model);
             }
 
-            return this.RedirectToAction("Details", new {id});
+            return this.RedirectToAction("Details", new { id });
         }
 
         // Get all SubCategories and add them into SelectListGroups based on their parent categories
