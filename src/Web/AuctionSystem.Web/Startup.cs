@@ -16,6 +16,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Services.Models;
 
     public class Startup
     {
@@ -29,12 +30,19 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            services
+                .Configure<CloudinaryOptions>(options =>
+                {
+                    options.CloudName = this.Configuration.GetSection("Cloudinary:CloudName").Value;
+                    options.ApiKey = this.Configuration.GetSection("Cloudinary:ApiKey").Value;
+                    options.ApiSecret = this.Configuration.GetSection("Cloudinary:ApiSecret").Value;
+                })
+                .Configure<CookiePolicyOptions>(options =>
+                {
+                    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                    options.CheckConsentNeeded = context => true;
+                    options.MinimumSameSitePolicy = SameSiteMode.None;
+                });
 
             services
                 .Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });

@@ -13,9 +13,15 @@ namespace AuctionSystem.Services.Implementations
 
     public class ItemsService : BaseService, IItemsService
     {
-        public ItemsService(AuctionSystemDbContext context)
+        private const string DefaultPictureUrl =
+            "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg";
+
+        private readonly IPictureService pictureService;
+
+        public ItemsService(AuctionSystemDbContext context, IPictureService pictureService)
             : base(context)
         {
+            this.pictureService = pictureService;
         }
 
         public async Task<T> GetByIdAsync<T>(string id)
@@ -49,10 +55,28 @@ namespace AuctionSystem.Services.Implementations
             }
 
             var item = Mapper.Map<Item>(serviceModel);
-
             item.UserId = user.Id;
-
+            
             await this.Context.AddAsync(item);
+
+            if (serviceModel.PictFormFiles.Any())
+            {
+                var uploadedPictures = this.pictureService.Upload(serviceModel.PictFormFiles, item.Id, serviceModel.Title).ToList();
+                if (uploadedPictures.Any())
+                {
+                    var pictureUrls = uploadedPictures.Select(picture => new Picture { Url = picture.Uri.AbsoluteUri }).ToList();
+
+                    item.Pictures = pictureUrls;
+                }
+                else
+                {
+                    item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
+                }
+            }
+            else
+            {
+                item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
+            }
 
             await this.Context.SaveChangesAsync();
 

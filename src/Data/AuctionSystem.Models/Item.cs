@@ -1,6 +1,7 @@
 ﻿namespace AuctionSystem.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class Item
@@ -24,11 +25,11 @@
         public decimal MinIncrease { get; set; }
 
         [Required]
-        public DateTime StartTime { get; set;}
+        public DateTime StartTime { get; set; }
 
         [Required]
         public DateTime EndTime { get; set; }
-
+        
         [Required]
         public string SubCategoryId { get; set; }
 
@@ -38,5 +39,7 @@
         public string UserId { get; set; }
 
         public AuctionUser User { get; set; }
+
+        public ICollection<Picture> Pictures { get; set; }
     }
 }
