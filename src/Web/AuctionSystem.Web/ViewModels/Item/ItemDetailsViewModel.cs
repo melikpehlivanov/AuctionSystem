@@ -1,7 +1,9 @@
 namespace AuctionSystem.Web.ViewModels.Item
 {
     using System;
+    using System.Collections.Generic;
     using Common.AutoMapping.Interfaces;
+    using Models;
     using Services.Models.Item;
 
     public class ItemDetailsViewModel : IMapWith<ItemDetailsServiceModel>
@@ -21,5 +23,7 @@ namespace AuctionSystem.Web.ViewModels.Item
         public DateTime EndTime { get; set; }
 
         public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
+
+        public ICollection<Picture> Pictures { get; set; }
     }
 }

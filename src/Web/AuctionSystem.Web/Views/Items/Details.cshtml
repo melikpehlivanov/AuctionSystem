@@ -6,19 +6,24 @@
 
 @{
     var calculatedPriceForPlaceHolder = Model.StartingPrice * 10;
+    var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
 }
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-8">
             <div>
                 <div class="tt-mobile-product-layout">
-                    @*TODO: Add images when we implement add image functionality*@
-                    <img class="zoom-product" src="/default-img.jpg" data-zoom-image="/default-img.jpg" alt="">
+                    <img class="zoom-product" src="@mainImage" data-zoom-image="@mainImage" alt="">
                 </div>
                 <div class="images-carousel">
                     <ul id="smallGallery">
-                        @*TODO: Add images when we implement add image functionality*@
-                        @*<li><a href="#" class="zoomGalleryActive" data-image="/default-img.jpg" data-zoom-image="/default-img.jpg"><img src="/default-img.jpg" alt="" /></a></li>*@
+                        @if (Model.Pictures.Count > 1)
+                        {
+                            foreach (var picture in Model.Pictures)
+                            {
+                                <li><a href="#" class="zoomGalleryActive" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
+                            }
+                        }
                     </ul>
                 </div>
             </div>
