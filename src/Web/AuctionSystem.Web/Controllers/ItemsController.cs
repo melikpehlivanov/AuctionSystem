@@ -42,7 +42,7 @@ namespace AuctionSystem.Web.Controllers
 
             if (!allItems.Any())
             {
-                return this.NotFound();
+                return RedirectToHome();
             }
 
             var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
@@ -63,7 +63,8 @@ namespace AuctionSystem.Web.Controllers
 
             if (serviceModel == null)
             {
-                return this.NotFound();
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                return this.RedirectToHome();
             }
 
             var viewModel = Mapper.Map<ItemDetailsViewModel>(serviceModel);
@@ -107,7 +108,7 @@ namespace AuctionSystem.Web.Controllers
 
                 return this.View(model);
             }
-            
+
             this.ShowSuccessMessage(NotificationMessages.ItemCreated);
 
             return this.RedirectToAction("Details", new { id });

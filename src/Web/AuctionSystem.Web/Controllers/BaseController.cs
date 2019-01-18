@@ -13,5 +13,7 @@ namespace AuctionSystem.Web.Controllers
         {
             this.TempData[WebConstants.TempDataSuccessMessageKey] = message;
         }
+
+        protected IActionResult RedirectToHome() => this.Redirect("/");
     }
 }
