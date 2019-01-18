@@ -73,11 +73,11 @@
                 for (int i = 1; i <= 2; i++)
                 {
                     var user = new AuctionUser
-                        {
-                            Email = $"test{i}@test.com",
-                            FullName = $"Test Testov{i}",
-                            UserName = $"test{i}@test.com"
-                        }
+                    {
+                        Email = $"test{i}@test.com",
+                        FullName = $"Test Testov{i}",
+                        UserName = $"test{i}@test.com"
+                    }
                         ;
                     allUsers.Add(user);
                 }
@@ -131,6 +131,7 @@
                             MinIncrease = random.Next(1, 100),
                             SubCategoryId = subCategory.Id,
                             UserId = dbContext.Users.First().Id,
+                            Pictures = new List<Picture> { new Picture { Url = "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg" } }
                         };
 
                         i++;
