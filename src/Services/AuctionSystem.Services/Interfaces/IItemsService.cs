@@ -13,5 +13,7 @@ namespace AuctionSystem.Services.Interfaces
 
         Task<IEnumerable<T>> GetAllItemsInGivenCategoryByCategoryIdAsync<T>(string id)
             where T : BaseItemServiceModel;
+
+        Task<IEnumerable<T>> GetAllItems<T>();
     }
 }

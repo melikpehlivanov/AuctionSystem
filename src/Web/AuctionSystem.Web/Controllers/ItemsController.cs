@@ -27,8 +27,18 @@ namespace AuctionSystem.Web.Controllers
 
         public async Task<IActionResult> List(string id, int pageIndex = 1)
         {
-            var allItems = await this.itemsService
-                .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
+            IEnumerable<ItemListingServiceModel> allItems;
+
+            if (id == null)
+            {
+                allItems = await this.itemsService
+                    .GetAllItems<ItemListingServiceModel>();
+            }
+            else
+            {
+                allItems = await this.itemsService
+                    .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
+            }
 
             if (!allItems.Any())
             {
