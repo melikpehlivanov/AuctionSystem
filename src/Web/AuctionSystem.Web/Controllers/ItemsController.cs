@@ -36,7 +36,7 @@ namespace AuctionSystem.Web.Controllers
             }
 
             var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
-            pageIndex = Math.Min(pageIndex, Math.Max(1, totalPages));
+            pageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
 
             var itemsToShow = allItems
                 .Skip((pageIndex - 1) * WebConstants.ItemsCountPerPage)
