@@ -101,14 +101,14 @@ namespace AuctionSystem.Web.Controllers
 
             if (id == null)
             {
-                this.Error(NotificationMessages.ItemCreateError);
+                this.ShowErrorMessage(NotificationMessages.ItemCreateError);
 
                 model.SubCategories = await this.GetAllSubCategoriesAsync();
 
                 return this.View(model);
             }
             
-            this.Success(NotificationMessages.ItemCreated);
+            this.ShowSuccessMessage(NotificationMessages.ItemCreated);
 
             return this.RedirectToAction("Details", new { id });
         }
