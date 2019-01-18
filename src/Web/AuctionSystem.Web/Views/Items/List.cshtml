@@ -8,9 +8,11 @@
     <div class="row">
         @foreach (var item in Model.Items)
         {
-            <div class="col-6 col-md-4 p-1">
-                <div class="card" style="width: 18rem;">
-                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id"><img src="~/default-img.jpg" class="card-img-top" alt="default-image"></a>
+            <div class="col-12 col-md-6 col-lg-4 p-1">
+                <div class="card shadow m-2">
+                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
+                        <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing" alt="image">
+                    </a>
                     <div class="card-body">
                         <h5 class="card-title"><a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h5>
                         <p class="text-gray">@item.UserFullName</p>

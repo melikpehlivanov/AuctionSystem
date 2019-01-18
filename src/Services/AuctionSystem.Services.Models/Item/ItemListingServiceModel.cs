@@ -1,12 +1,16 @@
 ﻿namespace AuctionSystem.Services.Models.Item
 {
+    using System.Collections.Generic;
+    using Picture;
+
     public class ItemListingServiceModel : BaseItemServiceModel
     {
-        //TODO: Add picture when we implement it
         public string Title { get; set; }
 
         public decimal StartingPrice { get; set; }
 
         public string UserFullName { get; set; }
+
+        public ICollection<PictureDisplayServiceModel> Pictures { get; set; }
     }
 }
