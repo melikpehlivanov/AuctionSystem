@@ -10,11 +10,11 @@
         {
             <div class="col-12 col-md-6 col-lg-4 p-1">
                 <div class="card shadow m-2">
-                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">
+                    <a href="@item.Url">
                         <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing" alt="image">
                     </a>
                     <div class="card-body">
-                        <h5 class="card-title"><a asp-controller="Items" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h5>
+                        <h5 class="card-title"><a href="@item.Url">@item.Title</a></h5>
                         <p class="text-gray">@item.UserFullName</p>
                         @*We might add remaining time until the auction starts here also*@
                         <p class="card-text">$@item.StartingPrice</p>
