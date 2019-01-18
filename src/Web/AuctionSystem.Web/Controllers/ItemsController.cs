@@ -7,6 +7,7 @@ namespace AuctionSystem.Web.Controllers
     using AutoMapper;
     using Infrastructure.Collections;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Services.Interfaces;

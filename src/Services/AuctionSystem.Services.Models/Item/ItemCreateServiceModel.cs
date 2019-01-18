@@ -1,7 +1,10 @@
 namespace AuctionSystem.Services.Models.Item
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Http;
 
     public class ItemCreateServiceModel : BaseItemServiceModel
     {
@@ -32,5 +35,7 @@ namespace AuctionSystem.Services.Models.Item
 
         [Required]
         public string UserName { get; set; }
+        
+        public ICollection<IFormFile> PictFormFiles { get; set; }
     }
 }

@@ -11,5 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="CloudinaryDotNet" Version="1.6.0" />
   </ItemGroup>
 </Project>

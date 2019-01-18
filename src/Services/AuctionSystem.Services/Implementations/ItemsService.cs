@@ -13,9 +13,12 @@ namespace AuctionSystem.Services.Implementations
 
     public class ItemsService : BaseService, IItemsService
     {
-        public ItemsService(AuctionSystemDbContext context)
+        private readonly IPictureService pictureService;
+
+        public ItemsService(AuctionSystemDbContext context, IPictureService pictureService)
             : base(context)
         {
+            this.pictureService = pictureService;
         }
 
         public async Task<T> GetByIdAsync<T>(string id)
@@ -49,11 +52,20 @@ namespace AuctionSystem.Services.Implementations
             }
 
             var item = Mapper.Map<Item>(serviceModel);
-
             item.UserId = user.Id;
 
-            await this.Context.AddAsync(item);
+            if (serviceModel.PictFormFiles.Any())
+            {
+                var uploadedPictures = this.pictureService.Upload(serviceModel.PictFormFiles, serviceModel.UserName, serviceModel.Title).ToList();
+                if (uploadedPictures.Any())
+                {
+                    var pictureUrls = uploadedPictures.Select(picture => new Picture { Url = picture.Uri.AbsoluteUri }).ToList();
 
+                    item.Pictures = pictureUrls;
+                }
+            }
+
+            await this.Context.AddAsync(item);
             await this.Context.SaveChangesAsync();
 
             return item.Id;

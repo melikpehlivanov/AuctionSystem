@@ -4,6 +4,7 @@ namespace AuctionSystem.Web.ViewModels.Item
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Common.AutoMapping.Interfaces;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Services.Models.Item;
 
@@ -42,6 +43,8 @@ namespace AuctionSystem.Web.ViewModels.Item
         [Required]
         [Display(Name = "Category")]
         public string SubCategoryId { get; set; }
+
+        public ICollection<IFormFile> PictFormFiles { get; set; }
 
         public IEnumerable<SelectListItem> SubCategories { get; set; }
 
