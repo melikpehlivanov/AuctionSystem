@@ -1,6 +1,7 @@
 ﻿@model ItemListingViewModel
 @{
     ViewData["Title"] = "List";
+    const int surroundingPagesCount = 3;
 }
 
 <div class="container">
@@ -27,6 +28,9 @@
     var nextDisabled = !Model.Items.HasNextPage ? "disabled" : "";
     var firstDisabled = Model.Items.PageIndex == 1 ? "disabled" : "";
     var lastDisabled = Model.Items.TotalPages <= Model.Items.PageIndex ? "disabled" : "";
+
+    var firstShownPage = Math.Max(1, Model.Items.PageIndex - surroundingPagesCount);
+    var lastShownPage = Math.Min(Model.Items.TotalPages, Model.Items.PageIndex + surroundingPagesCount);
 }
 
 @if (Model.Items.Any())
@@ -38,15 +42,30 @@
         <li class="page-item @prevDisabled">
             <a class="page-link" asp-route-pageIndex="@(Model.Items.PageIndex - 1)">Previous</a>
         </li>
+
+        @for (int i = firstShownPage; i < Model.Items.PageIndex; i++)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageIndex="@i">@i</a>
+            </li>
+        }
+
         <li class="page-item active">
-            <a class="page-link active">@Model.Items.PageIndex</a>
+            <button class="page-link active">@Model.Items.PageIndex</button>
         </li>
+
+        @for (int i = Model.Items.PageIndex + 1; i <= lastShownPage; i++)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-pageIndex="@i">@i</a>
+            </li>
+        }
+
         <li class="page-item @nextDisabled">
             <a class="page-link" asp-route-pageIndex="@(Model.Items.PageIndex + 1)">Next</a>
         </li>
         <li class="page-item @lastDisabled">
-            <a class="page-link" asp-route-pageIndex="@(Model.Items.TotalPages)">Last Page</a>
+            <a class="page-link" asp-route-pageIndex="@(Model.Items.TotalPages)">Last</a>
         </li>
     </ul>
 }
-
