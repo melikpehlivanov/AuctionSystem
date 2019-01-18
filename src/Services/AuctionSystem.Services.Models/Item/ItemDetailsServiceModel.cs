@@ -2,7 +2,7 @@ namespace AuctionSystem.Services.Models.Item
 {
     using System;
     using System.Collections.Generic;
-    using AuctionSystem.Models;
+    using Picture;
 
     public class ItemDetailsServiceModel : BaseItemServiceModel
     {
@@ -18,6 +18,6 @@ namespace AuctionSystem.Services.Models.Item
 
         public DateTime EndTime { get; set; }
 
-        public ICollection<Picture> Pictures { get; set; }
+        public ICollection<PictureDisplayServiceModel> Pictures { get; set; }
     }
 }
