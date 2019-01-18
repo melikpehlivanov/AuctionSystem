@@ -14,7 +14,7 @@ namespace AuctionSystem.Web.Controllers
     using Services.Models.SubCategory;
     using ViewModels.Item;
 
-    public class ItemsController : Controller
+    public class ItemsController : BaseController
     {
         private readonly IItemsService itemsService;
         private readonly ICategoriesService categoriesService;
@@ -42,7 +42,7 @@ namespace AuctionSystem.Web.Controllers
 
             if (!allItems.Any())
             {
-                return this.NotFound();
+                return RedirectToHome();
             }
 
             var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
@@ -63,7 +63,8 @@ namespace AuctionSystem.Web.Controllers
 
             if (serviceModel == null)
             {
-                return this.NotFound();
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                return this.RedirectToHome();
             }
 
             var viewModel = Mapper.Map<ItemDetailsViewModel>(serviceModel);
@@ -101,12 +102,14 @@ namespace AuctionSystem.Web.Controllers
 
             if (id == null)
             {
-                //TODO: Add notification
+                this.ShowErrorMessage(NotificationMessages.ItemCreateError);
 
                 model.SubCategories = await this.GetAllSubCategoriesAsync();
 
                 return this.View(model);
             }
+
+            this.ShowSuccessMessage(NotificationMessages.ItemCreated);
 
             return this.RedirectToAction("Details", new { id });
         }

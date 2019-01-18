@@ -47,6 +47,35 @@
         </nav>
     </header>
     <div class="container">
+        @if (TempData.ContainsKey(WebConstants.TempDataSuccessMessageKey))
+        {
+            <div class="alert alert-primary fade show mb-0" role="alert">
+                <div class="container d-flex flex-row">
+                    <i class="fas fa-check fa-2x align-self-center"></i>
+                    <p class="pl-3 my-2" style="font-size: large;">@TempData[WebConstants.TempDataSuccessMessageKey]</p>
+                    <div class="ml-auto">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (TempData.ContainsKey(WebConstants.TempDataErrorMessageKey))
+        {
+            <div class="alert alert-danger fade show mb-0" role="alert">
+                <div class="container d-flex flex-row">
+                    <i class="fas fa-exclamation-circle fa-2x align-self-center"></i>
+                    <p class="pl-3 my-2" style="font-size: large;">@TempData[WebConstants.TempDataErrorMessageKey]</p>
+                    <div class="ml-auto">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
