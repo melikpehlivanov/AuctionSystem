@@ -1,6 +1,8 @@
 ﻿namespace AuctionSystem.Services.Implementations
 {
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Data;
@@ -29,17 +31,17 @@
 
         public IEnumerable<ImageUploadResult> Upload(ICollection<IFormFile> pictures, string username, string title)
         {
-            var uploadResults = new List<ImageUploadResult>();
-            foreach (var picture in pictures)
+            var uploadResults = new ConcurrentBag<ImageUploadResult>();
+            Parallel.ForEach(pictures, (picture) =>
             {
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(picture.FileName, picture.OpenReadStream()),
                     Folder = $"{username}/{title}"
                 };
-                var uploadResult = this.cloudinary.Upload(uploadParams);
+                var uploadResult = this.cloudinary.UploadLarge(uploadParams);
                 uploadResults.Add(uploadResult);
-            }
+            });
 
             return uploadResults;
         }

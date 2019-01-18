@@ -1,5 +1,6 @@
 ﻿namespace AuctionSystem.Services.Interfaces
 {
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
