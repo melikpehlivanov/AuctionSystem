@@ -56,10 +56,12 @@ namespace AuctionSystem.Services.Implementations
 
             var item = Mapper.Map<Item>(serviceModel);
             item.UserId = user.Id;
+            
+            await this.Context.AddAsync(item);
 
             if (serviceModel.PictFormFiles.Any())
             {
-                var uploadedPictures = this.pictureService.Upload(serviceModel.PictFormFiles, serviceModel.UserName, serviceModel.Title).ToList();
+                var uploadedPictures = this.pictureService.Upload(serviceModel.PictFormFiles, item.Id, serviceModel.Title).ToList();
                 if (uploadedPictures.Any())
                 {
                     var pictureUrls = uploadedPictures.Select(picture => new Picture { Url = picture.Uri.AbsoluteUri }).ToList();
@@ -76,7 +78,6 @@ namespace AuctionSystem.Services.Implementations
                 item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
             }
 
-            await this.Context.AddAsync(item);
             await this.Context.SaveChangesAsync();
 
             return item.Id;

@@ -29,7 +29,7 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public IEnumerable<ImageUploadResult> Upload(ICollection<IFormFile> pictures, string username, string title)
+        public IEnumerable<ImageUploadResult> Upload(ICollection<IFormFile> pictures, string itemId, string title)
         {
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
             Parallel.ForEach(pictures, (picture) =>
@@ -37,7 +37,7 @@
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(picture.FileName, picture.OpenReadStream()),
-                    Folder = $"{username}/{title}"
+                    Folder = $"{title}/{itemId}"
                 };
                 var uploadResult = this.cloudinary.UploadLarge(uploadParams);
                 uploadResults.Add(uploadResult);
