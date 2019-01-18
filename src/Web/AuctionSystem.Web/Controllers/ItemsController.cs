@@ -14,7 +14,7 @@ namespace AuctionSystem.Web.Controllers
     using Services.Models.SubCategory;
     using ViewModels.Item;
 
-    public class ItemsController : Controller
+    public class ItemsController : BaseController
     {
         private readonly IItemsService itemsService;
         private readonly ICategoriesService categoriesService;
