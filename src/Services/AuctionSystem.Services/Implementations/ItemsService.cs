@@ -8,6 +8,7 @@ namespace AuctionSystem.Services.Implementations
     using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Models.Item;
 
@@ -56,27 +57,11 @@ namespace AuctionSystem.Services.Implementations
 
             var item = Mapper.Map<Item>(serviceModel);
             item.UserId = user.Id;
-            
+
             await this.Context.AddAsync(item);
 
-            if (serviceModel.PictFormFiles.Any())
-            {
-                var uploadedPictures = this.pictureService.Upload(serviceModel.PictFormFiles, item.Id, serviceModel.Title).ToList();
-                if (uploadedPictures.Any())
-                {
-                    var pictureUrls = uploadedPictures.Select(picture => new Picture { Url = picture.Uri.AbsoluteUri }).ToList();
-
-                    item.Pictures = pictureUrls;
-                }
-                else
-                {
-                    item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
-                }
-            }
-            else
-            {
-                item.Pictures = new List<Picture> { new Picture { Url = DefaultPictureUrl } };
-            }
+            item.Pictures = serviceModel.PictFormFiles.Any() ? this.GetPictureUrls(serviceModel.PictFormFiles, item.Id, serviceModel.Title)
+                : new List<Picture> { new Picture { Url = DefaultPictureUrl } };
 
             await this.Context.SaveChangesAsync();
 
@@ -105,5 +90,16 @@ namespace AuctionSystem.Services.Implementations
                     .Items
                     .ProjectTo<T>()
                     .ToListAsync();
+
+        #region privateMethods
+
+        private ICollection<Picture> GetPictureUrls(ICollection<IFormFile> pictures, string itemId, string title)
+        {
+            var uploadedPictures = this.pictureService.Upload(pictures, itemId, title).ToList();
+            return uploadedPictures.Any() ? uploadedPictures.Select(picture => new Picture { Url = picture.Uri.AbsoluteUri }).ToList()
+                : new List<Picture> { new Picture { Url = DefaultPictureUrl } };
+        }
+
+        #endregion
     }
 }
