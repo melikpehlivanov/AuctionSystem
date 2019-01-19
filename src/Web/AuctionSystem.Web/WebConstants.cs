@@ -3,7 +3,6 @@
     public class WebConstants
     {
         public const string AppMainEmailAddress = "mytestedauctionsystem@gmail.com";
-        public const string EmailSentSuccessfully = "Email was sent successfully";
 
         public const string CategoriesPath = "Resources/SeedFiles/categories.json";
         public const string AdministratorRole = "Administrator";

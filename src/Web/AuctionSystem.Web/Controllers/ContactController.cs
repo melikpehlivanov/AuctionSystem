@@ -14,10 +14,9 @@
             this.emailSender = emailSender;
         }
 
-        [HttpGet("/Home/Contact")]
-        public IActionResult ContactUs() => this.PartialView("_ContactUsPartial");
+        public IActionResult Index() => this.PartialView("_ContactUsPartial");
 
-        public async Task<IActionResult> OnPostAsync(ContactUsViewModel model)
+        public async Task<IActionResult> SendMessage(ContactUsViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -27,7 +26,7 @@
             await this.emailSender.SendEmailAsync(model.Email, WebConstants.AppMainEmailAddress, model.Subject,
                 model.Message);
 
-            this.ShowSuccessMessage(WebConstants.EmailSentSuccessfully);
+            this.ShowSuccessMessage(NotificationMessages.EmailSentSuccessfully);
             return this.RedirectToHome();
         }
     }
