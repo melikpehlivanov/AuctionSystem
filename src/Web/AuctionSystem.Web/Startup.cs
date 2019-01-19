@@ -6,6 +6,7 @@
     using Common.AutoMapping.Profiles;
     using Data;
     using Infrastructure.Extensions;
+    using Infrastructure.Utilities;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -36,6 +37,10 @@
                     options.CloudName = this.Configuration.GetSection("Cloudinary:CloudName").Value;
                     options.ApiKey = this.Configuration.GetSection("Cloudinary:ApiKey").Value;
                     options.ApiSecret = this.Configuration.GetSection("Cloudinary:ApiSecret").Value;
+                })
+                .Configure<SendGridOptions>(options =>
+                {
+                    options.SendGridApiKey = this.Configuration.GetSection("SendGrid:ApiKey").Value;
                 })
                 .Configure<CookiePolicyOptions>(options =>
                 {
