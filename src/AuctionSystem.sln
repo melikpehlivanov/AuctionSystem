@@ -9,17 +9,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{FDF915C3-EDE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B6338757-0F55-41F1-AD49-83E28CF119E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Data", "Data\AuctionSystem.Data\AuctionSystem.Data.csproj", "{73D18CC9-BF44-44CF-9A73-43D31AFF31B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Data", "Data\AuctionSystem.Data\AuctionSystem.Data.csproj", "{73D18CC9-BF44-44CF-9A73-43D31AFF31B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Models", "Data\AuctionSystem.Models\AuctionSystem.Models.csproj", "{F1AE69C2-B168-4B3D-B601-8104732789C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Models", "Data\AuctionSystem.Models\AuctionSystem.Models.csproj", "{F1AE69C2-B168-4B3D-B601-8104732789C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Services", "Services\AuctionSystem.Services\AuctionSystem.Services.csproj", "{43ED2ABB-D24C-4E92-B2FD-246BE2EE40E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Services", "Services\AuctionSystem.Services\AuctionSystem.Services.csproj", "{43ED2ABB-D24C-4E92-B2FD-246BE2EE40E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Web", "Web\AuctionSystem.Web\AuctionSystem.Web.csproj", "{9C4038AE-48C7-4E20-8B1D-CFA5412CC218}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Web", "Web\AuctionSystem.Web\AuctionSystem.Web.csproj", "{9C4038AE-48C7-4E20-8B1D-CFA5412CC218}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Common", "AuctionSystem.Common\AuctionSystem.Common.csproj", "{0F6AA44B-811C-4DF2-8431-1D6C068BBCBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Common", "AuctionSystem.Common\AuctionSystem.Common.csproj", "{0F6AA44B-811C-4DF2-8431-1D6C068BBCBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSystem.Services.Models", "Services\AuctionSystem.Services.Models\AuctionSystem.Services.Models.csproj", "{E7FAC3C8-A8D8-4427-8573-E01081F58074}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Services.Models", "Services\AuctionSystem.Services.Models\AuctionSystem.Services.Models.csproj", "{E7FAC3C8-A8D8-4427-8573-E01081F58074}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Services.Tests", "Tests\AuctionSystem.Services.Tests\AuctionSystem.Services.Tests.csproj", "{320DC95E-53CE-4D63-A0DD-668E18CBB651}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22C6C924-10A9-4887-B110-70D7008EDDE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,10 @@ Global
 		{E7FAC3C8-A8D8-4427-8573-E01081F58074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7FAC3C8-A8D8-4427-8573-E01081F58074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7FAC3C8-A8D8-4427-8573-E01081F58074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{320DC95E-53CE-4D63-A0DD-668E18CBB651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{320DC95E-53CE-4D63-A0DD-668E18CBB651}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{320DC95E-53CE-4D63-A0DD-668E18CBB651}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{320DC95E-53CE-4D63-A0DD-668E18CBB651}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +69,7 @@ Global
 		{43ED2ABB-D24C-4E92-B2FD-246BE2EE40E4} = {AF06CF90-A1D2-456C-80A2-0B4F441686E2}
 		{9C4038AE-48C7-4E20-8B1D-CFA5412CC218} = {FDF915C3-EDEA-4BC7-AFDE-93AF98EF73B6}
 		{E7FAC3C8-A8D8-4427-8573-E01081F58074} = {AF06CF90-A1D2-456C-80A2-0B4F441686E2}
+		{320DC95E-53CE-4D63-A0DD-668E18CBB651} = {22C6C924-10A9-4887-B110-70D7008EDDE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {33975802-C020-4095-964C-7BA121AFED57}
