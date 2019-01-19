@@ -62,8 +62,8 @@
         {
             // Arrange
             const string testId = "sampleTestId";
-            this.dbContext.Items.Add(new Item { Id = testId });
-            this.dbContext.SaveChanges();
+            await this.dbContext.Items.AddAsync(new Item { Id = testId });
+            await this.dbContext.SaveChangesAsync();
             // Act
             var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(testId);
 
@@ -81,10 +81,10 @@
             const int count = 4;
             for (int i = 1; i <= count; i++)
             {
-                this.dbContext.Items.Add(new Item { Id = i.ToString(), Title = $"Title_{i}" });
+                await this.dbContext.Items.AddAsync(new Item { Id = i.ToString(), Title = $"Title_{i}" });
 
             }
-            this.dbContext.SaveChanges();
+            await this.dbContext.SaveChangesAsync();
 
             // Act
             var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(testId);
@@ -285,8 +285,7 @@
         public async Task CreateAsync_WithValidModel_ShouldReturnId_AndInsertItemInDatabase()
         {
             // Arrange
-            this.dbContext.Users.Add(new AuctionUser { UserName = SampleUsername });
-            this.dbContext.SubCategories.Add(new SubCategory { Id = SampleSubCategoryId });
+            await this.SeedUserAndSubCategory();
             this.dbContext.SaveChanges();
             var item = new ItemCreateServiceModel
             {
@@ -322,9 +321,7 @@
         public async Task CreateAsync_WithValidModelAndPictures_ShouldReturnId_AndInsertItemInDatabase()
         {
             // Arrange
-            this.dbContext.Users.Add(new AuctionUser { UserName = SampleUsername });
-            this.dbContext.SubCategories.Add(new SubCategory { Id = SampleSubCategoryId });
-            this.dbContext.SaveChanges();
+            await this.SeedUserAndSubCategory();
             var item = new ItemCreateServiceModel
             {
                 Id = SampleId,
@@ -334,7 +331,7 @@
                 MinIncrease = SampleMinIncrease,
                 StartTime = SampleStartTime,
                 EndTime = SampleEndTime,
-                SubCategoryId = SampleSubCategoryId,
+                SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
                 UserName = SampleUsername,
                 PictFormFiles = new List<IFormFile> { new FormFile(Stream.Null, 200000, 50, "SampleName", "SampleFileName") },
             };
@@ -354,5 +351,98 @@
                 .Should()
                 .HaveCount(1);
         }
+
+        [Fact]
+        public async Task GetAllItemsInGivenCategoryByCategoryIdAsync_WithInvalidId_ShouldReturnNull()
+        {
+            // Arrange
+            const int count = 1;
+            await this.SeedItems(count);
+            // Act
+            var result = await this.itemsService.GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(null);
+
+            // Assert
+            result
+                .Should()
+                .BeNull();
+        }
+
+        [Fact]
+        public async Task GetAllItemsInGivenCategoryByCategoryIdAsync_WithValidId_ShouldReturnCollectionOfCorrectModels()
+        {
+            // Arrange
+            const int count = 10;
+            await this.SeedItems(count);
+            // Act
+            var result = await this.itemsService.GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(SampleSubCategoryId);
+
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<IEnumerable<ItemListingServiceModel>>()
+                .And
+                .HaveCount(count);
+        }
+
+        [Fact]
+        public async Task GetAllItems_ShouldReturnCollectionOfCorrectModels()
+        {
+            // Arrange
+            const int count = 10;
+            await this.SeedItems(count);
+
+            // Act
+            var result = await this.itemsService.GetAllItems<ItemListingServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<IEnumerable<ItemListingServiceModel>>();
+        }
+
+        #region privateMethods
+
+        private async Task SeedItems(int count)
+        {
+            await this.SeedUserAndSubCategory();
+
+            var items = new List<Item>();
+            for (int i = 1; i <= count; i++)
+            {
+                var item = new Item
+                {
+                    Title = SampleTitle,
+                    Description = SampleDescription,
+                    StartingPrice = SampleStartingPrice,
+                    MinIncrease = SampleMinIncrease,
+                    StartTime = SampleStartTime,
+                    EndTime = SampleEndTime,
+                    UserId = this.dbContext.Users.FirstOrDefault()?.Id,
+                    SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
+                };
+                items.Add(item);
+            }
+            for (int i = count + 1; i <= count + count; i++)
+            {
+                var item = new Item
+                {
+                    Id = i.ToString(),
+                    Description = $"Item_{i}",
+                };
+                items.Add(item);
+            }
+
+            await this.dbContext.Items.AddRangeAsync(items);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        private async Task SeedUserAndSubCategory()
+        {
+            await this.dbContext.Users.AddAsync(new AuctionUser { UserName = SampleUsername });
+            await this.dbContext.SubCategories.AddAsync(new SubCategory { Id = SampleSubCategoryId });
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        #endregion
     }
 }

@@ -12,7 +12,6 @@
 
     public class CategoriesServiceTests : BaseTest
     {
-        private const string SampleCategoryName = "Fashion";
         private const string SampleSubCategoryName = "Watches";
 
         private readonly AuctionSystemDbContext dbContext;
