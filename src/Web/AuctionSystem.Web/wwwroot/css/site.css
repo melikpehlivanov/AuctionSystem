@@ -100,6 +100,9 @@ body {
     color: gray;
 }
 
+.custom-card-color {
+    background: #fbf6f4;
+}
 /*-------  3.2 Slider Slick  --------*/
 /* Slider */
 .slick-slider {
