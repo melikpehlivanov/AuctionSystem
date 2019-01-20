@@ -96,7 +96,7 @@ namespace AuctionSystem.Services.Implementations
         private ICollection<Picture> GetPictureUrls(ICollection<IFormFile> pictures, string itemId, string title)
         {
             var uploadedPictures = this.pictureService.Upload(pictures, itemId, title).ToList();
-            return uploadedPictures.Any() ? uploadedPictures.Select(picture => new Picture { Url = picture.Uri.AbsoluteUri }).ToList()
+            return uploadedPictures.Any() ? uploadedPictures.Select(picture => new Picture { Url = picture.SecureUri.AbsoluteUri }).ToList()
                 : new List<Picture> { new Picture { Url = DefaultPictureUrl } };
         }
 
