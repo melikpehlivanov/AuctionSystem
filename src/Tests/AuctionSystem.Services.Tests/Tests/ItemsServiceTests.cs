@@ -37,19 +37,15 @@
             this.itemsService = new ItemsService(this.dbContext, Mock.Of<IPictureService>());
         }
 
-        [Theory]
-        [InlineData(" !")]
-        [InlineData(" ")]
-        [InlineData("  ")]
-        [InlineData(null)]
-        public async Task GetByIdAsync_WithInvalidId_ShouldReturnEmptyModel(string id)
+        [Fact]
+        public async Task GetByIdAsync_WithInvalidId_ShouldReturnEmptyModel()
         {
             // Arrange
             await this.dbContext.Items.AddAsync(new Item { Description = SampleDescription });
             await this.dbContext.SaveChangesAsync();
 
             // Act
-            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
+            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(null);
 
             // Assert
             result
