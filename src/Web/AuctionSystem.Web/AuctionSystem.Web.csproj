@@ -24,4 +24,9 @@
     <ProjectReference Include="..\..\Services\AuctionSystem.Services\AuctionSystem.Services.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Areas\Bid\Models\" />
+  </ItemGroup>
+
 </Project>
