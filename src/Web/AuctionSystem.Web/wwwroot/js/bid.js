@@ -21,7 +21,6 @@ connection.on('ReceivedMessage',
         let nextValue = bidAmount + (bidAmount * 0.1);
 
         if (bidAmount > highestBid) {
-            console.log('hit the if');
             changeCurrentBidValueOnTenPercentHigherBidButton(nextValue);
         }
 
@@ -89,7 +88,9 @@ function createBid() {
     let bidInput = document.getElementById('bid-amount');
     let bidAmount = bidInput.value;
     let bidMinAttribute = bidInput.min;
-    if (bidMinAttribute < bidAmount) {
+    if (bidMinAttribute > bidAmount || bidAmount < highestBidInput.val()) {
+        //TODO: Add better notifications
+        alert("There's no point bidding lower amount than the highest.");
         return;
     }
 
