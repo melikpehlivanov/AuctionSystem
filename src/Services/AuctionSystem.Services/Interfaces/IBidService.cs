@@ -6,5 +6,7 @@
     public interface IBidService
     {
         Task<bool> CreateBidAsync(BidCreateServiceModel model);
+
+        Task<decimal?> GetHighestBidAmountForGivenItemAsync(string id);
     }
 }

@@ -1,15 +1,17 @@
 ﻿namespace AuctionSystem.Services.Implementations
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using AuctionSystem.Models;
     using AutoMapper;
     using Data;
     using Interfaces;
+    using Microsoft.EntityFrameworkCore;
     using Models.Bid;
 
     public class BidService : BaseService, IBidService
     {
-        public BidService(AuctionSystemDbContext context) 
+        public BidService(AuctionSystemDbContext context)
             : base(context)
         {
         }
@@ -34,6 +36,21 @@
             {
                 return false;
             }
+        }
+
+        public async Task<decimal?> GetHighestBidAmountForGivenItemAsync(string id)
+        {
+            var highestBid = await this.Context
+                .Bids
+                .Select(b => new
+                {
+                    b.Amount,
+                    b.ItemId
+                })
+                .OrderByDescending(b => b.Amount)
+                .FirstOrDefaultAsync(b => b.ItemId == id);
+
+            return highestBid?.Amount;
         }
     }
 }
