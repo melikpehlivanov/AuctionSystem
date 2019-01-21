@@ -6,9 +6,10 @@
     using Models;
     using Services.Interfaces;
     using Services.Models.Item;
+    using Web.Controllers;
 
     [Area("Bid")]
-    public class BidController : Controller
+    public class BidController : BaseController
     {
         private readonly IItemsService itemsService;
         private readonly IBidService bidService;
@@ -26,7 +27,8 @@
         {
             if (id == null)
             {
-                return this.NotFound();
+                this.ShowErrorMessage(NotificationMessages.BidNotFound);
+                return this.RedirectToHome();
             }
 
             var serviceModel = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
@@ -37,7 +39,7 @@
             viewModel.ReturnUrl = this.HttpContext.Request.Path.ToString();
             viewModel.HighestBid = highestBid ?? 0;
 
-            return this.View();
+            return this.View(viewModel);
         }
     }
 }

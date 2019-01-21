@@ -55,15 +55,12 @@
             <div class="pt-5 pb-5">
                 <div class="card border-dark custom-card-color">
                     <div class="card-body">
-                        <p class="card-text">$@Model.StartingPrice</p>
+                        <p class="card-text">Est. Price: &euro; @Model.StartingPrice - @(Model.StartingPrice * 10)</p>
                         <div>
-                            <label>Your Bid:</label>
-                        </div>
-                        <div>
-                            <input class="form-control border-primary" type="number" placeholder="$@calculatedPriceForPlaceHolder" />
+                            <label></label>
                         </div>
                         <div class="m-2">
-                            <button class="btn btn-primary btn-lg btn-block">PLACE BID</button>
+                            <a asp-area="Bid" asp-action="Details" asp-controller="Bid" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</a>
                         </div>
                     </div>
                 </div>
@@ -72,22 +69,9 @@
     </div>
 </div>
 
-@section Scripts{
-    <script>
-        var eventTime = moment.utc('@Model.EndTime.ToString("O")').local();
-        var currentTime = moment();
-        var duration = moment.duration(eventTime.diff(currentTime));
-        var interval = 1000;
-        var identifier = $('#identifier').val();
+@* It's necessary id to be exactly like down below or js won't work *@
+<input type="hidden" id="end-time-id-for-calculator" value="@Model.EndTime.ToString("O")" />
 
-        setInterval(function () {
-                if (identifier == null) {
-                    return;
-                }
-                duration = moment.duration(duration - interval, 'milliseconds');
-                $('#countdown')
-                    .text(`${duration.asDays().toFixed()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`);
-            },
-            interval);
-    </script>
+@section Scripts{
+    <script src="~/js/end-time-calculator.js"></script>
 }
