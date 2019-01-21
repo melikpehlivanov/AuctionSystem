@@ -18,9 +18,9 @@ connection.start()
 connection.on('ReceivedMessage',
     function (bidAmount, userId) {
         let highestBid = highestBidInput.val();
-        let nextValue = bidAmount + (bidAmount * 0.1);
 
         if (bidAmount > highestBid) {
+            let nextValue = bidAmount + (bidAmount * 0.1);
             changeCurrentBidValueOnTenPercentHigherBidButton(nextValue);
         }
 
