@@ -17,10 +17,9 @@ connection.start()
 
 connection.on('ReceivedMessage',
     function (bidAmount, userId) {
-        let highestBid = highestBidInput.val();
-
+        let highestBid = parseFloat(highestBidInput.val());
         if (bidAmount > highestBid) {
-            let nextValue = bidAmount + (bidAmount * 0.1);
+            let nextValue = (bidAmount + (bidAmount * 0.1)).toFixed(2);
             changeCurrentBidValueOnTenPercentHigherBidButton(nextValue);
         }
 
@@ -81,7 +80,7 @@ function changeCurrentPriceStatus(currentBidAmount) {
 }
 
 function changeCurrentBidValueOnTenPercentHigherBidButton(amount) {
-    $('#bid-10-percent-higher-button').text(`Bid: 10% higher (${amount.toFixed(2)})`);
+    $('#bid-10-percent-higher-button').text(`Bid: 10% higher (${amount})`);
 }
 
 function createBid() {
@@ -98,12 +97,12 @@ function createBid() {
 }
 
 function createTenPercentHigherBid() {
-    let highestBid = highestBidInput.val();
+    let highestBid = parseFloat(highestBidInput.val());
     let amount;
-    if (highestBid === 0) {
+    if (highestBid == 0) {
         amount = 1;
     } else {
-        amount = highestBid + (highestBid * 0.1);
+        amount = highestBid + highestBid * 0.1;
     }
 
     connection.invoke('CreateBidAsync', amount, consoleId);
