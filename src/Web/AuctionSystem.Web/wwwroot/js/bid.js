@@ -1,6 +1,7 @@
-﻿let currentUserId = $('#currentUserId').val();
-let consoleId = $('#consoleId').val();
-let highestBidInput = $('#highestBid');
+﻿const euroSign = '€';
+const currentUserId = $('#currentUserId').val();
+const consoleId = $('#consoleId').val();
+const highestBidInput = $('#highestBid');
 
 let connection =
     new signalR.HubConnectionBuilder()
@@ -18,6 +19,7 @@ connection.start()
 connection.on('ReceivedMessage',
     function (bidAmount, userId) {
         let highestBid = parseFloat(highestBidInput.val());
+        console.log(highestBid);
         if (bidAmount > highestBid) {
             let nextValue = (bidAmount + (bidAmount * 0.1)).toFixed(2);
             changeCurrentBidValueOnTenPercentHigherBidButton(nextValue);
@@ -30,12 +32,12 @@ connection.on('ReceivedMessage',
             li = $('<li>')
                 .append($('<div>')
                     .addClass('yellow-message')
-                    .text(`You've successfully bid €${bidAmount.toFixed(2)}`));
+                    .text(`You've successfully bid ${euroSign}${bidAmount.toFixed(2)}`));
         } else {
             li = $('<li>')
                 .append($('<div>')
                     .addClass('message')
-                    .text(`€${bidAmount.toFixed(2)}: Competing Bid`));
+                    .text(`${euroSign}${bidAmount.toFixed(2)}: Competing Bid`));
         }
 
         let messageArea = $('#chat-messages');
@@ -65,7 +67,7 @@ function changeCurrentPriceStatus(currentBidAmount) {
         .addClass('custom-price-card')
         .append($('<span>')
             .addClass('text-white')
-            .text('€'));
+            .text(euroSign));
 
     priceStorage.append(currencySign);
     digits.forEach(digit => {
@@ -87,7 +89,9 @@ function createBid() {
     let bidInput = document.getElementById('bid-amount');
     let bidAmount = bidInput.value;
     let bidMinAttribute = bidInput.min;
-    if (bidMinAttribute > bidAmount || bidAmount < highestBidInput.val()) {
+    let parsedBidInput = parseFloat(highestBidInput.val());
+
+    if (bidMinAttribute > bidAmount || bidAmount < parsedBidInput) {
         //TODO: Add better notifications
         alert("There's no point bidding lower amount than the highest.");
         return;
