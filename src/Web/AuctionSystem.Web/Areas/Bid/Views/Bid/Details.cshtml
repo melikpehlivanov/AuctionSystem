@@ -2,7 +2,7 @@
 
 @{
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
-    var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : "1.00";
+    var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal) 0.1).ToString("F2");
 }
 
 <div class="container">
@@ -108,10 +108,10 @@
                         <div class="form-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">€</span>
-                                <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control" placeholder="Amount"
+                                <input id="bid-amount" maxlength="12" required type="text" name="bidAmount" class="form-control" placeholder="Amount (minimum - @Model.StartingPrice)"
                                        min="@Model.StartingPrice.ToString("F2")">
                             </div>
-                            <button class="btn btn-danger btn-lg btn-block" type="submit" id="button-addon2" onclick="createBid()">Bid</button>
+                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-addon2" onclick="createBid()">Bid</button>
                         </div>
                         <div class="text-center mb-2">
 
@@ -149,6 +149,7 @@
 @section Scripts
     {
     <script src="~/js/signalr.min.js"></script>
+    <script src="~/js/notify.js"></script>
     <script src="~/js/bid.js"></script>
     <script src="~/js/end-time-calculator.js"></script>
 }

@@ -1,6 +1,8 @@
 ﻿const euroSign = '€';
 const currentUserId = $('#currentUserId').val();
 const consoleId = $('#consoleId').val();
+
+const bidInput = document.getElementById('bid-amount');
 const highestBidInput = $('#highestBid');
 
 let connection =
@@ -86,14 +88,16 @@ function changeCurrentBidValueOnTenPercentHigherBidButton(amount) {
 }
 
 function createBid() {
-    let bidInput = document.getElementById('bid-amount');
     let bidAmount = bidInput.value;
     let bidMinAttribute = bidInput.min;
     let parsedBidInput = parseFloat(highestBidInput.val());
 
+    if (parsedBidInput === 0 && bidAmount < bidMinAttribute) {
+        $('#bid-amount').notify(`Minimum bid amount ${bidMinAttribute}`);
+        return;
+    }
     if (bidMinAttribute > bidAmount || bidAmount < parsedBidInput) {
-        //TODO: Add better notifications
-        alert("There's no point bidding lower amount than the highest.");
+        $('#bid-amount').notify('You cannot bid lower amount than the current highest bid');
         return;
     }
 
@@ -102,9 +106,11 @@ function createBid() {
 
 function createTenPercentHigherBid() {
     let highestBid = parseFloat(highestBidInput.val());
+    let minBidAttribute = bidInput.value.min;
+    console.log(minBidAttribute);
     let amount;
     if (highestBid == 0) {
-        amount = 1;
+        amount = minBidAttribute;
     } else {
         amount = highestBid + highestBid * 0.1;
     }
