@@ -21,7 +21,6 @@ connection.start()
 connection.on('ReceivedMessage',
     function (bidAmount, userId) {
         let highestBid = parseFloat(highestBidInput.val());
-        console.log(highestBid);
         if (bidAmount > highestBid) {
             let nextValue = (bidAmount + (bidAmount * 0.1)).toFixed(2);
             changeCurrentBidValueOnTenPercentHigherBidButton(nextValue);
@@ -106,11 +105,10 @@ function createBid() {
 
 function createTenPercentHigherBid() {
     let highestBid = parseFloat(highestBidInput.val());
-    let minBidAttribute = bidInput.value.min;
-    console.log(minBidAttribute);
+    let bidMinAttribute = parseFloat(bidInput.min);
     let amount;
     if (highestBid == 0) {
-        amount = minBidAttribute;
+        amount = bidMinAttribute + bidMinAttribute * 0.1;
     } else {
         amount = highestBid + highestBid * 0.1;
     }
