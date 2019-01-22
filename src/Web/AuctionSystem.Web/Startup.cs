@@ -18,6 +18,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Services.Models;
+    using SignalRHubs;
 
     public class Startup
     {
@@ -80,6 +81,9 @@
                 .Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
             services
+                .AddSignalR();
+
+            services
                 .AddResponseCompression(options => options.EnableForHttps = true);
 
             services
@@ -112,6 +116,8 @@
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseSignalR(config=> config.MapHub<BidHub>("/bidHub"));
 
             app.UseMvc(routes =>
             {
