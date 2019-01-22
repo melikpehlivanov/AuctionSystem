@@ -12,7 +12,6 @@
         {
         }
 
-
         public async Task<string> GetUserIdByUsernameAsync(string username)
         {
             var user = await this.Context
