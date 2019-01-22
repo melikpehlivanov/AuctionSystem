@@ -91,6 +91,10 @@ function createBid() {
     let bidMinAttribute = bidInput.min;
     let parsedBidInput = parseFloat(highestBidInput.val());
 
+    if (!bidAmount) {
+        $('#bid-amount').notify('Please enter some value in order to bid');
+        return;
+    }
     if (parsedBidInput === 0 && bidAmount < bidMinAttribute) {
         $('#bid-amount').notify(`Minimum bid amount ${bidMinAttribute}`);
         return;
