@@ -2,15 +2,17 @@
 namespace AuctionSystem.Data.Migrations
 {
     using System;
-    using Data;
+    using AuctionSystem.Data;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
 
     [DbContext(typeof(AuctionSystemDbContext))]
-    partial class AuctionSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190123162659_AddIsEmailSentFieldInItemsTable")]
+    partial class AddIsEmailSentFieldInItemsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

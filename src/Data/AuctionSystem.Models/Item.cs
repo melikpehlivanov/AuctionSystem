@@ -11,7 +11,7 @@
         [Required]
         [MaxLength(120)]
         public string Title { get; set; }
-
+        
         [Required]
         [MaxLength(500)]
         public string Description { get; set; }
@@ -29,6 +29,9 @@
 
         [Required]
         public DateTime EndTime { get; set; }
+
+        [Required]
+        public bool IsEmailSent { get; set; } = false;
         
         [Required]
         public string SubCategoryId { get; set; }
