@@ -148,12 +148,15 @@ namespace AuctionSystem.Web.Controllers
                 .Take(WebConstants.ItemsCountPerPage)
                 .ToList();
 
-            var items = new ItemListingViewModel
-                {Items = new PaginatedList<ItemListingDto>(itemsToShow, pageIndex, totalPages)};
+            var items = new ItemSearchViewModel
+            {
+                Items = new PaginatedList<ItemListingDto>(itemsToShow, pageIndex, totalPages),
+                Query = query
+            };
 
             this.ViewData[WebConstants.SearchViewDataKey] = query;
 
-            return this.View("List", items);
+            return this.View(items);
         }
 
         // Get all SubCategories and add them into SelectListGroups based on their parent categories
