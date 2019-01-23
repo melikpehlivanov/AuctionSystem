@@ -45,6 +45,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+
+                    <form class="form-inline my-2 my-lg-0" asp-controller="Items" asp-action="Search" method="get">
+                        <div class="input-group">
+                            <input class="form-control" type="search" placeholder="Search" aria-label="Search"
+                                   value="@ViewData[WebConstants.SearchViewDataKey]" name="query">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    
                 </div>
             </div>
         </nav>

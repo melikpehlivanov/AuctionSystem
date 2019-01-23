@@ -15,5 +15,8 @@ namespace AuctionSystem.Services.Interfaces
             where T : BaseItemServiceModel;
 
         Task<IEnumerable<T>> GetAllItems<T>();
+
+        Task<IEnumerable<T>> SearchByTitleAsync<T>(string query)
+            where T : BaseItemServiceModel;
     }
 }
