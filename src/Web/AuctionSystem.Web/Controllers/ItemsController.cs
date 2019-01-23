@@ -97,7 +97,8 @@ namespace AuctionSystem.Web.Controllers
             }
 
             var serviceModel = Mapper.Map<ItemCreateServiceModel>(model);
-
+            serviceModel.StartTime = serviceModel.StartTime.ToUniversalTime();
+            serviceModel.EndTime = serviceModel.EndTime.ToUniversalTime();
             serviceModel.UserName = this.User.Identity.Name;
 
             var id = await this.itemsService.CreateAsync(serviceModel);
