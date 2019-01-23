@@ -1,12 +1,11 @@
 ﻿namespace AuctionSystem.Web
 {
     using System;
-    using AuctionSystem.Models;
     using AutoMapper;
     using Common.AutoMapping.Profiles;
+    using Common.EmailSender;
     using Data;
     using Infrastructure.Extensions;
-    using Infrastructure.Utilities;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -17,6 +16,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Models;
     using Services.Models;
     using SignalRHubs;
 
