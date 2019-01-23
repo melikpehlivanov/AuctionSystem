@@ -2,7 +2,7 @@
 
 @{
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
-    var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal) 0.1).ToString("F2");
+    var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal)0.1).ToString("F2");
 }
 
 <div class="container">
@@ -59,20 +59,25 @@
                         </div>
                     </div>
                 </div>
-                @if (Model.EndTime > DateTime.UtcNow)
+                @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
                 {
-                    <div>
-                        <span id="identifier">
-                            <p class="d-inline">Remaining time:</p>
-                            <span id="countdown" class="text-red"></span>
-                        </span>
-                    </div>
+                    <span id="identifier" class="float-right">
+                        Remaining time:
+                        <span id="countdown" class="text-red"></span>
+                    </span>
+                }
+                else if (Model.StartTime > DateTime.UtcNow)
+                {
+                    <span id="identifier" class="float-right">
+                        Time until start:
+                        <span id="countdown" class="text-red"></span>
+                    </span>
                 }
                 else
                 {
-                    <div>
-                        <h3 class="text-red">Auction ended</h3>
-                    </div>
+                    <span class="float-right">
+                        <span class="text-red">Auction ended</span>
+                    </span>
                 }
                 <div id="price-storage" class="d-block m-auto p-3">
 
@@ -96,11 +101,14 @@
                 </div>
                 @if (!this.User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-danger" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Model.ReturnUrl">Sign Up To Bid</a>
+                    <a class="btn btn-danger" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Model.ReturnUrl">Sign In To Bid</a>
                 }
                 else
                 {
                     if (Model.EndTime <= DateTime.UtcNow)
+                    {
+                    }
+                    else if (Model.StartTime > DateTime.UtcNow)
                     {
                     }
                     else
@@ -145,11 +153,12 @@
 
 @* It's necessary id to be exactly like down below or js won't work *@
 <input type="hidden" id="end-time-id-for-calculator" value="@Model.EndTime.ToString("O")" />
+<input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
 
 @section Scripts
     {
     <script src="~/js/signalr.min.js"></script>
     <script src="~/js/notify.js"></script>
     <script src="~/js/bid.js"></script>
-    <script src="~/js/end-time-calculator.js"></script>
+    <script src="~/js/time-calculator.js"></script>
 }

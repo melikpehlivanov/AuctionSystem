@@ -46,10 +46,24 @@
         </div>
         <div class="col-12 col-md-4">
             <h1>@Model.Title</h1>
-            @if (Model.EndTime > DateTime.UtcNow)
+            @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
             {
                 <span id="identifier" class="float-right">
+                    Remaining time:
                     <span id="countdown" class="text-red"></span>
+                </span>
+            }
+            else if (Model.StartTime > DateTime.UtcNow)
+            {
+                <span id="identifier" class="float-right">
+                    Time until start:
+                    <span id="countdown" class="text-red"></span>
+                </span>
+            }
+            else
+            {
+                <span class="float-right">
+                    <span class="text-red">Auction ended</span>
                 </span>
             }
             <div class="pt-5 pb-5">
@@ -59,9 +73,18 @@
                         <div>
                             <label></label>
                         </div>
-                        <div class="m-2">
-                            <a asp-area="Bid" asp-action="Details" asp-controller="Bid" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</a>
-                        </div>
+                        @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
+                        {
+                            <div class="m-2">
+                                <a asp-area="Bid" asp-action="Details" asp-controller="Bid" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="m-2">
+                                <button disabled class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -71,7 +94,8 @@
 
 @* It's necessary id to be exactly like down below or js won't work *@
 <input type="hidden" id="end-time-id-for-calculator" value="@Model.EndTime.ToString("O")" />
+<input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
 
 @section Scripts{
-    <script src="~/js/end-time-calculator.js"></script>
+    <script src="~/js/time-calculator.js"></script>
 }
