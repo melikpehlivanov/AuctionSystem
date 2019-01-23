@@ -62,6 +62,7 @@
                 @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
                 {
                     <span id="identifier" class="float-right">
+                        Remaining time:
                         <span id="countdown" class="text-red"></span>
                     </span>
                 }
@@ -100,7 +101,7 @@
                 </div>
                 @if (!this.User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-danger" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Model.ReturnUrl">Sign Up To Bid</a>
+                    <a class="btn btn-danger" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Model.ReturnUrl">Sign In To Bid</a>
                 }
                 else
                 {
