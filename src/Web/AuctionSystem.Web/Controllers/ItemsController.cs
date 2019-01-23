@@ -116,6 +116,46 @@ namespace AuctionSystem.Web.Controllers
             return this.RedirectToAction("Details", new { id });
         }
 
+        public async Task<IActionResult> Search(string query, int pageIndex = 1)
+        {
+            query = query?.Trim();
+
+            if (query == null || query.Length < 3)
+            {
+                this.ShowErrorMessage(NotificationMessages.SearchQueryTooShort);
+
+                return this.RedirectToHome();
+            }
+
+            var serviceItems = (await this.itemsService
+                    .SearchByTitleAsync<ItemListingServiceModel>(query))
+                .ToArray();
+
+            if (!serviceItems.Any())
+            {
+                this.ShowErrorMessage(NotificationMessages.SearchNoItems);
+
+                return this.RedirectToHome();
+            }
+
+            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>).ToList();
+
+            var totalPages = (int) Math.Ceiling(allItems.Count / (double) WebConstants.ItemsCountPerPage);
+            pageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
+
+            var itemsToShow = allItems
+                .Skip((pageIndex - 1) * WebConstants.ItemsCountPerPage)
+                .Take(WebConstants.ItemsCountPerPage)
+                .ToList();
+
+            var items = new ItemListingViewModel
+                {Items = new PaginatedList<ItemListingDto>(itemsToShow, pageIndex, totalPages)};
+
+            this.ViewData[WebConstants.SearchViewDataKey] = query;
+
+            return this.View("List", items);
+        }
+
         // Get all SubCategories and add them into SelectListGroups based on their parent categories
         private async Task<IEnumerable<SelectListItem>> GetAllSubCategoriesAsync()
         {
