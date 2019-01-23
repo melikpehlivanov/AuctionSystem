@@ -91,6 +91,25 @@ namespace AuctionSystem.Services.Implementations
                     .ProjectTo<T>()
                     .ToListAsync();
 
+        public async Task<IEnumerable<T>> SearchByTitleAsync<T>(string query)
+            where T : BaseItemServiceModel
+        {
+            if (query == null || query.Length < 3)
+            {
+                return null;
+            }
+
+            query = query.ToLower();
+
+            var matchingItems = await this.Context
+                .Items
+                .Where(i => i.Title.ToLower().Contains(query))
+                .ProjectTo<T>()
+                .ToArrayAsync();
+
+            return matchingItems;
+        }
+
         #region privateMethods
 
         private ICollection<Picture> GetPictureUrls(ICollection<IFormFile> pictures, string itemId, string title)
