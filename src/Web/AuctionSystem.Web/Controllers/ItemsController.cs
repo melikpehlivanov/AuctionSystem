@@ -79,7 +79,7 @@ namespace AuctionSystem.Web.Controllers
         {
             var model = new ItemCreateBindingModel
             {
-                SubCategories = await this.GetAllSubCategoriesAsync()
+                SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync()
             };
 
             return this.View(model);
@@ -91,7 +91,7 @@ namespace AuctionSystem.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                model.SubCategories = await this.GetAllSubCategoriesAsync();
+                model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
 
                 return this.View(model);
             }
@@ -107,7 +107,7 @@ namespace AuctionSystem.Web.Controllers
             {
                 this.ShowErrorMessage(NotificationMessages.ItemCreateError);
 
-                model.SubCategories = await this.GetAllSubCategoriesAsync();
+                model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
 
                 return this.View(model);
             }
