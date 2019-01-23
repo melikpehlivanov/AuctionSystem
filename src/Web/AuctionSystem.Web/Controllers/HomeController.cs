@@ -22,7 +22,12 @@
 
         public async Task<IActionResult> Index()
         {
-            return View(await GetAllCategoriesWithSubCategoriesAsync());
+            var model = new HomeViewModel
+            {
+                Categories = await this.GetAllCategoriesWithSubCategoriesAsync()
+            };
+            
+            return this.View(model);
         }
 
         public IActionResult Privacy()
@@ -41,8 +46,13 @@
             var categories = (await this.categoriesService
                     .GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>())
                 .OrderBy(c => c.Name)
-                .ToArray()
-                .Select(Mapper.Map<CategoryViewModel>);
+                .Select(Mapper.Map<CategoryViewModel>)
+                .ToArray();
+
+            foreach (var category in categories)
+            {
+                category.SubCategories = category.SubCategories.OrderBy(c => c.Name);
+            }
             
             return categories;
 

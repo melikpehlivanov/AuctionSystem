@@ -1,42 +1,49 @@
-﻿@model IEnumerable<CategoryViewModel>
+﻿@model HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-        <ul class="nav">
-            @foreach (var category in Model)
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+    <span class="navbar-brand">Categories</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mx-auto">
+            @foreach (var category in Model.Categories)
             {
-                <li class="dropdown nav-item">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">@category.Name<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <ul class="dropdown-menu sub-menu">
-                                @foreach (var subCategory in category.SubCategories)
-                                {
-                                    <li><a href="#">@subCategory.Name</a></li>
-                                }
-                            </ul>
-                        </li>
-                    </ul>
+                <li class="nav-item dropdown auto-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button">
+                        @category.Name
+                    </a>
+                    <div class="dropdown-menu">
+                        @foreach (var subCategory in category.SubCategories)
+                        {
+                            <a class="dropdown-item" asp-controller="Items" asp-action="List"
+                               asp-route-id="@subCategory.Id">
+                                @subCategory.Name
+                            </a>
+                        }
+                    </div>
                 </li>
             }
         </ul>
     </div>
 </nav>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
 @section Scripts{
-
     <script>
-        $('ul.nav li.dropdown').hover(function () {
-            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
-        }, function () {
-            $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
-        });
+        $('li.auto-dropdown').hover(function() {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).slideDown();
+            },
+            function() {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).slideUp();
+            });
     </script>
 }
