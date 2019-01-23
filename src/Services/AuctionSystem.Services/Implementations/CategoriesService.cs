@@ -6,7 +6,7 @@ namespace AuctionSystem.Services.Implementations
     using Data;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
-    using Models.SubCategory;
+    using Models.Category;
 
     public class CategoriesService : BaseService, ICategoriesService
     {
@@ -14,10 +14,10 @@ namespace AuctionSystem.Services.Implementations
         {
         }
 
-        public async Task<IEnumerable<T>> GetAllSubCategoriesAsync<T>()
-            where T : BaseSubCategoryServiceModel
+        public async Task<IEnumerable<T>> GetAllCategoriesWithSubCategoriesAsync<T>()
+            where T : BaseCategoryServiceModel
         {
-            var subCategories = await this.Context.SubCategories
+            var subCategories = await this.Context.Categories
                 .ProjectTo<T>()
                 .ToArrayAsync();
 

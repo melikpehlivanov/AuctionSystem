@@ -10,8 +10,8 @@ namespace AuctionSystem.Web.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Services.Interfaces;
+    using Services.Models.Category;
     using Services.Models.Item;
-    using Services.Models.SubCategory;
     using ViewModels.Item;
 
     public class ItemsController : BaseController
@@ -141,7 +141,7 @@ namespace AuctionSystem.Web.Controllers
 
             var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>).ToList();
 
-            var totalPages = (int) Math.Ceiling(allItems.Count / (double) WebConstants.ItemsCountPerPage);
+            var totalPages = (int)Math.Ceiling(allItems.Count / (double)WebConstants.ItemsCountPerPage);
             pageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
 
             var itemsToShow = allItems
@@ -159,46 +159,30 @@ namespace AuctionSystem.Web.Controllers
 
             return this.View(items);
         }
-
-        // Get all SubCategories and add them into SelectListGroups based on their parent categories
-        private async Task<IEnumerable<SelectListItem>> GetAllSubCategoriesAsync()
+        
+        private async Task<IEnumerable<SelectListItem>> GetAllCategoriesWithSubCategoriesAsync()
         {
-            var subCategories = (await this.categoriesService
-                    .GetAllSubCategoriesAsync<SubCategoryListingServiceModel>())
-                .OrderBy(c => c.Category.Name)
-                .ThenBy(c => c.Name)
+            var categories = (await this.categoriesService
+                    .GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>())
+                .OrderBy(c => c.Name)
                 .ToArray();
 
-            var selectListItems = new SelectListItem[subCategories.Length];
+            var selectListItems = new List<SelectListItem>();
 
-            var selectListGroups = new Dictionary<string, SelectListGroup>();
-
-            for (int i = 0; i < subCategories.Length; i++)
+            foreach (var category in categories)
             {
-                var subCategory = subCategories[i];
-
-                var categoryName = subCategory.Category.Name;
-
-                var exists = selectListGroups.TryGetValue(categoryName, out var selectListGroup);
-
-                if (!exists)
+                var group = new SelectListGroup {Name = category.Name};
+                foreach (var subCategory in category.SubCategories.OrderBy(c=> c.Name))
                 {
-                    selectListGroup = new SelectListGroup
+                    var item = new SelectListItem
                     {
-                        Name = categoryName
+                        Text = subCategory.Name,
+                        Value = subCategory.Id,
+                        Group = group
                     };
 
-                    selectListGroups.Add(categoryName, selectListGroup);
+                    selectListItems.Add(item);
                 }
-
-                var item = new SelectListItem
-                {
-                    Text = subCategory.Name,
-                    Value = subCategory.Id,
-                    Group = selectListGroup
-                };
-
-                selectListItems[i] = item;
             }
 
             return selectListItems;
