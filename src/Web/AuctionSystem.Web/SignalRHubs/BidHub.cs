@@ -40,7 +40,14 @@
             var parsedBidAmount = decimal.Parse(bidAmount);
 
             var item = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(consoleId);
+
             if (item == null)
+            {
+                return;
+            }
+            var canBid = this.bidService.CanBid(item);
+
+            if (!canBid)
             {
                 return;
             }

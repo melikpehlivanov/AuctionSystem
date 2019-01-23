@@ -1,5 +1,6 @@
 ﻿namespace AuctionSystem.Services.Implementations
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using AuctionSystem.Models;
@@ -8,6 +9,7 @@
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Models.Bid;
+    using Models.Item;
 
     public class BidService : BaseService, IBidService
     {
@@ -51,6 +53,11 @@
                 .FirstOrDefaultAsync(b => b.ItemId == id);
 
             return highestBid?.Amount;
+        }
+
+        public bool CanBid(ItemDetailsServiceModel model)
+        {
+            return model.EndTime >= DateTime.UtcNow && model.StartTime < DateTime.UtcNow;
         }
     }
 }
