@@ -1,4 +1,4 @@
-﻿let endTime = $('#end-time-id-for-calculator').val();
+﻿let endTime = moment.utc($('#end-time-id-for-calculator').val());
 let startTime = moment.utc($('#start-time-id-for-calculator').val());
 let currentTime = moment();
 
@@ -19,7 +19,7 @@ setInterval(function () {
         return;
     }
     duration = moment.duration(duration - interval, 'milliseconds');
-    if (duration < 0) {
+    if (duration < 0 && endTime > currentTime) {
         location.reload();
     }
 
