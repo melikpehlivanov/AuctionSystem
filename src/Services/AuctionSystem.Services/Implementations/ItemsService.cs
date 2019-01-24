@@ -1,5 +1,6 @@
 namespace AuctionSystem.Services.Implementations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -39,6 +40,20 @@ namespace AuctionSystem.Services.Implementations
 
             return item;
         }
+
+        public async Task<IEnumerable<T>> GetHottestItemsAsync<T>()
+            where T : BaseItemServiceModel
+            => await this.Context.Items
+                .Where(i => i.StartingPrice > 10000 && i.StartTime > DateTime.UtcNow)
+                .ProjectTo<T>()
+                .ToListAsync();
+
+        public async Task<IEnumerable<T>> GetAllLiveItemsAsync<T>()
+            where T : BaseItemServiceModel
+            => await this.Context.Items
+                .Where(i => i.StartTime < DateTime.UtcNow && i.EndTime > DateTime.UtcNow && i.Pictures.Count > 2)
+                .ProjectTo<T>()
+                .ToListAsync();
 
         public async Task<string> CreateAsync(ItemCreateServiceModel serviceModel)
         {
@@ -85,7 +100,7 @@ namespace AuctionSystem.Services.Implementations
             return allItemsInGivenCategory;
         }
 
-        public async Task<IEnumerable<T>> GetAllItems<T>()
+        public async Task<IEnumerable<T>> GetAllItemsAsync<T>()
             => await this.Context
                     .Items
                     .ProjectTo<T>()

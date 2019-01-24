@@ -34,7 +34,7 @@
             await this.SeedSubCategoriesAsync(count);
 
             // Act
-            var result = await this.categoriesService.GetAllSubCategoriesAsync<SubCategoryListingServiceModel>();
+            var result = await this.categoriesService.GetAllCategoriesWithSubCategoriesAsync<SubCategoryListingServiceModel>();
 
             // Assert
             result

@@ -1,8 +1,114 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
+    <span class="navbar-brand">Categories</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mx-auto">
+            @foreach (var category in Model.Categories)
+            {
+                <li class="nav-item dropdown auto-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button">
+                        @category.Name
+                    </a>
+                    <div class="dropdown-menu">
+                        @foreach (var subCategory in category.SubCategories)
+                        {
+                            <a class="dropdown-item" asp-controller="Items" asp-action="List"
+                               asp-route-id="@subCategory.Id">
+                                @subCategory.Name
+                            </a>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+
+@if (Model.HottestItems.Count() >= 4)
+{
+    <div class="container pt-5">
+        <h2>Hot Items <i class="fas fa-fire" style="color: #FF4500;"></i></h2>
+        <div class="slick">
+            @foreach (var item in Model.HottestItems)
+            {
+                <div class="slick-slider">
+                    <div class="card shadow m-2">
+                        <a href="@item.Url">
+                            <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing" alt="image">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="@item.Url">@item.Title</a></h5>
+                            <p class="card-text">$@item.StartingPrice</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    @section CustomCss{
+        <link rel="stylesheet" href="~/css/slick.css" />
+        <link rel="stylesheet" href="~/css/slick-theme.css" />
+    }
+}
+
+<div class="pt-5 container">
+    <h3>@Model.CountOfLiveItems Live & Upcoming Items</h3>
+    <div class="row">
+        @foreach (var item in Model.LiveItems)
+        {
+            <div class="col-12 col-md-6 col-lg-4 p-1">
+                <div class="card shadow m-2">
+                    @if (item.Pictures.Count == 1)
+                    {
+                        <a href="@item.Url">
+                            <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing" alt="image">
+                        </a>
+                    }
+                    else
+                    {
+                        <div>
+                            <a href="@item.Url" class="primary-picture-container">
+                                <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing primary-picture" alt="image">
+                            </a>
+                                <a href="@item.Url">
+                                    <img src="@item.Pictures.Take(2).Skip(1).FirstOrDefault()?.Url" class="card-img-top card-img-listing secondary-picture" alt="image">
+                                </a>
+                                <a href="@item.Url">
+                                    <img src="@item.Pictures.Take(3).Skip(2).FirstOrDefault()?.Url" class="card-img-top card-img-listing secondary-picture" alt="image">
+                                </a>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="@item.Url">@item.Title</a></h5>
+                        @*We might add remaining time until the auction starts here also*@
+                        <a href="@item.Url"><span class="float-right text-red">Bid now <i class="fas fa-caret-right"></i></span></a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+@section Scripts{
+    <script src="~/js/slick.js" asp-append-version="true"></script>
+    <script src="~/js/initialize-slick-slider.js" asp-append-version="true"></script>
+
+    <script>
+        $('li.auto-dropdown').hover(function () {
+            $(this).find('.dropdown-menu').stop(true, true).delay(200).slideDown();
+        },
+            function () {
+                $(this).find('.dropdown-menu').stop(true, true).delay(200).slideUp();
+            });
+    </script>
+}

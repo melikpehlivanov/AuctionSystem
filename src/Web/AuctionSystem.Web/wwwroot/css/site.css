@@ -1,4 +1,4 @@
-﻿@media (min-width: 768px) {
+@media (min-width: 768px) {
     .w-md-75 {
         width: 75% !important;
     }
@@ -38,4 +38,24 @@
 
 .text-gray {
     color: gray;
+}
+
+.primary-picture {
+    float: left;
+    overflow: hidden;
+    height: 100%;
+    max-width: calc((100% / 3) * 2);
+    text-align: center;
+    display: block;
+    border-right: 1px solid grey;
+    position: relative;
+}
+
+.secondary-picture {
+    position: relative;
+    overflow: hidden;
+    height: 50%;
+    max-width: calc(100% / 3);
+    display: inline-block;
+    border-bottom: 1px solid grey;
 }
