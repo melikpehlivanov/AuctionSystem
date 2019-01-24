@@ -1,0 +1,102 @@
+.custom-card-color {
+    background: #fbf6f4;
+}
+
+.images-carousel {
+    position: relative;
+    margin-top: 10px;
+    margin-right: -10px;
+    padding-bottom: 26px;
+}
+
+.images-carousel ul li {
+    padding-right: 10px;
+}
+
+.images-carousel:before {
+    content: '';
+    width: 10px;
+    height: 100%;
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    background-color: #ffffff;
+    z-index: 1;
+}
+
+.images-carousel .slick-next {
+    right: 30px;
+}
+
+.images-carousel .slick-dots {
+    margin-top: 30px;
+    position: absolute;
+}
+
+.images-carousel .slick-dots li {
+    width: 8px;
+    height: 8px;
+}
+
+.images-carousel .slick-slider li {
+    position: relative;
+}
+
+.images-carousel .slick-slider .slick-slide a:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    -moz-opacity: 0.56;
+    -khtml-opacity: 0.56;
+    -webkit-opacity: 0.56;
+    opacity: 0.56;
+    -moz-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+}
+
+.images-carousel .slick-slider .slick-slide div:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    -moz-opacity: 0.56;
+    -khtml-opacity: 0.56;
+    -webkit-opacity: 0.56;
+    opacity: 0.56;
+    -moz-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    -webkit-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+}
+
+.images-carousel .slick-slider .slick-slide:hover a:before,
+.images-carousel .slick-slider .slick-slide:hover div:before,
+.images-carousel .slick-slider .slick-slide .zoomGalleryActive:before {
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    -webkit-opacity: 0;
+    opacity: 0;
+}
+
+
+.tt-mobile-product-layout {
+    margin-top: 30px;
+    position: relative;
+}
+
+.tt-product-single-img {
+    position: relative;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

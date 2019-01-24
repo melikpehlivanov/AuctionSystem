@@ -1,7 +1,7 @@
 ﻿namespace AuctionSystem.Web.Controllers
 {
     using System.Threading.Tasks;
-    using Infrastructure.Utilities.Interfaces;
+    using Common.EmailSender.Interface;
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Home;
 

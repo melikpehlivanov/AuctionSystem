@@ -12,16 +12,16 @@
     <div class="row">
         <div class="col-12 col-md-8">
             <div>
-                <div class="tt-mobile-product-layout">
-                    <img class="zoom-product" src="@mainImage" data-zoom-image="@mainImage" alt="">
+                <div class="tt-mobile-product-layout text-center">
+                    <img class="zoom-product" src="@mainImage" data-zoom-image="@mainImage" style="max-height:80vh;" alt="">
                 </div>
-                <div class="images-carousel">
+                <div class="images-carousel ml-0">
                     <ul id="smallGallery">
                         @if (Model.Pictures.Count > 1)
                         {
                             foreach (var picture in Model.Pictures)
                             {
-                                <li><a href="#" class="zoomGalleryActive" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
+                                <li><a href="#" class="zoom-gallery" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
                             }
                         }
                     </ul>
@@ -98,4 +98,11 @@
 
 @section Scripts{
     <script src="~/js/time-calculator.js"></script>
+    <script src="~/js/elevatezoom/elevatezoom-init.js"></script>
+}
+
+@section CustomCss
+    {
+    <link href="~/css/item-details.css" rel="stylesheet">
+    <link href="~/css/slick.css" rel="stylesheet">
 }
