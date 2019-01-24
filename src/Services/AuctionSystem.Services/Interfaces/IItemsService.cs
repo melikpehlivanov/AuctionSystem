@@ -9,6 +9,9 @@ namespace AuctionSystem.Services.Interfaces
         Task<T> GetByIdAsync<T>(string id)
             where T : BaseItemServiceModel;
 
+        Task<IEnumerable<T>> GetHottestItems<T>()
+            where T : BaseItemServiceModel;
+
         Task<string> CreateAsync(ItemCreateServiceModel serviceModel);
 
         Task<IEnumerable<T>> GetAllItemsInGivenCategoryByCategoryIdAsync<T>(string id)

@@ -40,6 +40,13 @@ namespace AuctionSystem.Services.Implementations
             return item;
         }
 
+        public async Task<IEnumerable<T>> GetHottestItems<T>()
+            where T : BaseItemServiceModel
+            => await this.Context.Items
+                .Where(i => i.StartingPrice > 10000)
+                .ProjectTo<T>()
+                .ToListAsync();
+
         public async Task<string> CreateAsync(ItemCreateServiceModel serviceModel)
         {
             if (!this.IsEntityStateValid(serviceModel))

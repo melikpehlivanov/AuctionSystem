@@ -8,28 +8,36 @@
     using Microsoft.AspNetCore.Mvc;
     using Services.Interfaces;
     using Services.Models.Category;
+    using Services.Models.Item;
     using ViewModels;
     using ViewModels.Category;
+    using ViewModels.Item;
 
     public class HomeController : BaseController
     {
         private readonly ICategoriesService categoriesService;
+        private readonly IItemsService itemsService;
 
-        public HomeController(ICategoriesService categoriesService)
+        public HomeController(ICategoriesService categoriesService, IItemsService itemsService)
         {
             this.categoriesService = categoriesService;
+            this.itemsService = itemsService;
         }
 
         public async Task<IActionResult> Index()
         {
+            var serviceModelHottestItems = await this.itemsService.GetHottestItems<HottestItemServiceModel>();
+            var hottestItems = serviceModelHottestItems.Select(Mapper.Map<HottestItemViewModel>);
+
             var model = new HomeViewModel
             {
+                HottestItems = hottestItems,
                 Categories = await this.GetAllCategoriesWithSubCategoriesAsync()
             };
             
             return this.View(model);
         }
-
+        
         public IActionResult Privacy()
         {
             return View();

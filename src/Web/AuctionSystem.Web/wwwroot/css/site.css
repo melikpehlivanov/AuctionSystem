@@ -184,7 +184,7 @@ ul {
 
 /*-------  3.2 Slider Slick  --------*/
 /* Slider */
-.slick-slider {
+/*.slick-slider {
     position: relative;
     display: block;
     -moz-box-sizing: border-box;
@@ -282,8 +282,7 @@ ul {
     display: block;
     height: auto;
     border: 1px solid transparent;
-}
-
+}*/
 /*-------  3.3 Magnific popup  --------*/
 /* Magnific Popup CSS */
 .mfp-bg {

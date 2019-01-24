@@ -32,17 +32,44 @@
     </div>
 </nav>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (Model.HottestItems.Count() >= 4)
+{
+    <div class="container pt-5">
+        <h2>Hot Items <i class="fas fa-fire" style="color: #FF4500;"></i></h2>
+        <div class="slick">
+            @foreach (var item in Model.HottestItems)
+            {
+                <div class="slick-slider">
+                    <div class="card shadow m-2">
+                        <a href="@item.Url">
+                            <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing" alt="image">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="@item.Url">@item.Title</a></h5>
+                            <p class="card-text">$@item.StartingPrice</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    @section CustomCss{
+        <link rel="stylesheet" href="~/css/slick.css" />
+        <link rel="stylesheet" href="~/css/slick-theme.css" />
+    }
+}
 
 @section Scripts{
+    <script src="~/js/slick.js" asp-append-version="true"></script>
+    <script src="~/js/initialize-slick-slider.js" asp-append-version="true"></script>
+
     <script>
-        $('li.auto-dropdown').hover(function() {
-                $(this).find('.dropdown-menu').stop(true, true).delay(200).slideDown();
-            },
-            function() {
+        $('li.auto-dropdown').hover(function () {
+            $(this).find('.dropdown-menu').stop(true, true).delay(200).slideDown();
+        },
+            function () {
                 $(this).find('.dropdown-menu').stop(true, true).delay(200).slideUp();
             });
     </script>
