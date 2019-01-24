@@ -4,6 +4,6 @@
 
     public interface IEmailSender
     {
-        Task SendEmailAsync(string sender, string receiver, string subject, string htmlMessage);
+        Task<bool> SendEmailAsync(string sender, string receiver, string subject, string htmlMessage);
     }
 }
