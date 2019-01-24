@@ -47,7 +47,7 @@
             }
             var canBid = this.bidService.CanBid(item);
 
-            if (!canBid)
+            if (!canBid || item.StartingPrice > parsedBidAmount)
             {
                 return;
             }

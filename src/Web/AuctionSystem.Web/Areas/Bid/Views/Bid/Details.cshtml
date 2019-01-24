@@ -116,7 +116,7 @@
                         <div class="form-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">€</span>
-                                <input id="bid-amount" maxlength="12" required type="text" name="bidAmount" class="form-control" placeholder="Amount (minimum - @Model.StartingPrice)"
+                                <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control" placeholder="Amount (minimum - @Model.StartingPrice)"
                                        min="@Model.StartingPrice.ToString("F2")">
                             </div>
                             <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-addon2" onclick="createBid()">Bid</button>
