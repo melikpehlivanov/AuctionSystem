@@ -1,5 +1,6 @@
 namespace AuctionSystem.Services.Implementations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace AuctionSystem.Services.Implementations
         public async Task<IEnumerable<T>> GetHottestItems<T>()
             where T : BaseItemServiceModel
             => await this.Context.Items
-                .Where(i => i.StartingPrice > 10000)
+                .Where(i => i.StartingPrice > 10000 && i.EndTime > DateTime.UtcNow)
                 .ProjectTo<T>()
                 .ToListAsync();
 
