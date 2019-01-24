@@ -26,13 +26,17 @@
 
         public async Task<IActionResult> Index()
         {
-            var serviceModelHottestItems = await this.itemsService.GetHottestItems<HottestItemServiceModel>();
+            var serviceModelHottestItems = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
+            var serviceLiveItems = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
+
+            var liveItems = serviceLiveItems.Select(Mapper.Map<LiveItemViewModel>);
             var hottestItems = serviceModelHottestItems.Select(Mapper.Map<HottestItemViewModel>);
 
             var model = new HomeViewModel
             {
+                LiveItems = liveItems,
                 HottestItems = hottestItems,
-                Categories = await this.GetAllCategoriesWithSubCategoriesAsync()
+                Categories = await this.GetAllCategoriesWithSubCategoriesAsync(),
             };
             
             return this.View(model);

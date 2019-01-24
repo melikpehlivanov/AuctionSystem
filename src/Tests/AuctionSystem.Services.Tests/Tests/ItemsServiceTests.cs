@@ -388,7 +388,7 @@
             await this.SeedItems(count);
 
             // Act
-            var result = await this.itemsService.GetAllItems<ItemListingServiceModel>();
+            var result = await this.itemsService.GetAllItemsAsync<ItemListingServiceModel>();
 
             // Assert
             result

@@ -61,6 +61,44 @@
     }
 }
 
+<div class="pt-5 container">
+    <h3>@Model.CountOfLiveItems Live & Upcoming Items</h3>
+    <div class="row">
+        @foreach (var item in Model.LiveItems)
+        {
+            <div class="col-12 col-md-6 col-lg-4 p-1">
+                <div class="card shadow m-2">
+                    @if (item.Pictures.Count == 1)
+                    {
+                        <a href="@item.Url">
+                            <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing" alt="image">
+                        </a>
+                    }
+                    else
+                    {
+                        <div>
+                            <a href="@item.Url" class="primary-picture-container">
+                                <img src="@item.Pictures.FirstOrDefault()?.Url" class="card-img-top card-img-listing primary-picture" alt="image">
+                            </a>
+                                <a href="@item.Url">
+                                    <img src="@item.Pictures.Take(2).Skip(1).FirstOrDefault()?.Url" class="card-img-top card-img-listing secondary-picture" alt="image">
+                                </a>
+                                <a href="@item.Url">
+                                    <img src="@item.Pictures.Take(3).Skip(2).FirstOrDefault()?.Url" class="card-img-top card-img-listing secondary-picture" alt="image">
+                                </a>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="@item.Url">@item.Title</a></h5>
+                        @*We might add remaining time until the auction starts here also*@
+                        <a href="@item.Url"><span class="float-right text-red">Bid now <i class="fas fa-caret-right"></i></span></a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
 @section Scripts{
     <script src="~/js/slick.js" asp-append-version="true"></script>
     <script src="~/js/initialize-slick-slider.js" asp-append-version="true"></script>

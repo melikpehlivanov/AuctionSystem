@@ -32,7 +32,7 @@ namespace AuctionSystem.Web.Controllers
             if (id == null)
             {
                 serviceItems = await this.itemsService
-                    .GetAllItems<ItemListingServiceModel>();
+                    .GetAllItemsAsync<ItemListingServiceModel>();
             }
             else
             {

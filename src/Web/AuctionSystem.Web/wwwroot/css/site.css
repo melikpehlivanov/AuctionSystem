@@ -283,6 +283,27 @@ ul {
     height: auto;
     border: 1px solid transparent;
 }*/
+
+.primary-picture {
+    float: left;
+    overflow: hidden;
+    height: 100%;
+    max-width: calc((100% / 3) * 2);
+    text-align: center;
+    display: block;
+    border-right: 1px solid grey;
+    position: relative;
+}
+
+.secondary-picture {
+    position: relative;
+    overflow: hidden;
+    height: 50%;
+    max-width: calc(100% / 3);
+    display: inline-block;
+    border-bottom: 1px solid grey;
+}
+
 /*-------  3.3 Magnific popup  --------*/
 /* Magnific Popup CSS */
 .mfp-bg {
