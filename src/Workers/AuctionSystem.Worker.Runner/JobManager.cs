@@ -65,14 +65,13 @@
                 var isSuccessful = await this.emailSender.SendEmailAsync(AppMainEmailAddress, winnerBid.UserEmail, "You won a bid!",
                    string.Format(CongratsMessage, winnerBid.UserFullName, item.Title));
 
+                if (!isSuccessful) continue;
                 try
                 {
-                    if (isSuccessful)
-                    {
-                        this.dbContext.Update(item);
-                        await this.dbContext.SaveChangesAsync();
-                        this.logger.LogInformation(string.Format(LogMessage, DateTime.UtcNow, winnerBid.UserEmail, item.Id));
-                    }
+                    item.IsEmailSent = true;
+                    this.dbContext.Update(item);
+                    await this.dbContext.SaveChangesAsync();
+                    this.logger.LogInformation(string.Format(LogMessage, DateTime.UtcNow, winnerBid.UserEmail, item.Id));
                 }
                 catch (Exception ex)
                 {

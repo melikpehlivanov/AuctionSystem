@@ -3,7 +3,6 @@
     using System;
     using System.IO;
     using System.Text;
-    using System.Threading;
     using System.Threading.Tasks;
     using Common.EmailSender;
     using Common.EmailSender.Implementation;
@@ -35,9 +34,6 @@
             {
                 Task.Run(async () =>
                 {
-                    Console.WriteLine("Task {0} (asyncTask) executing on Thread {1}",
-                        Task.CurrentId,
-                        Thread.CurrentThread.ManagedThreadId);
                     await jobManager.ExecuteAllJobs();
                 }).Wait();
             }
