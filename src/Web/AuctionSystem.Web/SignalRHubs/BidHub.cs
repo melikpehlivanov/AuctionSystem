@@ -37,7 +37,12 @@
                 return;
             }
 
-            var parsedBidAmount = decimal.Parse(bidAmount);
+            var isParsed = decimal.TryParse(bidAmount, out var parsedBidAmount);
+            
+            if (!isParsed)
+            {
+                return;
+            }
 
             var item = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(consoleId);
 
