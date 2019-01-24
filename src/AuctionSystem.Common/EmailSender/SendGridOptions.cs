@@ -1,4 +1,4 @@
-﻿namespace AuctionSystem.Web.Infrastructure.Utilities
+﻿namespace AuctionSystem.Common.EmailSender
 {
     public class SendGridOptions
     {
