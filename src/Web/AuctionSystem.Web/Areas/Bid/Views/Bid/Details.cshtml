@@ -156,9 +156,14 @@
 <input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
 
 @section Scripts
-    {
+{
     <script src="~/js/signalr.min.js"></script>
     <script src="~/js/notify.js"></script>
     <script src="~/js/bid.js"></script>
     <script src="~/js/time-calculator.js"></script>
+}
+
+@section CustomCss
+{
+    <link href="~/css/bid.css" rel="stylesheet">
 }
