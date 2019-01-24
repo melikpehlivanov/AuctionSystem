@@ -8,6 +8,7 @@
     using Implementations;
     using Interfaces;
     using Models.Bid;
+    using Models.Item;
     using Xunit;
 
     public class BidServiceTests : BaseTest
@@ -133,6 +134,34 @@
                 .HaveValue()
                 .And
                 .Be(expectedModel.Amount);
+        }
+
+        [Fact]
+        public void CanBid_WithInvalidInput_ShouldReturnFalse()
+        {
+            // Arrange
+            var model = new ItemDetailsServiceModel();
+            // Act
+            var result = this.bidService.CanBid(model);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void CanBid_WithValidInput_ShouldReturnTrue()
+        {
+            // Arrange
+            var model = new ItemDetailsServiceModel{EndTime = DateTime.UtcNow.AddDays(10),};
+            // Act
+            var result = this.bidService.CanBid(model);
+
+            // Assert
+            result
+                .Should()
+                .BeTrue();
         }
     }
 }
