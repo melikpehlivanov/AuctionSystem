@@ -7,12 +7,12 @@
     using FluentAssertions;
     using Implementations;
     using Interfaces;
-    using Models.SubCategory;
+    using Models.Category;
     using Xunit;
 
     public class CategoriesServiceTests : BaseTest
     {
-        private const string SampleSubCategoryName = "Watches";
+        private const string SampleCategoryName = "Fashion";
 
         private readonly AuctionSystemDbContext dbContext;
         private readonly ICategoriesService categoriesService;
@@ -28,18 +28,18 @@
         [InlineData(10)]
         [InlineData(100)]
         [InlineData(1000)]
-        public async Task GetAllSubCategoriesAsync_ShouldReturnValidModelAndCount(int count)
+        public async Task GetAllCategoriesWithSubCategoriesAsync_ShouldReturnValidModelAndCount(int count)
         {
             // Arrange
             await this.SeedSubCategoriesAsync(count);
 
             // Act
-            var result = await this.categoriesService.GetAllCategoriesWithSubCategoriesAsync<SubCategoryListingServiceModel>();
+            var result = await this.categoriesService.GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>();
 
             // Assert
             result
                 .Should()
-                .BeAssignableTo<IEnumerable<SubCategoryListingServiceModel>>()
+                .BeAssignableTo<IEnumerable<CategoryListingServiceModel>>()
                 .And
                 .HaveCount(count);
         }
@@ -48,14 +48,14 @@
 
         private async Task SeedSubCategoriesAsync(int count)
         {
-            var subCategories = new List<SubCategory>();
+            var categories = new List<Category>();
             for (int i = 1; i <= count; i++)
             {
-                var subCategory = new SubCategory { Name = SampleSubCategoryName, };
-                subCategories.Add(subCategory);
+                var category = new Category { Name = SampleCategoryName };
+                categories.Add(category);
             }
 
-            await this.dbContext.SubCategories.AddRangeAsync(subCategories);
+            await this.dbContext.Categories.AddRangeAsync(categories);
             await this.dbContext.SaveChangesAsync();
         }
 
