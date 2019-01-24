@@ -21,7 +21,7 @@
                         {
                             foreach (var picture in Model.Pictures)
                             {
-                                <li><a href="#" class="zoomGalleryActive" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
+                                <li><a href="#" class="zoom-gallery" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
                             }
                         }
                     </ul>
@@ -102,6 +102,7 @@
 }
 
 @section CustomCss
-{
+    {
     <link href="~/css/item-details.css" rel="stylesheet">
+    <link href="~/css/slick.css" rel="stylesheet">
 }
