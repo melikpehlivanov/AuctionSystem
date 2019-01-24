@@ -37,7 +37,12 @@
                 return;
             }
 
-            var parsedBidAmount = decimal.Parse(bidAmount);
+            var isParsed = decimal.TryParse(bidAmount, out var parsedBidAmount);
+            
+            if (!isParsed)
+            {
+                return;
+            }
 
             var item = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(consoleId);
 
@@ -47,7 +52,7 @@
             }
             var canBid = this.bidService.CanBid(item);
 
-            if (!canBid)
+            if (!canBid || item.StartingPrice > parsedBidAmount)
             {
                 return;
             }
