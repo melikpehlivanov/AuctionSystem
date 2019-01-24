@@ -16,7 +16,7 @@
 
         public string UserFullName { get; set; }
 
-        public string Url => $"details/{this.Id}/{this.Title.GenerateSlug()}";
+        public string Url => $"/items/details/{this.Id}/{this.Title.GenerateSlug()}";
 
         public ICollection<PictureDisplayViewModel> Pictures { get; set; }
     }
