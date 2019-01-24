@@ -49,3 +49,18 @@ ul {
 .big-black-arrow {
     font-size: 40px
 }
+
+/*Custom cards*/
+.custom-price-card {
+    display: inline-block;
+    background-color: black;
+    text-align: center;
+    border: 1px solid silver;
+    border-radius: 8px;
+    margin-right: 2px;
+    line-height: 1;
+    position: relative;
+    width: 43px;
+    font-size: 40px;
+    font-weight: bold;
+}
