@@ -22,9 +22,9 @@
         private const string SampleTitle = "SampleTitle";
         private const string SampleDescription = "Very cool item";
         private const string SampleUsername = "TestUser";
-        private const decimal SampleStartingPrice = 300;
+        private const decimal SampleStartingPrice = 3000000;
         private const decimal SampleMinIncrease = 10;
-        private static readonly DateTime SampleStartTime = DateTime.UtcNow;
+        private static readonly DateTime SampleStartTime = DateTime.UtcNow.AddDays(10);
         static readonly DateTime SampleEndTime = DateTime.MaxValue;
         private const string SampleSubCategoryId = "SampleSubCategoryId";
 
@@ -91,6 +91,55 @@
                 .Match(x => x.As<ItemDetailsServiceModel>().Id == testId)
                 .And
                 .Match(x => x.As<ItemDetailsServiceModel>().Title == $"Title_{testId}");
+        }
+
+        [Fact]
+        public async Task GetHottestItemsAsync_WithInvalidStartingPrice_ShouldReturnNull()
+        {
+            // Arrange
+            await this.dbContext.Items.AddAsync(new Item {StartingPrice = 10});
+            await this.dbContext.SaveChangesAsync();
+            // Act
+            var result = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task GetHottestItemsAsync_WithInvalidStartTime_ShouldReturnNull()
+        {
+            // Arrange
+            await this.dbContext.Items.AddAsync(new Item { StartingPrice = 100001 });
+            await this.dbContext.SaveChangesAsync();
+            // Act
+            var result = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeNullOrEmpty();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public async Task GetHottestItemsAsync_ShouldReturnCorrectModelAndCount(int count)
+        {
+            // Arrange
+            await this.SeedItems(count);
+            // Act
+            var result = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<IEnumerable<HottestItemServiceModel>>()
+                .And
+                .HaveCount(count);
         }
 
         [Fact]
