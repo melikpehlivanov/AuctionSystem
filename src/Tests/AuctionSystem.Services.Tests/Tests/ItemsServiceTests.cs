@@ -97,7 +97,7 @@
         public async Task GetHottestItemsAsync_WithInvalidStartingPrice_ShouldReturnNull()
         {
             // Arrange
-            await this.dbContext.Items.AddAsync(new Item {StartingPrice = 10});
+            await this.dbContext.Items.AddAsync(new Item { StartingPrice = 10 });
             await this.dbContext.SaveChangesAsync();
             // Act
             var result = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
@@ -142,6 +142,80 @@
                 .HaveCount(count);
         }
 
+        [Fact]
+        public async Task GetAllLiveItemsAsync_WithInvalidStartTime_ShouldReturnNull()
+        {
+            // Arrange
+            await this.dbContext.Items.AddAsync(new Item { StartTime = DateTime.UtcNow.AddMinutes(10), EndTime = DateTime.UtcNow.AddDays(10),
+                Pictures = new List<Picture>() { new Picture(), new Picture(), new Picture() } });
+            await this.dbContext.SaveChangesAsync();
+            // Act
+            var result = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task GetAllLiveItemsAsync_WithInvalidEndTime_ShouldReturnNull()
+        {
+            // Arrange
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                StartTime = DateTime.UtcNow,
+                Pictures = new List<Picture>() { new Picture(), new Picture(), new Picture() }
+            });
+            await this.dbContext.SaveChangesAsync();
+            // Act
+            var result = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task GetAllLiveItemsAsync_WithInvalidPicturesCount_ShouldReturnNull()
+        {
+            // Arrange
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                StartTime = DateTime.UtcNow,
+                EndTime = DateTime.UtcNow.AddDays(10),
+                Pictures = new List<Picture>() { new Picture(), }
+            });
+            await this.dbContext.SaveChangesAsync();
+            // Act
+            var result = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeNullOrEmpty();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public async Task GetAllLiveItemsAsync_WithValidInput_ShouldCorrectModelAndCount(int count)
+        {
+            // Arrange
+            await this.SeedLiveItems(count);
+            // Act
+            var result = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
+
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<IEnumerable<LiveItemServiceModel>>()
+                .And
+                .HaveCount(count);
+        }
+        
         [Fact]
         public async Task CreateAsync_WithEmptyModel_ShouldReturnNullId_AndNotInsertItemInDatabase()
         {
@@ -473,6 +547,28 @@
                 {
                     Id = i.ToString(),
                     Description = $"Item_{i}",
+                };
+                items.Add(item);
+            }
+
+            await this.dbContext.Items.AddRangeAsync(items);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        private async Task SeedLiveItems(int count)
+        {
+            var items = new List<Item>();
+            for (int i = 1; i <= count; i++)
+            {
+                var item = new Item
+                {
+                    Title = SampleTitle,
+                    Description = SampleDescription,
+                    StartingPrice = SampleStartingPrice,
+                    MinIncrease = SampleMinIncrease,
+                    StartTime = DateTime.UtcNow,
+                    EndTime = DateTime.UtcNow.AddDays(10),
+                    Pictures = new List<Picture> { new Picture { }, new Picture { }, new Picture { } }
                 };
                 items.Add(item);
             }
