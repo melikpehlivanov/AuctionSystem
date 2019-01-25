@@ -22,6 +22,7 @@
         private const string SampleTitle = "SampleTitle";
         private const string SampleDescription = "Very cool item";
         private const string SampleUsername = "TestUser";
+        private const string SampleUserFullName = "Test Test";
         private const decimal SampleStartingPrice = 3000000;
         private const decimal SampleMinIncrease = 10;
         private static readonly DateTime SampleStartTime = DateTime.UtcNow.AddDays(10);
@@ -201,7 +202,7 @@
         [InlineData(1)]
         [InlineData(10)]
         [InlineData(100)]
-        public async Task GetAllLiveItemsAsync_WithValidInput_ShouldCorrectModelAndCount(int count)
+        public async Task GetAllLiveItemsAsync_WithValidInput_ShouldReturnCorrectModelAndCount(int count)
         {
             // Arrange
             await this.SeedLiveItems(count);
@@ -215,7 +216,74 @@
                 .And
                 .HaveCount(count);
         }
-        
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("aa")]
+        public async Task SearchByTitleAsync_WithInvalidInput_ShouldReturnNull(string query)
+        {
+            // Act
+            var result = await this.itemsService.SearchByTitleAsync<ItemListingServiceModel>(query);
+
+            // Assert
+            result
+                .Should()
+                .BeNull();
+        }
+
+        [Fact]
+        public async Task SearchByTitleAsync_WithValidInput_ShouldReturnCorrectEntities()
+        {
+            // Arrange
+            const string expectedTitle = "expected";
+            await this.dbContext.Items.AddAsync(new Item {
+                Title = expectedTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                User = new AuctionUser { FullName =  SampleUserFullName, UserName = SampleUsername},
+                SubCategory = new SubCategory()
+            });
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                User = new AuctionUser { FullName = SampleUserFullName, UserName = SampleUsername },
+                SubCategory = new SubCategory()
+            });
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                User = new AuctionUser { FullName = SampleUserFullName, UserName = SampleUsername },
+                SubCategory = new SubCategory()
+            });
+            await this.dbContext.SaveChangesAsync();
+            // Act
+            var result = await this.itemsService.SearchByTitleAsync<ItemListingServiceModel>(expectedTitle);
+
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<IEnumerable<ItemListingServiceModel>>();
+
+            result
+                .Should()
+                .Subject
+                .All(x => x.Title.Contains(expectedTitle));
+        }
+
         [Fact]
         public async Task CreateAsync_WithEmptyModel_ShouldReturnNullId_AndNotInsertItemInDatabase()
         {
