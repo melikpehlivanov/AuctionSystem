@@ -24,7 +24,7 @@
                             </div>
                             @if (Model.Pictures.Count > 1)
                             {
-                                foreach (var picture in Model.Pictures)
+                                foreach (var picture in Model.Pictures.Skip(1))
                                 {
                                     <div class="carousel-item">
                                         <img src="@picture.Url" class="d-block mx-auto" style="max-height: 70vh" alt="@picture.Url">
