@@ -119,12 +119,12 @@
                                 <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control" placeholder="Amount (minimum - @Model.StartingPrice)"
                                        min="@Model.StartingPrice.ToString("F2")">
                             </div>
-                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-addon2" onclick="createBid()">Bid</button>
+                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-addon2">Bid</button>
                         </div>
                         <div class="text-center mb-2">
 
                             <div>
-                                <button id="bid-10-percent-higher-button" class="btn btn-primary btn-lg d-inline-block" type="submit" onclick="createTenPercentHigherBid()">
+                                <button id="bid-10-percent-higher-button" class="btn btn-primary btn-lg d-inline-block" type="submit">
                                     Bid: 10% higher (@tenPercentHigherThanTheBiggestBid)
                                 </button>
                             </div>
