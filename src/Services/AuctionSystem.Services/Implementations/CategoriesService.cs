@@ -19,7 +19,7 @@ namespace AuctionSystem.Services.Implementations
             where T : BaseCategoryServiceModel
         {
             var categories = await this.Context.Categories
-                .OrderBy(c=> c.Name)
+                .OrderBy(c => c.Name)
                 .ProjectTo<T>()
                 .ToArrayAsync();
 
