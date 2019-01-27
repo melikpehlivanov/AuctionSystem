@@ -1,6 +1,7 @@
 namespace AuctionSystem.Services.Implementations
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using Data;
@@ -18,6 +19,7 @@ namespace AuctionSystem.Services.Implementations
             where T : BaseCategoryServiceModel
         {
             var subCategories = await this.Context.Categories
+                .OrderBy(c=> c.Name)
                 .ProjectTo<T>()
                 .ToArrayAsync();
 

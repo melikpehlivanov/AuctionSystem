@@ -57,7 +57,6 @@
         {
             var categories = (await this.categoriesService
                     .GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>())
-                .OrderBy(c => c.Name)
                 .Select(Mapper.Map<CategoryViewModel>)
                 .ToArray();
 
@@ -67,7 +66,6 @@
             }
             
             return categories;
-
         }
     }
 }
