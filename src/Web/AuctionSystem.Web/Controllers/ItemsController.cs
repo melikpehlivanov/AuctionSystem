@@ -6,11 +6,11 @@ namespace AuctionSystem.Web.Controllers
     using System.Threading.Tasks;
     using AutoMapper;
     using Infrastructure.Collections;
+    using Infrastructure.Collections.Interfaces;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Services.Interfaces;
-    using Services.Models.Category;
     using Services.Models.Item;
     using ViewModels.Item;
 
@@ -18,11 +18,13 @@ namespace AuctionSystem.Web.Controllers
     {
         private readonly IItemsService itemsService;
         private readonly ICategoriesService categoriesService;
+        private readonly ICache cache;
 
-        public ItemsController(IItemsService itemsService, ICategoriesService categoriesService)
+        public ItemsController(IItemsService itemsService, ICategoriesService categoriesService, ICache cache)
         {
             this.itemsService = itemsService;
             this.categoriesService = categoriesService;
+            this.cache = cache;
         }
 
         public async Task<IActionResult> List(string id, int pageIndex = 1)
@@ -162,10 +164,7 @@ namespace AuctionSystem.Web.Controllers
         
         private async Task<IEnumerable<SelectListItem>> GetAllCategoriesWithSubCategoriesAsync()
         {
-            var categories = (await this.categoriesService
-                    .GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>())
-                .OrderBy(c => c.Name)
-                .ToArray();
+            var categories = await this.cache.GetAllCategoriesWithSubcategoriesAsync();
 
             var selectListItems = new List<SelectListItem>();
 

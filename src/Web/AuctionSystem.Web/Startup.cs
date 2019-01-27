@@ -68,6 +68,9 @@
                 .AddDefaultTokenProviders();
 
             services
+                .AddDistributedMemoryCache();
+
+            services
                 .AddDomainServices()
                 .AddApplicationServices()
                 .AddAuthentication();

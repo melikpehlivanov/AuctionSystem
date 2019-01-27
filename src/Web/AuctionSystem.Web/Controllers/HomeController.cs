@@ -1,27 +1,27 @@
 ﻿namespace AuctionSystem.Web.Controllers
 {
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Infrastructure.Collections.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using Services.Interfaces;
-    using Services.Models.Category;
     using Services.Models.Item;
     using ViewModels;
-    using ViewModels.Category;
     using ViewModels.Item;
 
     public class HomeController : BaseController
     {
         private readonly ICategoriesService categoriesService;
         private readonly IItemsService itemsService;
+        private readonly ICache cache;
 
-        public HomeController(ICategoriesService categoriesService, IItemsService itemsService)
+        public HomeController(ICategoriesService categoriesService, IItemsService itemsService, ICache cache)
         {
             this.categoriesService = categoriesService;
             this.itemsService = itemsService;
+            this.cache = cache;
         }
 
         public async Task<IActionResult> Index()
@@ -36,7 +36,7 @@
             {
                 LiveItems = liveItems,
                 HottestItems = hottestItems,
-                Categories = await this.GetAllCategoriesWithSubCategoriesAsync(),
+                Categories = await this.cache.GetAllCategoriesWithSubcategoriesAsync(),
             };
             
             return this.View(model);
@@ -51,21 +51,6 @@
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
-        }
-
-        private async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesWithSubCategoriesAsync()
-        {
-            var categories = (await this.categoriesService
-                    .GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>())
-                .Select(Mapper.Map<CategoryViewModel>)
-                .ToArray();
-
-            foreach (var category in categories)
-            {
-                category.SubCategories = category.SubCategories.OrderBy(c => c.Name);
-            }
-            
-            return categories;
         }
     }
 }
