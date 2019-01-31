@@ -1,12 +1,11 @@
 namespace AuctionSystem.Web.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
-    using Infrastructure.Collections;
     using Infrastructure.Collections.Interfaces;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,13 +16,11 @@ namespace AuctionSystem.Web.Controllers
     public class ItemsController : BaseController
     {
         private readonly IItemsService itemsService;
-        private readonly ICategoriesService categoriesService;
         private readonly ICache cache;
 
-        public ItemsController(IItemsService itemsService, ICategoriesService categoriesService, ICache cache)
+        public ItemsController(IItemsService itemsService, ICache cache)
         {
             this.itemsService = itemsService;
-            this.categoriesService = categoriesService;
             this.cache = cache;
         }
 
@@ -47,17 +44,10 @@ namespace AuctionSystem.Web.Controllers
                 return RedirectToHome();
             }
 
-            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>).ToList();
+            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>)
+                .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 
-            var totalPages = (int)(Math.Ceiling(allItems.Count() / (double)WebConstants.ItemsCountPerPage));
-            pageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
-
-            var itemsToShow = allItems
-                .Skip((pageIndex - 1) * WebConstants.ItemsCountPerPage)
-                .Take(WebConstants.ItemsCountPerPage)
-                .ToList();
-
-            var items = new ItemListingViewModel { Items = new PaginatedList<ItemListingDto>(itemsToShow, pageIndex, totalPages) };
+            var items = new ItemListingViewModel { Items = allItems };
             return this.View(items);
         }
 
@@ -141,19 +131,12 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>).ToList();
-
-            var totalPages = (int)Math.Ceiling(allItems.Count / (double)WebConstants.ItemsCountPerPage);
-            pageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
-
-            var itemsToShow = allItems
-                .Skip((pageIndex - 1) * WebConstants.ItemsCountPerPage)
-                .Take(WebConstants.ItemsCountPerPage)
-                .ToList();
+            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>)
+                .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 
             var items = new ItemSearchViewModel
             {
-                Items = new PaginatedList<ItemListingDto>(itemsToShow, pageIndex, totalPages),
+                Items = allItems,
                 Query = query
             };
 
@@ -161,7 +144,7 @@ namespace AuctionSystem.Web.Controllers
 
             return this.View(items);
         }
-        
+
         private async Task<IEnumerable<SelectListItem>> GetAllCategoriesWithSubCategoriesAsync()
         {
             var categories = await this.cache.GetAllCategoriesWithSubcategoriesAsync();
@@ -170,8 +153,8 @@ namespace AuctionSystem.Web.Controllers
 
             foreach (var category in categories)
             {
-                var group = new SelectListGroup {Name = category.Name};
-                foreach (var subCategory in category.SubCategories.OrderBy(c=> c.Name))
+                var group = new SelectListGroup { Name = category.Name };
+                foreach (var subCategory in category.SubCategories.OrderBy(c => c.Name))
                 {
                     var item = new SelectListItem
                     {
