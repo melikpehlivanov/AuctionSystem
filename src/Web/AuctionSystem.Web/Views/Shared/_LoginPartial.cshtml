@@ -12,10 +12,10 @@
                     <i class="fas fa-user-circle"></i>
                 </a>
                 <div class="dropdown-menu">
-                    <a class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
-                    <a class="nav-link text-dark dropdown-item">My Items</a>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
+                    <a class="dropdown-item">My Items</a>
                     <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
-                        <button type="submit" class="nav-link btn btn-link text-dark dropdown-item ">Logout</button>
+                        <button type="submit" class="btn btn-link text-dark dropdown-item ">Logout</button>
                     </form>
                 </div>
             </li>
