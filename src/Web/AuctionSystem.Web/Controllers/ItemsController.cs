@@ -1,5 +1,6 @@
 namespace AuctionSystem.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -107,6 +108,19 @@ namespace AuctionSystem.Web.Controllers
             this.ShowSuccessMessage(NotificationMessages.ItemCreated);
 
             return this.RedirectToAction("Details", new { id });
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Delete()
+        {
+            return new NotImplementedException;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete()
+        {
+            return new NotImplementedException;
         }
 
         public async Task<IActionResult> Search(string query, int pageIndex = 1)
