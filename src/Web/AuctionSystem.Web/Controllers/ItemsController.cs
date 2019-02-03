@@ -109,6 +109,40 @@ namespace AuctionSystem.Web.Controllers
             return this.RedirectToAction("Details", new { id });
         }
 
+        [Authorize]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var serviceItem = await this.itemsService
+                .GetByIdAsync<ItemDetailsServiceModel>(id);
+            if (serviceItem == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+
+                return RedirectToHome();
+            }
+
+            var item = Mapper.Map<ItemDetailsViewModel>(serviceItem);
+
+            return View(item);
+        }
+
+        [ActionName(nameof(Delete))]
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var isDeleted = await this.itemsService
+                .DeleteAsync(id);
+            if (!isDeleted)
+            {
+                this.ShowSuccessMessage(NotificationMessages.ItemDeletedError);
+                return this.RedirectToAction(nameof(Delete), new { id });
+            }
+
+            this.ShowErrorMessage(NotificationMessages.ItemDeletedSuccessfully);
+            return this.RedirectToHome();
+        }
+
         public async Task<IActionResult> Search(string query, int pageIndex = 1)
         {
             query = query?.Trim();

@@ -24,5 +24,7 @@ namespace AuctionSystem.Services.Interfaces
 
         Task<IEnumerable<T>> SearchByTitleAsync<T>(string query)
             where T : BaseItemServiceModel;
+
+        Task<bool> DeleteAsync(string id);
     }
 }

@@ -125,6 +125,22 @@ namespace AuctionSystem.Services.Implementations
             return matchingItems;
         }
 
+        public async Task<bool> DeleteAsync(string id)
+        {
+            var item = await this.Context
+                .Items
+                .FindAsync(id);
+            if (item == null)
+            {
+                return false;
+            }
+
+            this.Context.Remove(item);
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
+
         #region privateMethods
 
         private ICollection<Picture> GetPictureUrls(ICollection<IFormFile> pictures, string itemId, string title)
