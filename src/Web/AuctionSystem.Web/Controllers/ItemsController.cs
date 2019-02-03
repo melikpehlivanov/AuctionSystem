@@ -135,7 +135,7 @@ namespace AuctionSystem.Web.Controllers
                 .DeleteAsync(id);
             if (!isDeleted)
             {
-                this.ShowSuccessMessage(NotificationMessages.ItemDeleteError);
+                this.ShowSuccessMessage(NotificationMessages.ItemDeletedError);
                 return this.RedirectToAction(nameof(Delete), new { id });
             }
 
