@@ -3,25 +3,31 @@
 @inject SignInManager<AuctionUser> SignInManager
 @inject UserManager<AuctionUser> UserManager
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
-    }
-    else
-    {
+@if (SignInManager.IsSignedIn(User))
+{
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown auto-dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
+                    <a class="nav-link text-dark dropdown-item">My Items</a>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
+                        <button type="submit" class="nav-link btn btn-link text-dark dropdown-item ">Logout</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+}
+else
+{
+    <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
-    }
-</ul>
+    </ul>
+}
