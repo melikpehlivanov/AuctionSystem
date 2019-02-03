@@ -1,6 +1,5 @@
 namespace AuctionSystem.Web.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -111,16 +110,37 @@ namespace AuctionSystem.Web.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete(string id)
         {
-            return new NotImplementedException;
+            var serviceItem = await this.itemsService
+                .GetByIdAsync<ItemDetailsServiceModel>(id);
+            if (serviceItem == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+
+                return RedirectToHome();
+            }
+
+            var item = Mapper.Map<ItemDetailsViewModel>(serviceItem);
+
+            return View(item);
         }
 
+        [ActionName(nameof(Delete))]
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            return new NotImplementedException;
+            var isDeleted = await this.itemsService
+                .DeleteAsync(id);
+            if (!isDeleted)
+            {
+                this.ShowSuccessMessage(NotificationMessages.ItemDeleteError);
+                return this.RedirectToAction(nameof(Delete), new { id });
+            }
+
+            this.ShowErrorMessage(NotificationMessages.ItemDeletedSuccessfully);
+            return this.RedirectToHome();
         }
 
         public async Task<IActionResult> Search(string query, int pageIndex = 1)

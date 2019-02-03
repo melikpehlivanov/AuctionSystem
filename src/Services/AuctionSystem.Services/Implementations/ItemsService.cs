@@ -127,7 +127,7 @@ namespace AuctionSystem.Services.Implementations
 
         public async Task<bool> DeleteAsync(string id)
         {
-            var item = this.Context
+            var item = await this.Context
                 .Items
                 .FindAsync(id);
             if (item == null)
