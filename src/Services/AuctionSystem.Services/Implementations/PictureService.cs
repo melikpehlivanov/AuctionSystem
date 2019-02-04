@@ -29,6 +29,9 @@
             this.cloudinary = new Cloudinary(account);
         }
 
+        public void Delete(string itemTitle) 
+            => this.cloudinary.DeleteResourcesByPrefix($"{itemTitle}/");
+
         public IEnumerable<ImageUploadResult> Upload(ICollection<IFormFile> pictures, string itemId, string title)
         {
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
