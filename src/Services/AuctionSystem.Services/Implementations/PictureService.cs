@@ -29,8 +29,8 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public void Delete(string itemTitle) 
-            => this.cloudinary.DeleteResourcesByPrefix($"{itemTitle}/");
+        public void Delete(string itemTitle, string itemId) 
+            => this.cloudinary.DeleteResourcesByPrefix($"{itemTitle}/{itemId}/");
 
         public IEnumerable<ImageUploadResult> Upload(ICollection<IFormFile> pictures, string itemId, string title)
         {
