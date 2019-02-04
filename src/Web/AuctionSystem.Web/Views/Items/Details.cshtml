@@ -2,11 +2,11 @@
 
 @{
     ViewData["Title"] = Model.Title;
-}
-
-@{
-    var calculatedPriceForPlaceHolder = Model.StartingPrice * 10;
+    
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
+
+    var isOwner = Model.UserUserName == this.User.Identity.Name ||
+        this.User.IsInRole(WebConstants.AdministratorRole);
 }
 <div class="container">
     <div class="row">
@@ -88,6 +88,25 @@
                     </div>
                 </div>
             </div>
+            
+            @if (isOwner)
+            {
+                <div class="card text-center">
+                    <div class="card-header">Actions</div>
+                    <div class="list-group list-group-flush">
+                        <a class="list-group-item list-group-item-action text-primary"
+                           asp-action="Edit" asp-route-id="@Model.Id">
+                            <i class="fas fa-pen"></i> Edit
+                        </a>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a class="list-group-item list-group-item-action text-danger"
+                           asp-action="Delete" asp-route-id="@Model.Id">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

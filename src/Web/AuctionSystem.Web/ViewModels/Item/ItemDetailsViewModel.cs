@@ -25,5 +25,7 @@ namespace AuctionSystem.Web.ViewModels.Item
         public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
 
         public ICollection<PictureDisplayViewModel> Pictures { get; set; }
+        
+        public string UserUserName { get; set; }
     }
 }

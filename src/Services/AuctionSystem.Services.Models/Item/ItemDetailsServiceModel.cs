@@ -21,6 +21,6 @@ namespace AuctionSystem.Services.Models.Item
 
         public ICollection<PictureDisplayServiceModel> Pictures { get; set; }
         
-        public AuctionUserDetailsServiceModel User { get; set; }
+        public string UserUserName { get; set; }
     }
 }

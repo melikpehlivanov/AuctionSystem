@@ -55,6 +55,14 @@ namespace AuctionSystem.Services.Implementations
                 .ProjectTo<T>()
                 .ToListAsync();
 
+        public async Task<IEnumerable<T>> GetAllItemsForGivenUser<T>(string userId)
+            where T : BaseItemServiceModel
+            => await this.Context.Items
+                .Where(i => i.UserId == userId)
+                .OrderByDescending(i=> i.EndTime)
+                .ProjectTo<T>()
+                .ToListAsync();
+
         public async Task<string> CreateAsync(ItemCreateServiceModel serviceModel)
         {
             if (!this.IsEntityStateValid(serviceModel))
@@ -138,6 +146,36 @@ namespace AuctionSystem.Services.Implementations
             this.pictureService.Delete(item.Title, item.Id);
 
             this.Context.Remove(item);
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateAsync(ItemEditServiceModel serviceModel)
+        {
+            if (!this.IsEntityStateValid(serviceModel))
+            {
+                return false;
+            }
+
+            var item = await this.Context.Items.SingleOrDefaultAsync(i => i.Id == serviceModel.Id);
+
+            if (item == null ||
+                !await this.Context.SubCategories.AnyAsync(c => c.Id == serviceModel.SubCategoryId))
+            {
+                return false;
+            }
+
+            item.Title = serviceModel.Title;
+            item.Description = serviceModel.Description;
+            item.StartingPrice = serviceModel.StartingPrice;
+            item.MinIncrease = serviceModel.MinIncrease;
+            item.StartTime = serviceModel.StartTime;
+            item.EndTime = serviceModel.EndTime;
+            item.SubCategoryId = serviceModel.SubCategoryId;
+
+            this.Context.Items.Update(item);
+
             await this.Context.SaveChangesAsync();
 
             return true;

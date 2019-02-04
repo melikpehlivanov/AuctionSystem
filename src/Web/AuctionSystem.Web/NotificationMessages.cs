@@ -2,8 +2,13 @@ namespace AuctionSystem.Web
 {
     public static class NotificationMessages
     {
+        public const string TryAgainLaterError = "Oops! Something went wrong, please try again later.";
+
         public const string ItemCreateError = "An error occured while creating item";
         public const string ItemCreated = "Item created";
+        
+        public const string ItemUpdateError = "An error occured while editing item";
+        public const string ItemUpdated = "Item details updated";
 
         public const string ItemDeletedError = "An error occured while deleting item";
         public const string ItemDeletedSuccessfully = "Item was deleted successfully";
