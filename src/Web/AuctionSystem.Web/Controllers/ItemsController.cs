@@ -149,11 +149,11 @@ namespace AuctionSystem.Web.Controllers
                 .DeleteAsync(id);
             if (!isDeleted)
             {
-                this.ShowSuccessMessage(NotificationMessages.ItemDeletedError);
+                this.ShowErrorMessage(NotificationMessages.ItemDeletedError);
                 return this.RedirectToAction(nameof(Delete), new { id });
             }
 
-            this.ShowErrorMessage(NotificationMessages.ItemDeletedSuccessfully);
+            this.ShowSuccessMessage(NotificationMessages.ItemDeletedSuccessfully);
             return this.RedirectToHome();
         }
 
