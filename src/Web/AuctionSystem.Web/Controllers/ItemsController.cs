@@ -110,12 +110,77 @@ namespace AuctionSystem.Web.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
+
+            if (serviceModel == null ||
+                serviceModel.UserUserName != this.User.Identity.Name &&
+                !this.User.IsInRole(WebConstants.AdministratorRole))
+            {
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                return this.RedirectToHome();
+            }
+
+            var model = Mapper.Map<ItemEditBindingModel>(serviceModel);
+
+            model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Edit(string id, ItemEditBindingModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
+
+                return this.View(model);
+            }
+
+            var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
+            
+            if (serviceModel == null ||
+                serviceModel.UserUserName != this.User.Identity.Name &&
+                !this.User.IsInRole(WebConstants.AdministratorRole))
+            {
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                return this.RedirectToHome();
+            }
+            
+            serviceModel.Title = model.Title;
+            serviceModel.Description = model.Description;
+            serviceModel.StartingPrice = model.StartingPrice;
+            serviceModel.MinIncrease = model.MinIncrease;
+            serviceModel.StartTime = model.StartTime.ToUniversalTime();
+            serviceModel.EndTime = model.EndTime.ToUniversalTime();
+            serviceModel.SubCategoryId = model.SubCategoryId;
+
+            bool success = await this.itemsService.UpdateAsync(serviceModel);
+
+            if (!success)
+            {
+                this.ShowErrorMessage(NotificationMessages.ItemUpdateError);
+
+                model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
+
+                return this.View(model);
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.ItemUpdated);
+
+            return this.RedirectToAction("Details", new { id });
+        }
+
+        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
             var serviceItem = await this.itemsService
                 .GetByIdAsync<ItemDetailsServiceModel>(id);
             if (serviceItem == null ||
-                serviceItem.User.UserName != this.User.Identity.Name &&
+                serviceItem.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
@@ -137,7 +202,7 @@ namespace AuctionSystem.Web.Controllers
                 .GetByIdAsync<ItemDetailsServiceModel>(id);
             
             if (serviceItem == null ||
-                serviceItem.User.UserName != this.User.Identity.Name &&
+                serviceItem.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);

@@ -4,6 +4,9 @@ namespace AuctionSystem.Web
     {
         public const string ItemCreateError = "An error occured while creating item";
         public const string ItemCreated = "Item created";
+        
+        public const string ItemUpdateError = "An error occured while editing item";
+        public const string ItemUpdated = "Item details updated";
 
         public const string ItemDeletedError = "An error occured while deleting item";
         public const string ItemDeletedSuccessfully = "Item was deleted successfully";
