@@ -55,6 +55,14 @@ namespace AuctionSystem.Services.Implementations
                 .ProjectTo<T>()
                 .ToListAsync();
 
+        public async Task<IEnumerable<T>> GetAllItemsForGivenUser<T>(string userId)
+            where T : BaseItemServiceModel
+            => await this.Context.Items
+                .Where(i => i.UserId == userId)
+                .OrderByDescending(i=> i.EndTime)
+                .ProjectTo<T>()
+                .ToListAsync();
+
         public async Task<string> CreateAsync(ItemCreateServiceModel serviceModel)
         {
             if (!this.IsEntityStateValid(serviceModel))
