@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Reflection;
+    using Common.EmailSender.Interface;
     using Microsoft.Extensions.DependencyInjection;
     using Services.Interfaces;
 
@@ -11,6 +12,14 @@
         {
             var assembly = Assembly.GetAssembly(typeof(IService));
 
+            AddAssemblyServices(services, assembly);
+
+            return services;
+        }
+
+        public static IServiceCollection AddCommonProjectServices(this IServiceCollection services)
+        {
+            var assembly = Assembly.GetAssembly(typeof(IEmailSender));
             AddAssemblyServices(services, assembly);
 
             return services;

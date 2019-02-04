@@ -9,6 +9,7 @@ namespace AuctionSystem.Web.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
     using Services.Interfaces;
     using Services.Models.Item;
     using ViewModels.Item;
@@ -154,7 +155,7 @@ namespace AuctionSystem.Web.Controllers
             }
 
             this.ShowErrorMessage(NotificationMessages.ItemDeletedSuccessfully);
-            return this.RedirectToHome();
+            return this.RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Search(string query, int pageIndex = 1)
