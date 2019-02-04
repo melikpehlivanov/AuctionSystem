@@ -141,6 +141,36 @@ namespace AuctionSystem.Services.Implementations
             return true;
         }
 
+        public async Task<bool> UpdateAsync(ItemEditServiceModel serviceModel)
+        {
+            if (!this.IsEntityStateValid(serviceModel))
+            {
+                return false;
+            }
+
+            var item = await this.Context.Items.SingleOrDefaultAsync(i => i.Id == serviceModel.Id);
+
+            if (item == null ||
+                !await this.Context.SubCategories.AnyAsync(c => c.Id == serviceModel.SubCategoryId))
+            {
+                return false;
+            }
+
+            item.Title = serviceModel.Title;
+            item.Description = serviceModel.Description;
+            item.StartingPrice = serviceModel.StartingPrice;
+            item.MinIncrease = serviceModel.MinIncrease;
+            item.StartTime = serviceModel.StartTime;
+            item.EndTime = serviceModel.EndTime;
+            item.SubCategoryId = serviceModel.SubCategoryId;
+
+            this.Context.Items.Update(item);
+
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
+
         #region privateMethods
 
         private ICollection<Picture> GetPictureUrls(ICollection<IFormFile> pictures, string itemId, string title)

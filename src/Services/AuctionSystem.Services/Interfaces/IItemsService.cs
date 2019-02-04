@@ -26,5 +26,7 @@ namespace AuctionSystem.Services.Interfaces
             where T : BaseItemServiceModel;
 
         Task<bool> DeleteAsync(string id);
+        
+        Task<bool> UpdateAsync(ItemEditServiceModel serviceModel);
     }
 }
