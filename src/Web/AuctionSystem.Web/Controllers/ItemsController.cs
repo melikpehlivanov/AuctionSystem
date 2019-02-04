@@ -114,7 +114,9 @@ namespace AuctionSystem.Web.Controllers
         {
             var serviceItem = await this.itemsService
                 .GetByIdAsync<ItemDetailsServiceModel>(id);
-            if (serviceItem == null)
+            if (serviceItem == null ||
+                serviceItem.User.UserName != this.User.Identity.Name &&
+                !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
 
@@ -131,6 +133,18 @@ namespace AuctionSystem.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            var serviceItem = await this.itemsService
+                .GetByIdAsync<ItemDetailsServiceModel>(id);
+            
+            if (serviceItem == null ||
+                serviceItem.User.UserName != this.User.Identity.Name &&
+                !this.User.IsInRole(WebConstants.AdministratorRole))
+            {
+                this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+
+                return this.RedirectToHome();
+            }
+            
             var isDeleted = await this.itemsService
                 .DeleteAsync(id);
             if (!isDeleted)
