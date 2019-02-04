@@ -9,7 +9,6 @@ namespace AuctionSystem.Web.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
     using Services.Interfaces;
     using Services.Models.Item;
     using ViewModels.Item;
@@ -237,11 +236,11 @@ namespace AuctionSystem.Web.Controllers
                 .DeleteAsync(id);
             if (!isDeleted)
             {
-                this.ShowSuccessMessage(NotificationMessages.ItemDeletedError);
+                this.ShowErrorMessage(NotificationMessages.ItemDeletedError);
                 return this.RedirectToAction(nameof(Delete), new { id });
             }
-
-            this.ShowErrorMessage(NotificationMessages.ItemDeletedSuccessfully);
+            
+            this.ShowSuccessMessage(NotificationMessages.ItemDeletedSuccessfully);
             return this.RedirectToAction(nameof(Index));
         }
 
