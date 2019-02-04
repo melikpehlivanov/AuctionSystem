@@ -31,6 +31,6 @@ namespace AuctionSystem.Services.Models.Item
         [Required]
         public string SubCategoryId { get; set; }
 
-        public AuctionUserDetailsServiceModel User { get; set; }
+        public string UserUserName { get; set; }
     }
 }

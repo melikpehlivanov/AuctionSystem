@@ -115,7 +115,7 @@ namespace AuctionSystem.Web.Controllers
             var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
 
             if (serviceModel == null ||
-                serviceModel.User.UserName != this.User.Identity.Name &&
+                serviceModel.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
@@ -143,7 +143,7 @@ namespace AuctionSystem.Web.Controllers
             var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
             
             if (serviceModel == null ||
-                serviceModel.User.UserName != this.User.Identity.Name &&
+                serviceModel.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
@@ -180,7 +180,7 @@ namespace AuctionSystem.Web.Controllers
             var serviceItem = await this.itemsService
                 .GetByIdAsync<ItemDetailsServiceModel>(id);
             if (serviceItem == null ||
-                serviceItem.User.UserName != this.User.Identity.Name &&
+                serviceItem.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
@@ -202,7 +202,7 @@ namespace AuctionSystem.Web.Controllers
                 .GetByIdAsync<ItemDetailsServiceModel>(id);
             
             if (serviceItem == null ||
-                serviceItem.User.UserName != this.User.Identity.Name &&
+                serviceItem.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
