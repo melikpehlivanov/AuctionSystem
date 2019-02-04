@@ -17,11 +17,33 @@ namespace AuctionSystem.Web.Controllers
     {
         private readonly IItemsService itemsService;
         private readonly ICache cache;
+        private readonly IUserService userService;
 
-        public ItemsController(IItemsService itemsService, ICache cache)
+        public ItemsController(IItemsService itemsService, ICache cache, IUserService userService)
         {
             this.itemsService = itemsService;
             this.cache = cache;
+            this.userService = userService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var user = await this.userService
+                .GetUserIdByUsernameAsync(this.HttpContext.User.Identity.Name);
+
+            var serviceItems = await this.itemsService
+                    .GetAllItemsForGivenUser<ItemIndexServiceModel>(user);
+            if (serviceItems == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
+                return View();
+            }
+
+            var items = serviceItems
+                .Select(Mapper.Map<ItemIndexViewModel>)
+                .ToList();
+
+            return View(items);
         }
 
         public async Task<IActionResult> List(string id, int pageIndex = 1)
