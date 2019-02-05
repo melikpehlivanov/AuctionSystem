@@ -5,7 +5,6 @@ $('#inputGroupFile01').on('change',
         let files = e.target.files;
         let myId = $('#item-id').val();
         let title = $('#title').val();
-        console.log(myId, title);
         if (files.length > 0) {
             if (window.FormData !== undefined) {
                 let data = new FormData();
@@ -28,7 +27,7 @@ $('#inputGroupFile01').on('change',
     });
 
 function preview(data) {
-    $('[value="https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg"]').closest('li').remove();
+    $('[src="https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg"]').closest('li').remove();
 
     let gallery = $('#smallGallery');
     let count = gallery.children().length;
@@ -60,11 +59,7 @@ function removePicture() {
     let src = closestLiElement.children().attr('data-image');
     let args = src.substring(src.lastIndexOf('/') + 1);
     let tokens = args.split('/');
-    console.log(tokens);
-
     let pictureId = tokens[0];
-    console.log(pictureId);
-
 
     closestLiElement.remove();
 
@@ -76,10 +71,7 @@ function removePicture() {
             url: `/Pictures/DeletePictures?pictureId=${pictureId}`,
             contentType: false,
             processData: false,
-            data: data,
-            success: function(result) {
-                preview(result);
-            }
+            data: data
         });
     }
 
@@ -90,17 +82,11 @@ function removePicture() {
             .attr("name", `urls[${index}]`);
     });
 
-    if ($inputs.length == 0) {
+    if ($inputs.length === 0) {
         let li = $('<li>')
             .append($('<a>')
                 .append($('<img>')
                     .attr("src", "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg")))
-            .append($('<input>')
-                .addClass('item-picture')
-                .attr("value", 'https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg')
-                .attr("hidden", "hidden")
-                .attr("id", 'urls[0]')
-                .attr("name", 'urls[0]'))
             .append($('<a>')
                 .addClass("close-btn")
                 .text('x')
