@@ -1,4 +1,4 @@
-﻿$('.close-btn').on("click", removePicture);
+﻿$('.pointer').on("click", removePicture);
 
 $('#inputGroupFile01').on('change',
     function (e) {
@@ -31,12 +31,23 @@ function preview(data) {
 
     let gallery = $('#smallGallery');
     let count = gallery.children().length;
+    console.log(data.urls.length);
+    if (data.urls.length === 0) {
+        let li = $('<li>')
+            .append($('<a>')
+                .append($('<img>')
+                    .attr("src", "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg")));
 
+        gallery.append(li);
+        return;
+    }
+    
     for (let i = 0; i < data.urls.length; i++) {
         let url = data.urls[i];
 
         let li = $('<li>')
             .append($('<a>')
+                .attr('data-image', url)
                 .append($('<img>')
                     .attr("src", url)))
             .append($('<input>')
@@ -45,9 +56,8 @@ function preview(data) {
                 .attr("hidden", "hidden")
                 .attr("id", `urls[${i + count}]`)
                 .attr("name", `urls[${i + count}]`))
-            .append($('<a>')
-                .addClass("close-btn")
-                .text('x')
+            .append($('<i>')
+                .addClass("pointer fas fa-times-circle")
                 .on("click", removePicture));
 
         gallery.append(li);
@@ -86,11 +96,7 @@ function removePicture() {
         let li = $('<li>')
             .append($('<a>')
                 .append($('<img>')
-                    .attr("src", "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg")))
-            .append($('<a>')
-                .addClass("close-btn")
-                .text('x')
-                .on("click", removePicture));
+                    .attr("src", "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg")));
 
         $('#smallGallery').append(li);
     }

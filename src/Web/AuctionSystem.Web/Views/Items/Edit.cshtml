@@ -12,20 +12,28 @@
 
         <form method="post" id="createForm" enctype="multipart/form-data">
             <hr />
-            <div class="col-12">
                 <div class="images-carousel ml-0">
-                    <ul id="smallGallery" class="d-flex">
-                        @for (int i = 0; i < Model.Pictures.Count; i++)
+                    <ul id="smallGallery" class="d-flex no-bullets">
+                        @if (Model.Pictures.Any())
                         {
-                            var picture = Model.Pictures.ToList()[i];
-                        <li>
-                            <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img id="img" src="@picture.Url" alt="" /></a>
-                            <input id="urls[@i]" name="urls[@i]" value="@picture.Url" hidden="hidden" class="item-picture" />
-                            <a class="close-btn">x</a>
-                        </li>
+                            for (int i = 0; i < Model.Pictures.Count; i++)
+                             {
+                                 var picture = Model.Pictures.ToList()[i];
+                                 <li>
+                                     <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img id="img" src="@picture.Url" alt=""/></a>
+                                     <input id="urls[@i]" name="urls[@i]" value="@picture.Url" hidden="hidden" class="item-picture"/>
+                                     <i class="fas fa-times-circle pointer"></i>
+                                 </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="zoomGalleryActive" href="#" data-image="@WebConstants.DefaultPictureUrl" data-zoom-image="@WebConstants.DefaultPictureUrl"><img id="img" src="@WebConstants.DefaultPictureUrl" alt=""/></a>
+                                <input id="urls[0]" name="urls[0]" value="@WebConstants.DefaultPictureUrl" hidden="hidden" class="item-picture"/>
+                            </li>
                         }
                     </ul>
-                </div>
                 <div class="form-group">
                     <div class="custom-file my-3">
                         <input type="file" accept="image/*" asp-for="Pictures" class="custom-file-input btn btn-outline-secondary" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" multiple>
