@@ -31,17 +31,7 @@ function preview(data) {
 
     let gallery = $('#smallGallery');
     let count = gallery.children().length;
-    console.log(data.urls.length);
-    if (data.urls.length === 0) {
-        let li = $('<li>')
-            .append($('<a>')
-                .append($('<img>')
-                    .attr("src", "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg")));
 
-        gallery.append(li);
-        return;
-    }
-    
     for (let i = 0; i < data.urls.length; i++) {
         let url = data.urls[i];
 
@@ -70,7 +60,7 @@ function removePicture() {
     let args = src.substring(src.lastIndexOf('/') + 1);
     let tokens = args.split('/');
     let pictureId = tokens[0];
-
+    pictureId = pictureId.slice(0, pictureId.lastIndexOf('.'));
     closestLiElement.remove();
 
     if (window.FormData !== undefined) {

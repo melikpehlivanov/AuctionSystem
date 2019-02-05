@@ -49,9 +49,7 @@
         [HttpPost]
         public async Task<IActionResult> DeletePictures(string pictureId)
         {
-            var extension = $".{pictureId.Split('.').LastOrDefault()?.ToLower()}";
-            var pictureIdWithoutExtension = pictureId.Remove(pictureId.LastIndexOf(extension, StringComparison.Ordinal));
-            var picture = await this.pictureService.GetPictureById<PictureDeleteServiceModel>(pictureIdWithoutExtension);
+            var picture = await this.pictureService.GetPictureById<PictureDeleteServiceModel>(pictureId);
             if (picture == null)
             {
                 return this.NotFound();
