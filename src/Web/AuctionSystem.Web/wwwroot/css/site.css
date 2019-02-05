@@ -78,3 +78,7 @@ html {
     color: dimgray;
     font-size: 5em;
 }
+
+ul {
+    list-style-type: none;
+}
