@@ -1,8 +1,9 @@
 namespace AuctionSystem.Services.Models.Item
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using AuctionUser;
+    using Picture;
 
     public class ItemEditServiceModel : BaseItemServiceModel
     {
@@ -32,5 +33,7 @@ namespace AuctionSystem.Services.Models.Item
         public string SubCategoryId { get; set; }
 
         public string UserUserName { get; set; }
+
+        public ICollection<PictureDisplayServiceModel> Pictures { get; set; }
     }
 }

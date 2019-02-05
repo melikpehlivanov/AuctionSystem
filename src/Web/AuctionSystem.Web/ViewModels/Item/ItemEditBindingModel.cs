@@ -3,13 +3,18 @@ namespace AuctionSystem.Web.ViewModels.Item
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Common;
     using Common.AutoMapping.Interfaces;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using Picture;
     using Services.Models.Item;
 
     public class ItemEditBindingModel : IMapWith<ItemEditServiceModel>, IValidatableObject
     {
         private const string EndTimeBeforeStartTimeError = "The end time must be after the start time";
+
+        [Required]
+        public string Id { get; set; }
 
         [Required]
         [MaxLength(120)]
@@ -42,6 +47,10 @@ namespace AuctionSystem.Web.ViewModels.Item
         public string SubCategoryId { get; set; }
 
         public IEnumerable<SelectListItem> SubCategories { get; set; }
+
+        public ICollection<PictureDisplayViewModel> Pictures { get; set; }
+
+        public string Url => $"/items/details/{this.Id}/{this.Title.GenerateSlug()}";
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
