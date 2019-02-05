@@ -14,7 +14,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td><img class="img-fluid img-thumbnail" src="@item.Pictures.FirstOrDefault()?.Url" /></td>
+                    <td><img class="img-fluid img-thumbnail" src="@item.PrimaryPicturePath" /></td>
                     <td>@item.Title</td>
                     <td>€@item.StartingPrice</td>
                     <td>

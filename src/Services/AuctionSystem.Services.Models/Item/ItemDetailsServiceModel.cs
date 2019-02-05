@@ -2,7 +2,6 @@ namespace AuctionSystem.Services.Models.Item
 {
     using System;
     using System.Collections.Generic;
-    using AuctionUser;
     using Picture;
 
     public class ItemDetailsServiceModel : BaseItemServiceModel
