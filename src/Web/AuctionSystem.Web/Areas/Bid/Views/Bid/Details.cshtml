@@ -7,6 +7,12 @@
 }
 
 <div class="container">
+    <div class="text-left">
+        <a class="btn btn-link" asp-controller="Items" asp-action="Details" asp-route-id="@Model.Id">
+            <i class="fas fa-chevron-left"></i>
+            Back to @Model.Title
+        </a>
+    </div>
     <div class="row">
         <div class="col-12 col-md-8">
             <div class="card">
