@@ -86,3 +86,7 @@ html {
 .pointer {
     cursor: pointer;
 }
+
+.text-wrap-break-word {
+    word-wrap: normal;
+}
