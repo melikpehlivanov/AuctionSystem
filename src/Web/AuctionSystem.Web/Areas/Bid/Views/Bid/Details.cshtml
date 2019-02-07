@@ -10,7 +10,9 @@
         <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card pre-scrollable">
-                    <h3 class="card-title">@Model.Title</h3>
+                    <a class="text-center mt-3" asp-controller="Items" asp-action="Details" asp-route-id="@Model.Id">
+                        <h3 class="card-title">@Model.Title</h3>
+                    </a>
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             @for (int i = 1; i <= Model.Pictures.Count; i++)
