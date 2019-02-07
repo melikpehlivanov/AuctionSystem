@@ -45,6 +45,11 @@
                 .Pictures
                 .FindAsync(pictureId);
 
+            if (pictureToRemove == null)
+            {
+                return;
+            }
+
             this.Context.Pictures.Remove(pictureToRemove);
             await this.Context.SaveChangesAsync();
         }
