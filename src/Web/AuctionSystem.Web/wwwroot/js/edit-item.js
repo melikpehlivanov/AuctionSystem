@@ -63,14 +63,13 @@ function removePicture() {
     closestLiElement.remove();
 
     if (window.FormData !== undefined) {
-        var data = new FormData();
-        data.append('__RequestVerificationToken', $('input[name=__RequestVerificationToken]').val());
         $.ajax({
             type: "POST",
-            url: `/Pictures/DeletePictures?pictureId=${pictureId}`,
-            contentType: false,
-            processData: false,
-            data: data
+            url: '/Pictures/DeletePictures',
+            data: {
+                pictureId: pictureId,
+                __RequestVerificationToken: $('input[name=__RequestVerificationToken]').val()
+            }
         });
     }
 
