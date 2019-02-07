@@ -62,7 +62,7 @@
             }
             await this.pictureService.Delete(picture.ItemId, picture.Id);
 
-            return this.Ok();
+            return this.Json(new object());
         }
     }
 }
