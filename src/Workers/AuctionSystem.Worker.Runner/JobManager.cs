@@ -68,8 +68,14 @@
                 if (!isSuccessful) continue;
                 try
                 {
-                    item.IsEmailSent = true;
-                    this.dbContext.Update(item);
+                    var dbItem = await this.dbContext.Items.FindAsync(item.Id);
+                    if (dbItem == null)
+                    {
+                        continue;
+                    }
+
+                    dbItem.IsEmailSent = true;
+                    this.dbContext.Items.Update(dbItem);
                     await this.dbContext.SaveChangesAsync();
                     this.logger.LogInformation(string.Format(LogMessage, DateTime.UtcNow, winnerBid.UserEmail, item.Id));
                 }
