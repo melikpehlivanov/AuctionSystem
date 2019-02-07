@@ -34,12 +34,12 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public void Delete(string itemTitle, string itemId)
-            => this.cloudinary.DeleteResourcesByPrefix($"{itemTitle}/{itemId}/");
+        public void Delete(string itemId)
+            => this.cloudinary.DeleteResourcesByPrefix($"{itemId}/");
 
-        public async Task Delete(string itemTitle, string itemId, string pictureId)
+        public async Task Delete(string itemId, string pictureId)
         {
-            this.cloudinary.DeleteResourcesByPrefix($"{itemTitle}/{itemId}/{pictureId}");
+            this.cloudinary.DeleteResourcesByPrefix($"{itemId}/{pictureId}");
 
             var pictureToRemove = await this.Context
                 .Pictures
@@ -56,7 +56,7 @@
                 .ProjectTo<T>()
                 .SingleOrDefaultAsync();
 
-        public async Task<IEnumerable<UploadResult>> Upload(ICollection<IFormFile> pictures, string itemId, string title)
+        public async Task<IEnumerable<UploadResult>> Upload(ICollection<IFormFile> pictures, string itemId)
         {
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
             Parallel.ForEach(pictures, (picture) =>
@@ -66,7 +66,7 @@
                 {
                     PublicId = guid,
                     File = new FileDescription(guid, picture.OpenReadStream()),
-                    Folder = $"{title}/{itemId}",
+                    Folder = $"{itemId}",
                 };
                 var uploadResult = this.cloudinary.UploadLarge(uploadParams);
                 uploadResults.Add(uploadResult);

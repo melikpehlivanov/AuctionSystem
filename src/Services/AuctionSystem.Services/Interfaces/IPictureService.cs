@@ -7,10 +7,10 @@
 
     public interface IPictureService
     {
-        Task<IEnumerable<UploadResult>> Upload(ICollection<IFormFile> pictures, string itemId, string title);
+        Task<IEnumerable<UploadResult>> Upload(ICollection<IFormFile> pictures, string itemId);
 
-        void Delete(string itemTitle, string itemId);
-        Task Delete(string itemTitle, string itemId, string pictureId);
+        void Delete(string itemId);
+        Task Delete(string itemId, string pictureId);
         Task<T> GetPictureById<T>(string pictureId);
     }
 }

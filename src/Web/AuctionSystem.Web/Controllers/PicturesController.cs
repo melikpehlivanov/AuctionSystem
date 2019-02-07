@@ -25,7 +25,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPictures(string id, string title)
+        public async Task<IActionResult> UploadPictures(string id)
         {
             try
             {
@@ -35,7 +35,7 @@
                 {
                     return this.NotFound();
                 }
-                var uploads = await this.pictureService.Upload((ICollection<IFormFile>)this.Request.Form.Files, id, title);
+                var uploads = await this.pictureService.Upload((ICollection<IFormFile>)this.Request.Form.Files, id);
                 var urls = uploads.Select(p => p.SecureUri.AbsoluteUri).ToList();
                 return this.Json(new { urls });
             }
@@ -60,7 +60,7 @@
             {
                 return this.NotFound();
             }
-            await this.pictureService.Delete(picture.ItemTitle, picture.ItemId, picture.Id);
+            await this.pictureService.Delete(picture.ItemId, picture.Id);
 
             return this.Ok();
         }

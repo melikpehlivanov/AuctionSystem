@@ -4,7 +4,6 @@ $('#inputGroupFile01').on('change',
     function (e) {
         let files = e.target.files;
         let myId = $('#item-id').val();
-        let title = $('#title').val();
         if (files.length > 0) {
             if (window.FormData !== undefined) {
                 let data = new FormData();
@@ -14,7 +13,7 @@ $('#inputGroupFile01').on('change',
                 data.append('__RequestVerificationToken', $('input[name=__RequestVerificationToken]').val());
                 $.ajax({
                     type: "POST",
-                    url: `/Pictures/UploadPictures?id=${myId}&title=${title}`,
+                    url: `/Pictures/UploadPictures?id=${myId}`,
                     contentType: false,
                     processData: false,
                     data: data,

@@ -78,7 +78,7 @@ namespace AuctionSystem.Services.Implementations
             item.UserId = user.Id;
 
             await this.Context.AddAsync(item);
-            await this.pictureService.Upload(serviceModel.PictFormFiles, item.Id, item.Title);
+            await this.pictureService.Upload(serviceModel.PictFormFiles, item.Id);
 
             await this.Context.SaveChangesAsync();
 
