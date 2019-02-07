@@ -26,7 +26,7 @@ $('#inputGroupFile01').on('change',
     });
 
 function preview(data) {
-    $('[src="https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg"]').closest('li').remove();
+    $('[src="https://res.cloudinary.com/auctionsystem/image/upload/v1547833155/default-img.jpg"]').closest('li').remove();
 
     let gallery = $('#smallGallery');
     let count = gallery.children().length;
@@ -85,7 +85,7 @@ function removePicture() {
         let li = $('<li>')
             .append($('<a>')
                 .append($('<img>')
-                    .attr("src", "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg")));
+                    .attr("src", "https://res.cloudinary.com/auctionsystem/image/upload/v1547833155/default-img.jpg")));
 
         $('#smallGallery').append(li);
     }
