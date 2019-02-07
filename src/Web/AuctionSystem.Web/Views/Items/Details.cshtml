@@ -74,13 +74,19 @@
                         @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
                         {
                             <div class="m-2">
-                                <a asp-area="Bid" asp-action="Details" asp-controller="Bid" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</a>
+                                <a asp-area="Bid" asp-action="Details" asp-controller="Bid" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block">
+                                    <span class="d-inline d-md-none d-lg-inline">GO LIVE</span> 
+                                    BIDDING
+                                </a>
                             </div>
                         }
                         else
                         {
                             <div class="m-2">
-                                <button disabled class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</button>
+                                <button disabled class="btn btn-primary btn-lg btn-block">
+                                    <span class="d-none d-lg-inline">GO LIVE</span> 
+                                    BIDDING
+                                </button>
                             </div>
                         }
                     </div>
