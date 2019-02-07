@@ -130,8 +130,7 @@
                             StartingPrice = random.Next(10, 500),
                             MinIncrease = random.Next(1, 100),
                             SubCategoryId = subCategory.Id,
-                            UserId = dbContext.Users.First().Id,
-                            Pictures = new List<Picture> { new Picture { Url = "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg" } }
+                            UserId = dbContext.Users.First().Id
                         };
 
                         i++;
