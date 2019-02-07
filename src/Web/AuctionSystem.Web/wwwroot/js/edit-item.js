@@ -26,7 +26,7 @@ $('#inputGroupFile01').on('change',
     });
 
 function preview(data) {
-    $('[src="https://res.cloudinary.com/auctionsystem/image/upload/v1547833155/default-img.jpg"]').closest('li').remove();
+    $('.defaultPicture').remove();
 
     let gallery = $('#smallGallery');
     let count = gallery.children().length;
@@ -82,6 +82,7 @@ function removePicture() {
 
     if ($inputs.length === 0) {
         let li = $('<li>')
+            .addClass('defaultPicture')
             .append($('<a>')
                 .append($('<img>')
                     .attr("src", "https://res.cloudinary.com/auctionsystem/image/upload/v1547833155/default-img.jpg")));
