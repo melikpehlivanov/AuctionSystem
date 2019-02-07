@@ -14,5 +14,7 @@
 
         public const string SearchViewDataKey = "SearchQuery";
         public const int StaticElementsExpirationTimeInDays = 14;
+
+        public const string DefaultPictureUrl = "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg";
     }
 }

@@ -5,5 +5,6 @@ namespace AuctionSystem.Services.Models.Picture
 
     public abstract class BasePictureServiceModel : IMapWith<Picture>
     {
+        public string Id { get; set; }
     }
 }

@@ -9,15 +9,11 @@ namespace AuctionSystem.Services.Implementations
     using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Models.Item;
 
     public class ItemsService : BaseService, IItemsService
     {
-        private const string DefaultPictureUrl =
-            "https://res.cloudinary.com/do72gylo3/image/upload/v1547833155/default-img.jpg";
-
         private readonly IPictureService pictureService;
 
         public ItemsService(AuctionSystemDbContext context, IPictureService pictureService)
@@ -59,7 +55,7 @@ namespace AuctionSystem.Services.Implementations
             where T : BaseItemServiceModel
             => await this.Context.Items
                 .Where(i => i.UserId == userId)
-                .OrderByDescending(i=> i.EndTime)
+                .OrderByDescending(i => i.EndTime)
                 .ProjectTo<T>()
                 .ToListAsync();
 
@@ -82,9 +78,7 @@ namespace AuctionSystem.Services.Implementations
             item.UserId = user.Id;
 
             await this.Context.AddAsync(item);
-
-            item.Pictures = serviceModel.PictFormFiles.Any() ? this.GetPictureUrls(serviceModel.PictFormFiles, item.Id, serviceModel.Title)
-                : new List<Picture> { new Picture { Url = DefaultPictureUrl } };
+            await this.pictureService.Upload(serviceModel.PictFormFiles, item.Id);
 
             await this.Context.SaveChangesAsync();
 
@@ -143,7 +137,7 @@ namespace AuctionSystem.Services.Implementations
                 return false;
             }
 
-            this.pictureService.Delete(item.Title, item.Id);
+            await this.pictureService.Delete(item.Title, item.Id);
 
             this.Context.Remove(item);
             await this.Context.SaveChangesAsync();
@@ -175,21 +169,9 @@ namespace AuctionSystem.Services.Implementations
             item.SubCategoryId = serviceModel.SubCategoryId;
 
             this.Context.Items.Update(item);
-
             await this.Context.SaveChangesAsync();
 
             return true;
         }
-
-        #region privateMethods
-
-        private ICollection<Picture> GetPictureUrls(ICollection<IFormFile> pictures, string itemId, string title)
-        {
-            var uploadedPictures = this.pictureService.Upload(pictures, itemId, title).ToList();
-            return uploadedPictures.Any() ? uploadedPictures.Select(picture => new Picture { Url = picture.SecureUri.AbsoluteUri }).ToList()
-                : new List<Picture> { new Picture { Url = DefaultPictureUrl } };
-        }
-
-        #endregion
     }
 }

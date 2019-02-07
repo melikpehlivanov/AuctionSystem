@@ -18,12 +18,14 @@ namespace AuctionSystem.Web.Controllers
         private readonly IItemsService itemsService;
         private readonly ICache cache;
         private readonly IUserService userService;
+        private readonly IPictureService pictureService;
 
-        public ItemsController(IItemsService itemsService, ICache cache, IUserService userService)
+        public ItemsController(IItemsService itemsService, ICache cache, IUserService userService, IPictureService pictureService)
         {
             this.itemsService = itemsService;
             this.cache = cache;
             this.userService = userService;
+            this.pictureService = pictureService;
         }
 
         public async Task<IActionResult> Index()
@@ -163,7 +165,7 @@ namespace AuctionSystem.Web.Controllers
             }
 
             var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
-            
+
             if (serviceModel == null ||
                 serviceModel.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
@@ -171,7 +173,7 @@ namespace AuctionSystem.Web.Controllers
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
                 return this.RedirectToHome();
             }
-            
+
             serviceModel.Title = model.Title;
             serviceModel.Description = model.Description;
             serviceModel.StartingPrice = model.StartingPrice;
@@ -222,7 +224,7 @@ namespace AuctionSystem.Web.Controllers
         {
             var serviceItem = await this.itemsService
                 .GetByIdAsync<ItemDetailsServiceModel>(id);
-            
+
             if (serviceItem == null ||
                 serviceItem.UserUserName != this.User.Identity.Name &&
                 !this.User.IsInRole(WebConstants.AdministratorRole))
@@ -231,7 +233,7 @@ namespace AuctionSystem.Web.Controllers
 
                 return this.RedirectToHome();
             }
-            
+
             var isDeleted = await this.itemsService
                 .DeleteAsync(id);
             if (!isDeleted)
@@ -239,7 +241,7 @@ namespace AuctionSystem.Web.Controllers
                 this.ShowErrorMessage(NotificationMessages.ItemDeletedError);
                 return this.RedirectToAction(nameof(Delete), new { id });
             }
-            
+
             this.ShowSuccessMessage(NotificationMessages.ItemDeletedSuccessfully);
             return this.RedirectToAction(nameof(Index));
         }

@@ -78,3 +78,11 @@ html {
     color: dimgray;
     font-size: 5em;
 }
+
+.no-bullets{
+    list-style-type: none;
+}
+
+.pointer {
+    cursor: pointer;
+}

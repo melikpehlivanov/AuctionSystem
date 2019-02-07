@@ -7,8 +7,40 @@
 <div class="container">
     <div class="text-center w-md-75 w-lg-50 mx-auto my-4">
         <h2>@ViewData["Title"]</h2>
+        <input id="item-id" asp-for="@Model.Id" hidden="hidden" value="@Model.Id" />
+        <input id="title" asp-for="@Model.Title" hidden="hidden" value="@Model.Title" />
+
         <form method="post" id="createForm" enctype="multipart/form-data">
             <hr />
+                <div class="images-carousel ml-0">
+                    <ul id="smallGallery" class="d-flex no-bullets">
+                        @if (Model.Pictures.Any())
+                        {
+                            for (int i = 0; i < Model.Pictures.Count; i++)
+                             {
+                                 var picture = Model.Pictures.ToList()[i];
+                                 <li>
+                                     <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img id="img" src="@picture.Url" alt=""/></a>
+                                     <input id="urls[@i]" name="urls[@i]" value="@picture.Url" hidden="hidden" class="item-picture"/>
+                                     <i class="fas fa-times-circle pointer"></i>
+                                 </li>
+                            }
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="zoomGalleryActive" href="#" data-image="@WebConstants.DefaultPictureUrl" data-zoom-image="@WebConstants.DefaultPictureUrl"><img id="img" src="@WebConstants.DefaultPictureUrl" alt=""/></a>
+                                <input id="urls[0]" name="urls[0]" value="@WebConstants.DefaultPictureUrl" hidden="hidden" class="item-picture"/>
+                            </li>
+                        }
+                    </ul>
+                <div class="form-group">
+                    <div class="custom-file my-3">
+                        <input type="file" accept="image/*" asp-for="Pictures" class="custom-file-input btn btn-outline-secondary" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" multiple>
+                        <label id="inputGroupFile01-label" class="custom-file-label btn btn-outline-secondary" for="inputGroupFile01">Choose file</label>
+                    </div>
+                </div>
+            </div>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title"></label>
@@ -58,11 +90,12 @@
 </div>
 
 @section CustomCss {
+    <link href="~/css/item-details.css" rel="stylesheet">
     <link href="~/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 }
-
 @section Scripts {
     <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/js/edit-item.js"></script>
 
     <script>
         $('#startTime').datetimepicker({
@@ -71,8 +104,8 @@
             icons: {
                 time: 'fas fa-clock'
             }
-        }); 
-        
+        });
+
         $('#endTime').datetimepicker({
             date: moment.utc($('#endTimeSubmit').val(), 'DD/MM/YYYY HH:mm').local(),
             format: 'DD/MM/YYYY HH:mm',

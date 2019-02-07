@@ -2,6 +2,7 @@ namespace AuctionSystem.Web.ViewModels.Item
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Common.AutoMapping.Interfaces;
     using Picture;
     using Services.Models.Item;
@@ -24,8 +25,22 @@ namespace AuctionSystem.Web.ViewModels.Item
 
         public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
 
-        public ICollection<PictureDisplayViewModel> Pictures { get; set; }
-        
         public string UserUserName { get; set; }
+
+        public ICollection<PictureDisplayViewModel> Pictures { get; set; }
+
+        public string PrimaryPicturePath => this.GetPrimaryPicturePath(this.Pictures);
+
+        private string GetPrimaryPicturePath(IEnumerable<PictureDisplayViewModel> pictures)
+        {
+            if (!pictures.Any())
+            {
+                return WebConstants.DefaultPictureUrl;
+            }
+            var firstPic = pictures.First();
+
+            return firstPic?.Url;
+        }
+
     }
 }
