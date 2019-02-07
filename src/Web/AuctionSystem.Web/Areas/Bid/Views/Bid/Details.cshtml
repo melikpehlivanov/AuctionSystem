@@ -1,16 +1,25 @@
 ﻿@model BidDetailsViewModel
 
 @{
+    ViewData["Title"] = Model.Title;    
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
     var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal)0.1).ToString("F2");
 }
 
 <div class="container">
+    <div class="text-left">
+        <a class="btn btn-link" asp-controller="Items" asp-action="Details" asp-route-id="@Model.Id">
+            <i class="fas fa-chevron-left"></i>
+            Back to @Model.Title
+        </a>
+    </div>
     <div class="row">
         <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card pre-scrollable">
-                    <h3 class="card-title">@Model.Title</h3>
+                    <a class="text-center mt-3" asp-controller="Items" asp-action="Details" asp-route-id="@Model.Id">
+                        <h3 class="card-title">@Model.Title</h3>
+                    </a>
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             @for (int i = 1; i <= Model.Pictures.Count; i++)
