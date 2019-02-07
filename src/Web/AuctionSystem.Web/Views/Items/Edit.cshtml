@@ -8,7 +8,13 @@
     <div class="text-center w-md-75 w-lg-50 mx-auto my-4">
         <h2>@ViewData["Title"]</h2>
         <input id="item-id" asp-for="@Model.Id" hidden="hidden" value="@Model.Id" />
-        <input id="title" asp-for="@Model.Title" hidden="hidden" value="@Model.Title" />
+        
+        <div class="text-left">
+            <a class="btn btn-link" asp-controller="Items" asp-action="Details" asp-route-id="@Model.Id">
+                <i class="fas fa-chevron-left"></i>
+                Back to @Model.Title
+            </a>
+        </div>
 
         <form method="post" id="createForm" enctype="multipart/form-data">
             <hr />
