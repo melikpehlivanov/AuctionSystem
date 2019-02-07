@@ -1,6 +1,7 @@
 ﻿@model BidDetailsViewModel
 
 @{
+    ViewData["Title"] = Model.Title;    
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
     var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal)0.1).ToString("F2");
 }
