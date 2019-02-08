@@ -1,115 +1,104 @@
 ﻿@model ItemDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = "Delete " + Model.Title;
 }
 
-@{
-    var calculatedPriceForPlaceHolder = Model.StartingPrice * 10;
-    var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
-}
 <div class="container">
-    <div class="text-center">
-        <h1>Are you sure you want to delete?</h1>
-        <form method="post">
-            <button type="submit" class="btn btn-danger" asp-controller="Items" asp-action="Delete" asp-route-id="@Model.Id">Delete</button>
-        </form>
-    </div>
-    <div class="row">
-        <div class="col-12 col-md-8">
-            <div>
-                <div class="tt-mobile-product-layout text-center">
-                    <img class="zoom-product" src="@mainImage" data-zoom-image="@mainImage" style="max-height: 80vh;" alt="">
-                </div>
-                <div class="images-carousel ml-0">
-                    <ul id="smallGallery">
-                        @if (Model.Pictures.Count > 1)
+    <div class="text-center w-md-75 w-lg-50 mx-auto my-4">
+        <h2>@ViewData["Title"]</h2>
+
+        <div class="text-left">
+            <a class="btn btn-link" asp-controller="Items" asp-action="Details" asp-route-id="@Model.Id">
+                <i class="fas fa-chevron-left"></i>
+                Back to @Model.Title
+            </a>
+        </div>
+
+        <form method="post" asp-controller="Items" asp-action="Delete">
+            <hr/>
+            <div class="images-carousel ml-0">
+                <ul class="d-flex no-bullets">
+                    @if (Model.Pictures.Any())
+                    {
+                        var pictures = Model.Pictures.ToList();
+
+                        foreach (var picture in pictures)
                         {
-                            foreach (var picture in Model.Pictures)
-                            {
-                                <li><a href="#" class="zoom-gallery" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-            <div>
-                <div class="card">
-                    <div class="card-header py-3">
-                        <ul class="nav nav-pills card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active mb-1" href="#">Details</a>
+                            <li>
+                                <a class="zoomGalleryActive" href="#" data-image="@picture.Url"
+                                   data-zoom-image="@picture.Url">
+                                    <img src="@picture.Url" alt="@Model.Title"/>
+                                </a>
                             </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <p>@Model.Description</p>
-                        <h5 class="card-title">Starting Bid</h5>
-                        <p class="card-text">$@Model.StartingPrice</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-4">
-            <h1>@Model.Title</h1>
-            @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
-            {
-                <span id="identifier" class="float-right">
-                    Remaining time:
-                    <span id="countdown" class="text-red"></span>
-                </span>
-            }
-            else if (Model.StartTime > DateTime.UtcNow)
-            {
-                <span id="identifier" class="float-right">
-                    Time until start:
-                    <span id="countdown" class="text-red"></span>
-                </span>
-            }
-            else
-            {
-                <span class="float-right">
-                    <span class="text-red">Auction ended</span>
-                </span>
-            }
-            <div class="pt-5 pb-5">
-                <div class="card border-dark custom-card-color">
-                    <div class="card-body">
-                        <p class="card-text">Est. Price: &euro; @Model.StartingPrice - @(Model.StartingPrice * 10)</p>
-                        <div>
-                            <label></label>
-                        </div>
-                        @if (Model.EndTime > DateTime.UtcNow && Model.StartTime < DateTime.UtcNow)
-                        {
-                            <div class="m-2">
-                                <a asp-area="Bid" asp-action="Details" asp-controller="Bid" asp-route-id="@Model.Id" class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</a>
-                            </div>
                         }
-                        else
-                        {
-                            <div class="m-2">
-                                <button disabled class="btn btn-primary btn-lg btn-block">GO LIVE BIDDING</button>
-                            </div>
-                        }
-                    </div>
-                </div>
+                    }
+                    else
+                    {
+                        <li>
+                            <a class="zoomGalleryActive" href="#" data-image="@WebConstants.DefaultPictureUrl"
+                               data-zoom-image="@WebConstants.DefaultPictureUrl">
+                                <img src="@WebConstants.DefaultPictureUrl" alt="@Model.Title"/>
+                            </a>
+                        </li>
+                    }
+                </ul>
             </div>
-        </div>
+            <div class="form-group">
+                <label>Title</label>
+                <input class="form-control" disabled="disabled" value="@Model.Title"/>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" disabled="disabled">@Model.Description</textarea>
+            </div>
+            <div class="form-group">
+                <label>Start time</label>
+                <input id="startTime" class="form-control" disabled="disabled"
+                       value="@Model.StartTime.ToString("O")"/>
+            </div>
+            <div class="form-group">
+                <label>End time</label>
+                <input id="endTime" class="form-control" disabled="disabled"
+                       value="@Model.EndTime.ToString("O")"/>
+            </div>
+            <div class="form-group">
+                <label>Starting price</label>
+                <input class="form-control" type="number" disabled="disabled" value="@Model.StartingPrice"/>
+            </div>
+            <div class="form-group">
+                <label>Minimal price increase allowed</label>
+                <input class="form-control" type="number" disabled="disabled" value="@Model.MinIncrease"/>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-control custom-select" disabled="disabled">
+                    <option selected="selected">@Model.SubCategoryName</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="id" value="@Model.Id"/>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
     </div>
 </div>
 
-@* It's necessary id to be exactly like down below or js won't work *@
-<input type="hidden" id="end-time-id-for-calculator" value="@Model.EndTime.ToString("O")" />
-<input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
-
-@section Scripts{
-    <script src="~/js/time-calculator.js"></script>
-    <script src="~/js/slick.js"></script>
-    <script src="~/js/elevatezoom/elevatezoom-init.js"></script>
+@section CustomCss
+{
+    <link href="~/css/item-details.css" rel="stylesheet">
 }
 
-@section CustomCss
-    {
-    <link href="~/css/item-details.css" rel="stylesheet">
-    <link href="~/css/slick.css" rel="stylesheet">
+@section Scripts
+{
+    <script>
+        (function() {
+            function setFieldDate(field) {
+                field.val(getFormattedDate(moment.utc(field.val()).local()));
+            }
+
+            setFieldDate($('#startTime'));
+            setFieldDate($('#endTime'));
+        })();
+    </script>
 }
