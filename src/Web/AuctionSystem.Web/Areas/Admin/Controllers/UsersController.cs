@@ -54,5 +54,37 @@
 
             return this.View(users);
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddToRole(string userEmail, string role)
+        {
+            if (string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(userEmail))
+            {
+                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            var user = await this.userManager.FindByEmailAsync(userEmail);
+            if (user == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserNotFound);
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            var identityResult = await this.userManager.AddToRoleAsync(user, role);
+
+            var success = identityResult.Succeeded;
+            if (success)
+            {
+                this.ShowSuccessMessage(
+                    string.Format(NotificationMessages.UserAddedToRole, userEmail, role));
+            }
+            else
+            {
+                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
+            }
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
     }
 }
