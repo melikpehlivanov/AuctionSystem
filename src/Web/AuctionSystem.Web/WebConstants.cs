@@ -8,6 +8,7 @@
         public const string AdministratorRole = "Administrator";
 
         public const int ItemsCountPerPage = 24;
+        public const int UsersCountPerPage = 22;
 
         public const string TempDataErrorMessageKey = "ErrorMessage";
         public const string TempDataSuccessMessageKey = "SuccessMessage";

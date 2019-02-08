@@ -24,12 +24,4 @@
     <ProjectReference Include="..\..\Services\AuctionSystem.Services\AuctionSystem.Services.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
-    <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\" />
-  </ItemGroup>
-
 </Project>
