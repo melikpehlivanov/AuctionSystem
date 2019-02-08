@@ -1,6 +1,8 @@
 ﻿namespace AuctionSystem.Services.Implementations
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
@@ -20,5 +22,10 @@
 
             return user?.Id;
         }
+
+        public IEnumerable<T> GetAllUsers<T>()
+            => this.Context
+                .Users
+                .ProjectTo<T>();
     }
 }

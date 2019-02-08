@@ -1,9 +1,9 @@
 ﻿namespace AuctionSystem.Services.Models.AuctionUser
 {
-    public class UserListingServiceModel
+    public class UserListingServiceModel : BaseAuctionUserServiceModel
     {
-        public string Id { get; set; }
+        public override string Id { get; set; }
 
-        public string Email { get; set; }
+        public override string Email { get; set; }
     }
 }
