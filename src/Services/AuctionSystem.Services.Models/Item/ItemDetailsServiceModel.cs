@@ -21,5 +21,7 @@ namespace AuctionSystem.Services.Models.Item
         public ICollection<PictureDisplayServiceModel> Pictures { get; set; }
         
         public string UserUserName { get; set; }
+
+        public string SubCategoryName { get; set; }
     }
 }
