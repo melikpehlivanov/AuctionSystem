@@ -20,7 +20,7 @@
       { "name": "Armoires & Wardrobes" },
       { "name": "Sideboards & Buffets" },
       { "name": "Chairs" },
-      { "name": "Bookcases, Etageres & Display Cases " },
+      { "name": "Bookcases, Etageres & Display Cases" },
       { "name": "Sofas & Canapes" },
       { "name": "Seating" },
       { "name": "Benches & Stools" },
@@ -31,7 +31,7 @@
   {
     "name": "Jewelry",
     "SubCategoryNames": [
-      { "name": "Cufflinks, Tie Pins & Tie Clips " },
+      { "name": "Cufflinks, Tie Pins & Tie Clips" },
       { "name": "Necklaces & Pendants" },
       { "name": "Costume Jewelry" },
       { "name": "Brooches & Pins" },
@@ -47,15 +47,15 @@
     "name": "Collectibles",
     "SubCategoryNames": [
       { "name": "Figurines & Miniatures" },
-      { "name": "Home Hardware, Tools & Locks " },
+      { "name": "Home Hardware, Tools & Locks" },
       { "name": "Hunting & Fishing" },
       { "name": "Pens & Writing Instruments" },
-      { "name": "Maps,  Globes & Atlases " },
+      { "name": "Maps,  Globes & Atlases" },
       { "name": "Musical Instruments & Music Stands" },
-      { "name": "Coins, Currency & Stamps " },
+      { "name": "Coins, Currency & Stamps" },
       { "name": "Cameras" },
-      { "name": "Books, Magazines & Papers " },
-      { "name": "Banks, Registers & Adding Machines " },
+      { "name": "Books, Magazines & Papers" },
+      { "name": "Banks, Registers & Adding Machines" },
       { "name": "Radios & Audio Equipment" },
       { "name": "Weapons & Armor" },
       { "name": "Scientific Objects" },
@@ -83,7 +83,7 @@
   {
     "name": "Home & Garden",
     "SubCategoryNames": [
-      { "name": "Frames, Shelves & Wall Decors " },
+      { "name": "Frames, Shelves & Wall Decors" },
       { "name": "Mirrors" },
       { "name": "Lighting" },
       { "name": "Garden Ornaments" },
