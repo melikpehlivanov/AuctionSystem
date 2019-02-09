@@ -22,11 +22,13 @@
                     <ul id="smallGallery" class="d-flex no-bullets">
                         @if (Model.Pictures.Any())
                         {
+                            var pictures = Model.Pictures.ToList();
+
                             for (int i = 0; i < Model.Pictures.Count; i++)
                              {
-                                 var picture = Model.Pictures.ToList()[i];
+                                 var picture = pictures[i];
                                  <li>
-                                     <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img id="img" src="@picture.Url" alt=""/></a>
+                                     <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt=""/></a>
                                      <input id="urls[@i]" name="urls[@i]" value="@picture.Url" hidden="hidden" class="item-picture"/>
                                      <i class="fas fa-times-circle pointer"></i>
                                  </li>
@@ -35,7 +37,7 @@
                         else
                         {
                             <li class="defaultPicture">
-                                <a class="zoomGalleryActive" href="#" data-image="@WebConstants.DefaultPictureUrl" data-zoom-image="@WebConstants.DefaultPictureUrl"><img id="img" src="@WebConstants.DefaultPictureUrl" alt=""/></a>
+                                <a class="zoomGalleryActive" href="#" data-image="@WebConstants.DefaultPictureUrl" data-zoom-image="@WebConstants.DefaultPictureUrl"><img src="@WebConstants.DefaultPictureUrl" alt=""/></a>
                                 <input id="urls[0]" name="urls[0]" value="@WebConstants.DefaultPictureUrl" hidden="hidden" class="item-picture"/>
                             </li>
                         }
