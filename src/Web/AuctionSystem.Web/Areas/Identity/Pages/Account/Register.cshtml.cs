@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace AuctionSystem.Web.Areas.Identity.Pages.Account
 {
+    using Controllers;
+
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
@@ -60,13 +62,24 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public void OnGet(string returnUrl = null)
+        public IActionResult OnGet(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+            }
+
             ReturnUrl = returnUrl;
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+            }
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
