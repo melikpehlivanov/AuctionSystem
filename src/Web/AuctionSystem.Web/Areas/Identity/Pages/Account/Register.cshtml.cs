@@ -1,34 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using AuctionSystem.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
-namespace AuctionSystem.Web.Areas.Identity.Pages.Account
+﻿namespace AuctionSystem.Web.Areas.Identity.Pages.Account
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
     using Controllers;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+    using Models;
+    using IEmailSender = Common.EmailSender.Interface.IEmailSender;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<AuctionUser> _signInManager;
         private readonly UserManager<AuctionUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<AuctionUser> userManager,
-            SignInManager<AuctionUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -66,7 +62,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+                return this.RedirectToHome();
             }
 
             ReturnUrl = returnUrl;
@@ -77,7 +73,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+                return this.RedirectToHome();
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -96,11 +92,12 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    await _emailSender.SendEmailAsync(WebConstants.AppMainEmailAddress, Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    this.TempData[WebConstants.TempDataSuccessMessageKey] = NotificationMessages.ActivateYourAccountMessage;
+                    return this.RedirectToHome();
                 }
                 foreach (var error in result.Errors)
                 {
@@ -111,5 +108,8 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+        private IActionResult RedirectToHome()
+            => this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
     }
 }
