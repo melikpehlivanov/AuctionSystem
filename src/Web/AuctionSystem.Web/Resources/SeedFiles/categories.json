@@ -56,7 +56,7 @@
       { "name": "Cameras" },
       { "name": "Books, Magazines & Papers " },
       { "name": "Banks, Registers & Adding Machines " },
-      { "name": "Radios & Audi Equipment" },
+      { "name": "Radios & Audio Equipment" },
       { "name": "Weapons & Armor" },
       { "name": "Scientific Objects" },
       { "name": "Games" },
@@ -79,10 +79,6 @@
       { "name": "Shirts & Blouses" },
       { "name": "Pants & Trousers" }
     ]
-  },
-  {
-    "name": "Coins",
-    "SubCategoryNames": []
   },
   {
     "name": "Home & Garden",
