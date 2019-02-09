@@ -54,7 +54,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+                return this.RedirectToHome();
             }
 
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -78,7 +78,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+                return this.RedirectToHome();
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -112,5 +112,8 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+        private IActionResult RedirectToHome()
+            => this.RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
     }
 }
