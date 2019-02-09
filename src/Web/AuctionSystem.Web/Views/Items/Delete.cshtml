@@ -54,12 +54,14 @@
             </div>
             <div class="form-group">
                 <label>Start time</label>
-                <input id="startTime" class="form-control" disabled="disabled"
+                <input id="startTime" class="form-control" disabled="disabled"/>
+                <input id="startTimeValue" type="hidden" disabled="disabled"
                        value="@Model.StartTime.ToString("O")"/>
             </div>
             <div class="form-group">
                 <label>End time</label>
-                <input id="endTime" class="form-control" disabled="disabled"
+                <input id="endTime" class="form-control" disabled="disabled"/>
+                <input id="endTimeValue" type="hidden" disabled="disabled"
                        value="@Model.EndTime.ToString("O")"/>
             </div>
             <div class="form-group">
@@ -93,12 +95,12 @@
 {
     <script>
         (function() {
-            function setFieldDate(field) {
-                field.val(getFormattedDate(moment.utc(field.val()).local()));
+            function setFieldDate(field, isoDate) {
+                field.val(getFormattedDate(moment.utc(isoDate).local()));
             }
 
-            setFieldDate($('#startTime'));
-            setFieldDate($('#endTime'));
+            setFieldDate($('#startTime'), $("#startTimeValue").val());
+            setFieldDate($('#endTime'), $("#endTimeValue").val());
         })();
     </script>
 }
