@@ -68,5 +68,15 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/elevatezoom.min.js",
+    "inputFiles": [
+      "wwwroot/elevatezoom/js/jquery.elevatezoom.js",
+      "wwwroot/elevatezoom/js/elevatezoom-init.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
