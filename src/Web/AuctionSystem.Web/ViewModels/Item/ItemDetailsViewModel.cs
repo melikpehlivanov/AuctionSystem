@@ -28,6 +28,8 @@ namespace AuctionSystem.Web.ViewModels.Item
         public string UserUserName { get; set; }
 
         public ICollection<PictureDisplayViewModel> Pictures { get; set; }
+        
+        public string SubCategoryName { get; set; }
 
         public string PrimaryPicturePath => this.GetPrimaryPicturePath(this.Pictures);
 

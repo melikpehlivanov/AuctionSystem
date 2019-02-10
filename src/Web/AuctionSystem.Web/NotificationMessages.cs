@@ -20,5 +20,7 @@ namespace AuctionSystem.Web
 
         public const string SearchQueryTooShort = "Please enter at least 3 characters";
         public const string SearchNoItems = "No results";
+        
+        public const string ActivateYourAccountMessage = "Please, check your email and click on the verification link to activate your account!";
     }
 }
