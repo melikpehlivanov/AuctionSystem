@@ -124,5 +124,25 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/bidding.min.css",
+    "inputFiles": [
+      "wwwroot/bidding/css/bid.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/bidding.min.js",
+    "inputFiles": [
+      "wwwroot/bidding/js/signalr.js",
+      "wwwroot/bidding/js/notify.js",
+      "wwwroot/bidding/js/bid.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
