@@ -14,8 +14,8 @@
 
     public class UsersController : AdminController
     {
-        private readonly IUserService userService;
         private readonly UserManager<AuctionUser> userManager;
+        private readonly IUserService userService;
 
         public UsersController(IUserService userService, UserManager<AuctionUser> userManager)
         {
@@ -54,7 +54,7 @@
 
             return this.View(users);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> AddToRole(string userEmail, string role)
         {
@@ -86,7 +86,7 @@
 
             return this.RedirectToAction(nameof(this.Index));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> RemoveFromRole(string userEmail, string role)
         {

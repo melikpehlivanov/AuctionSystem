@@ -2,13 +2,14 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using Common;
 
     public class Bid
     {
         public string Id { get; set; }
 
         [Required]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Range(typeof(decimal), ModelConstants.Bid.MinAmount, ModelConstants.Bid.MaxAmount)]
         public decimal Amount { get; set; }
 
         [Required]

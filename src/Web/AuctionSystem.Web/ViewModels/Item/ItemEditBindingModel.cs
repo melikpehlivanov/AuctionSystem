@@ -17,21 +17,21 @@ namespace AuctionSystem.Web.ViewModels.Item
         public string Id { get; set; }
 
         [Required]
-        [MaxLength(120)]
+        [MaxLength(ModelConstants.Item.TitleMaxLength)]
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(ModelConstants.Item.DescriptionMaxLength)]
         public string Description { get; set; }
 
         [Required]
         [Display(Name = "Starting price")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Range(typeof(decimal), ModelConstants.Item.MinStartingPrice, ModelConstants.Item.MaxStartingPrice)]
         public decimal StartingPrice { get; set; }
 
         [Required]
         [Display(Name = "Minimal price increase allowed")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Range(typeof(decimal), ModelConstants.Item.MinMinIncrease, ModelConstants.Item.MaxMinIncrease)]
         public decimal MinIncrease { get; set; }
 
         [Required]

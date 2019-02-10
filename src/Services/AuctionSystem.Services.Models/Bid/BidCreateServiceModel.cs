@@ -3,11 +3,12 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using AuctionSystem.Models;
+    using Common;
 
     public class BidCreateServiceModel : BaseBidServiceModel
     {
         [Required]
-        [Range(typeof(decimal), "0.01", "999999999999")]
+        [Range(typeof(decimal), ModelConstants.Bid.MinAmount, ModelConstants.Bid.MaxAmount)]
         public decimal Amount { get; set; }
 
         [Required]
