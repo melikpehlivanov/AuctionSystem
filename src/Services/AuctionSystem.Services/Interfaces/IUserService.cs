@@ -7,6 +7,6 @@
     {
         Task<string> GetUserIdByUsernameAsync(string username);
 
-        IEnumerable<T> GetAllUsers<T>();
+        Task<IEnumerable<T>> GetAllUsersAsync<T>();
     }
 }

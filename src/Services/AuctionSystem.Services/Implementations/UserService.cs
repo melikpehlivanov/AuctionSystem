@@ -23,9 +23,10 @@
             return user?.Id;
         }
 
-        public IEnumerable<T> GetAllUsers<T>()
-            => this.Context
+        public async Task<IEnumerable<T>> GetAllUsersAsync<T>()
+            => await this.Context
                 .Users
-                .ProjectTo<T>();
+                .ProjectTo<T>()
+                .ToListAsync();
     }
 }

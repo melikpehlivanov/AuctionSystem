@@ -12,6 +12,7 @@
     using Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Internal;
+    using Microsoft.EntityFrameworkCore;
     using Models.Item;
     using Moq;
     using Xunit;
@@ -58,11 +59,24 @@
         public async Task GetByIdAsync_WithValidId_ShouldReturnCorrectModel()
         {
             // Arrange
-            const string testId = "sampleTestId";
-            await this.dbContext.Items.AddAsync(new Item { Id = testId });
+            await this.SeedItems(10);
+            const string expected = "sampleTestId";
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                Id = expected,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                UserId = this.dbContext.Users.FirstOrDefault()?.Id,
+                SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
+            });
             await this.dbContext.SaveChangesAsync();
+
             // Act
-            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(testId);
+            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(expected);
 
             // Assert
             result
@@ -74,24 +88,29 @@
         public async Task GetByIdAsync_WithValidId_ShouldReturnCorrectEntity()
         {
             // Arrange
-            const string testId = "1";
-            const int count = 4;
-            for (int i = 1; i <= count; i++)
+            await this.SeedItems(10);
+            const string expected = "expectedId";
+            await this.dbContext.Items.AddAsync(new Item
             {
-                await this.dbContext.Items.AddAsync(new Item { Id = i.ToString(), Title = $"Title_{i}" });
-
-            }
+                Id = expected,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                UserId = this.dbContext.Users.FirstOrDefault()?.Id,
+                SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
+            });
             await this.dbContext.SaveChangesAsync();
 
             // Act
-            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(testId);
+            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(expected);
 
             // Assert
             result
                 .Should()
-                .Match(x => x.As<ItemDetailsServiceModel>().Id == testId)
-                .And
-                .Match(x => x.As<ItemDetailsServiceModel>().Title == $"Title_{testId}");
+                .Match(x => x.As<ItemDetailsServiceModel>().Id == expected);
         }
 
         [Fact]
@@ -147,8 +166,12 @@
         public async Task GetAllLiveItemsAsync_WithInvalidStartTime_ShouldReturnNull()
         {
             // Arrange
-            await this.dbContext.Items.AddAsync(new Item { StartTime = DateTime.UtcNow.AddMinutes(10), EndTime = DateTime.UtcNow.AddDays(10),
-                Pictures = new List<Picture>() { new Picture(), new Picture(), new Picture() } });
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                StartTime = DateTime.UtcNow.AddMinutes(10),
+                EndTime = DateTime.UtcNow.AddDays(10),
+                Pictures = new List<Picture>() { new Picture(), new Picture(), new Picture() }
+            });
             await this.dbContext.SaveChangesAsync();
             // Act
             var result = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
@@ -217,6 +240,23 @@
                 .HaveCount(count);
         }
 
+        [Fact]
+        public async Task GetAllItemsForGivenUser_WithValidInput_ShouldReturnCorrectModels()
+        {
+            // Arrange
+            await this.SeedItems(10);
+
+            // Act
+            var user = await this.dbContext.Users.FirstOrDefaultAsync();
+            var result = await this.itemsService.GetAllItemsForGivenUser<ItemListingServiceModel>(user.Id);
+
+            // Assert
+            result
+                .All(x => x.As<ItemListingServiceModel>().UserFullName == user.FullName)
+                .Should()
+                .BeTrue();
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData(null)]
@@ -237,14 +277,15 @@
         {
             // Arrange
             const string expectedTitle = "expected";
-            await this.dbContext.Items.AddAsync(new Item {
+            await this.dbContext.Items.AddAsync(new Item
+            {
                 Title = expectedTitle,
                 Description = SampleDescription,
                 StartingPrice = SampleStartingPrice,
                 MinIncrease = SampleMinIncrease,
                 StartTime = SampleStartTime,
                 EndTime = SampleEndTime,
-                User = new AuctionUser { FullName =  SampleUserFullName, UserName = SampleUsername},
+                User = new AuctionUser { FullName = SampleUserFullName, UserName = SampleUsername },
                 SubCategory = new SubCategory()
             });
             await this.dbContext.Items.AddAsync(new Item
@@ -540,6 +581,245 @@
         }
 
         [Fact]
+        public async Task DeleteAsync_WithInvalidInput_ShouldReturnFalse()
+        {
+            // Act
+            var result = await this.itemsService.DeleteAsync(null);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task DeleteAsync_WithValidInput_ShouldReturnTrueAndDeleteItemFromDatabase()
+        {
+            // Assert
+            await this.SeedItems(1);
+            var item = await this.dbContext.Items.FirstOrDefaultAsync();
+            var currentDbCount = this.dbContext.Items.Count();
+
+            // Act
+            var result = await this.itemsService.DeleteAsync(item.Id);
+
+            // Assert
+            result
+                .Should()
+                .BeTrue();
+
+            this.dbContext
+                .Items
+                .Should()
+                .HaveCountLessThan(currentDbCount);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithEmptyModel_ShouldReturnFalse()
+        {
+            // Act
+            var result = await this.itemsService.UpdateAsync(new ItemEditServiceModel());
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithInvalidTitle_ShouldReturnFalse()
+        {
+            // Arrange
+            var random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var invalidTitle = new string(Enumerable.Repeat(chars, 121)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            var item = new ItemEditServiceModel
+            {
+                Id = SampleId,
+                Title = invalidTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = SampleSubCategoryId,
+                UserUserName = SampleUsername,
+            };
+
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithInvalidDescription_ShouldReturnFalse()
+        {
+            // Arrange
+            var random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var invalidDescription = new string(Enumerable.Repeat(chars, 501)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            var item = new ItemEditServiceModel
+            {
+                Id = SampleId,
+                Title = SampleTitle,
+                Description = invalidDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = SampleSubCategoryId,
+                UserUserName = SampleUsername,
+            };
+
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithInvalidStartingPrice_ShouldReturnFalse()
+        {
+            // Arrange
+            var item = new ItemEditServiceModel
+            {
+                Id = SampleId,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = -1,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = SampleSubCategoryId,
+                UserUserName = SampleUsername,
+            };
+
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithInvalidMinIncrease_ShouldReturnFalse()
+        {
+            // Arrange
+            var item = new ItemEditServiceModel
+            {
+                Id = SampleId,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = -1,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = SampleSubCategoryId,
+                UserUserName = SampleUsername,
+            };
+
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithInvalidUsername_ShouldReturnFalse()
+        {
+            // Arrange
+            var item = new ItemEditServiceModel
+            {
+                Id = SampleId,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = SampleSubCategoryId,
+                UserUserName = SampleUsername,
+            };
+
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithInvalidModel_ShouldReturnFalse()
+        {
+            // Arrange
+            var item = new ItemEditServiceModel
+            {
+                Id = SampleId,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = SampleSubCategoryId,
+                UserUserName = SampleUsername,
+            };
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithValidModel_ShouldReturnTrue()
+        {
+            // Arrange
+            await this.SeedItems(10);
+            var item = new ItemEditServiceModel
+            {
+                Id = this.dbContext.Items.FirstOrDefault()?.Id,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
+                UserUserName = this.dbContext.Users.FirstOrDefault()?.UserName,
+            };
+            // Act
+            var result = await this.itemsService.UpdateAsync(item);
+
+            // Assert
+            result
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
         public async Task GetAllItemsInGivenCategoryByCategoryIdAsync_WithInvalidId_ShouldReturnNull()
         {
             // Arrange
@@ -647,7 +927,7 @@
 
         private async Task SeedUserAndSubCategory()
         {
-            await this.dbContext.Users.AddAsync(new AuctionUser { UserName = SampleUsername });
+            await this.dbContext.Users.AddAsync(new AuctionUser { UserName = SampleUsername, FullName = SampleUserFullName });
             await this.dbContext.SubCategories.AddAsync(new SubCategory { Id = SampleSubCategoryId });
             await this.dbContext.SaveChangesAsync();
         }
