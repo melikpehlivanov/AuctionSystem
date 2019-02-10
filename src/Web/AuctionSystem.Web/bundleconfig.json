@@ -105,5 +105,24 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/slick.min.css",
+    "inputFiles": [
+      "wwwroot/slick/css/slick.css",
+      "wwwroot/slick/css/slick-theme.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/slick.min.js",
+    "inputFiles": [
+      "wwwroot/slick/js/slick.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
