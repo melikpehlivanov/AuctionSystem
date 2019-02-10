@@ -46,7 +46,7 @@
                         </a>
                         <div class="card-body">
                             <h5 class="card-title"><a href="@item.Url">@item.Title</a></h5>
-                            <p class="card-text">$@item.StartingPrice</p>
+                            <p class="card-text">€@item.StartingPrice</p>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,30 @@
                 slidesToShow: 4,
                 slidesToScroll: 3,
                 autoplay: true,
-                autoplaySpeed: 4000
+                autoplaySpeed: 4000,
+                responsive: [
+                    {
+                        breakpoint: 1200,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
             });
         });
     </script>
