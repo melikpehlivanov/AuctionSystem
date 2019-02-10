@@ -12,6 +12,7 @@
     using Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Internal;
+    using Microsoft.EntityFrameworkCore;
     using Models.Item;
     using Moq;
     using Xunit;
@@ -237,6 +238,23 @@
                 .BeAssignableTo<IEnumerable<LiveItemServiceModel>>()
                 .And
                 .HaveCount(count);
+        }
+
+        [Fact]
+        public async Task GetAllItemsForGivenUser_WithValidInput_ShouldReturnCorrectModels()
+        {
+            // Arrange
+            await this.SeedItems(10);
+
+            // Act
+            var user = await this.dbContext.Users.FirstOrDefaultAsync();
+            var result = await this.itemsService.GetAllItemsForGivenUser<ItemListingServiceModel>(user.Id);
+
+            // Assert
+            result
+                .All(x => x.As<ItemListingServiceModel>().UserFullName == user.FullName)
+                .Should()
+                .BeTrue();
         }
 
         [Theory]
@@ -561,7 +579,7 @@
                 .Should()
                 .HaveCount(1);
         }
-
+        
         [Fact]
         public async Task GetAllItemsInGivenCategoryByCategoryIdAsync_WithInvalidId_ShouldReturnNull()
         {
@@ -670,7 +688,7 @@
 
         private async Task SeedUserAndSubCategory()
         {
-            await this.dbContext.Users.AddAsync(new AuctionUser { UserName = SampleUsername });
+            await this.dbContext.Users.AddAsync(new AuctionUser { UserName = SampleUsername, FullName = SampleUserFullName});
             await this.dbContext.SubCategories.AddAsync(new SubCategory { Id = SampleSubCategoryId });
             await this.dbContext.SaveChangesAsync();
         }
