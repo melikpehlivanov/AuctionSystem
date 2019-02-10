@@ -58,11 +58,24 @@
         public async Task GetByIdAsync_WithValidId_ShouldReturnCorrectModel()
         {
             // Arrange
-            const string testId = "sampleTestId";
-            await this.dbContext.Items.AddAsync(new Item { Id = testId });
+            await this.SeedItems(10);
+            const string expected = "sampleTestId";
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                Id = expected,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                UserId = this.dbContext.Users.FirstOrDefault()?.Id,
+                SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
+            });
             await this.dbContext.SaveChangesAsync();
+
             // Act
-            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(testId);
+            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(expected);
 
             // Assert
             result
