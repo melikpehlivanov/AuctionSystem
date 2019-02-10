@@ -3,6 +3,7 @@ namespace AuctionSystem.Web.ViewModels.Item
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Common;
     using Common.AutoMapping.Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,21 +16,21 @@ namespace AuctionSystem.Web.ViewModels.Item
         private const string EndTimeBeforeStartTimeError = "The end time must be after the start time";
 
         [Required]
-        [MaxLength(120)]
+        [MaxLength(ModelConstants.Item.TitleMaxLength)]
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(ModelConstants.Item.DescriptionMaxLength)]
         public string Description { get; set; }
 
         [Required]
         [Display(Name = "Starting price")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Range(typeof(decimal), ModelConstants.Item.MinStartingPrice, ModelConstants.Item.MaxStartingPrice)]
         public decimal StartingPrice { get; set; }
 
         [Required]
         [Display(Name = "Minimal price increase allowed")]
-        [Range(typeof(decimal), "0.01", "79228162514264337593543950335")]
+        [Range(typeof(decimal), ModelConstants.Item.MinMinIncrease, ModelConstants.Item.MaxMinIncrease)]
         public decimal MinIncrease { get; set; }
 
         [Required]

@@ -2,12 +2,13 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Common;
     using Microsoft.AspNetCore.Identity;
 
     public class AuctionUser : IdentityUser
     {
         [Required]
-        [MaxLength(50)]
+        [MaxLength(ModelConstants.User.FullNameMaxLength)]
         public string FullName { get; set; }
 
         public ICollection<Item> ItemsSold { get; set; }
