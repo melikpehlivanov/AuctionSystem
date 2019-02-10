@@ -3,7 +3,7 @@
     using System.Threading.Tasks;
     using Common.EmailSender.Interface;
     using Microsoft.AspNetCore.Mvc;
-    using ViewModels.Home;
+    using ViewModels.Contact;
 
     public class ContactController : BaseController
     {

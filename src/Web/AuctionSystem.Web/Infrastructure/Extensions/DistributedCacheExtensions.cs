@@ -11,12 +11,12 @@
         {
             var cacheOptions = new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = expiration,
+                AbsoluteExpirationRelativeToNow = expiration
             };
 
             var jsonSettings = new JsonSerializerSettings
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
 
             var serializeObject = JsonConvert.SerializeObject(value, jsonSettings);

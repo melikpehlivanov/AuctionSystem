@@ -9,7 +9,7 @@ namespace AuctionSystem.Web.Controllers
         {
             return this.View();
         }
-        
+
         [Route("error/403")]
         public IActionResult Error403()
         {

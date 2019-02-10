@@ -1,4 +1,4 @@
-﻿namespace AuctionSystem.Web.Areas.Admin.Models.User
+﻿namespace AuctionSystem.Web.Areas.Admin.Models.Users
 {
     using System.Collections.Generic;
     using Common.AutoMapping.Interfaces;

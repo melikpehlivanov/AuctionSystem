@@ -15,8 +15,8 @@
     [Authorize]
     public class PicturesController : BaseController
     {
-        private readonly IPictureService pictureService;
         private readonly IItemsService ItemsService;
+        private readonly IPictureService pictureService;
 
         public PicturesController(IPictureService pictureService, IItemsService itemsService)
         {

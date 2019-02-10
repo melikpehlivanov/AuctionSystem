@@ -7,7 +7,7 @@ namespace AuctionSystem.Web
 
         public const string ItemCreateError = "An error occured while creating item";
         public const string ItemCreated = "Item created";
-        
+
         public const string ItemUpdateError = "An error occured while editing item";
         public const string ItemUpdated = "Item details updated";
 
@@ -16,7 +16,7 @@ namespace AuctionSystem.Web
 
         public const string ItemNotFound = "Oops! Looks like the item you're searching for actually does not exist.";
         public const string BidNotFound = "Oops! Looks like the bid you're searching for actually does not exist.";
-        
+
         public const string UserAddedToRole = "User \"{0}\" was successfully added to role \"{1}\"";
         public const string UserRemovedFromRole = "User \"{0}\" was successfully removed from role \"{1}\"";
         public const string UnableToRemoveSelf = "You can not remove yourself from role {0}!";
@@ -25,7 +25,7 @@ namespace AuctionSystem.Web
 
         public const string SearchQueryTooShort = "Please enter at least 3 characters";
         public const string SearchNoItems = "No results";
-        
+
         public const string ActivateYourAccountMessage = "Please, check your email and click on the verification link to activate your account!";
     }
 }

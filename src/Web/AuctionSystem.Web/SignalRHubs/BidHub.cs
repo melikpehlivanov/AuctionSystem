@@ -63,7 +63,7 @@
                 Amount = parsedBidAmount,
                 MadeOn = DateTime.UtcNow,
                 ItemId = item.Id,
-                UserId = userId,
+                UserId = userId
             };
 
             var isSucceeded = await this.bidService.CreateBidAsync(serviceModel);
