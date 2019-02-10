@@ -9,5 +9,9 @@
         public bool IsEmailSent { get; set; }
 
         public decimal WinnerAmount { get; set; }
+
+        public string UserEmail { get; set; }
+
+        public string UserFullName { get; set; }
     }
 }
