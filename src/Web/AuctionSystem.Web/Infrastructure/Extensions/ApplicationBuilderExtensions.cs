@@ -5,12 +5,12 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using AuctionSystem.Models;
     using Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Models;
     using Newtonsoft.Json;
 
     public static class ApplicationBuilderExtensions

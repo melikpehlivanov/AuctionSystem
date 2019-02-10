@@ -11,8 +11,8 @@
     [Area("Bid")]
     public class BidController : BaseController
     {
-        private readonly IItemsService itemsService;
         private readonly IBidService bidService;
+        private readonly IItemsService itemsService;
         private readonly IUserService userService;
 
         public BidController(IItemsService itemsService, IBidService bidService, IUserService userService)

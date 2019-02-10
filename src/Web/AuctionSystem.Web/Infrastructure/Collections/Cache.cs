@@ -17,8 +17,8 @@
     {
         private const string CategoriesKey = "_CategoriesStoredInCache";
 
-        private readonly ICategoriesService categoriesService;
         private readonly IDistributedCache cache;
+        private readonly ICategoriesService categoriesService;
 
         public Cache(ICategoriesService categoriesService, IDistributedCache cache)
         {

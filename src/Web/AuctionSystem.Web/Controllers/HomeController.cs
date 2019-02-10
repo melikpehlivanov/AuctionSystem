@@ -1,6 +1,5 @@
 ﻿namespace AuctionSystem.Web.Controllers
 {
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -13,13 +12,11 @@
 
     public class HomeController : BaseController
     {
-        private readonly ICategoriesService categoriesService;
-        private readonly IItemsService itemsService;
         private readonly ICache cache;
+        private readonly IItemsService itemsService;
 
-        public HomeController(ICategoriesService categoriesService, IItemsService itemsService, ICache cache)
+        public HomeController(IItemsService itemsService, ICache cache)
         {
-            this.categoriesService = categoriesService;
             this.itemsService = itemsService;
             this.cache = cache;
         }
@@ -36,15 +33,15 @@
             {
                 LiveItems = liveItems,
                 HottestItems = hottestItems,
-                Categories = await this.cache.GetAllCategoriesWithSubcategoriesAsync(),
+                Categories = await this.cache.GetAllCategoriesWithSubcategoriesAsync()
             };
             
             return this.View(model);
         }
-        
+
         public IActionResult Privacy()
         {
-            return View();
+            return this.View();
         }
     }
 }

@@ -16,6 +16,10 @@
             this.TotalPages = totalPages;
         }
 
+        public IEnumerator<T> GetEnumerator() => this.data.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+
         public int PageIndex { get; }
 
         public int TotalPages { get; }
@@ -23,9 +27,5 @@
         public bool HasPreviousPage => this.PageIndex > 1;
 
         public bool HasNextPage => this.PageIndex < this.TotalPages;
-
-        public IEnumerator<T> GetEnumerator() => this.data.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 }

@@ -15,17 +15,15 @@ namespace AuctionSystem.Web.Controllers
 
     public class ItemsController : BaseController
     {
-        private readonly IItemsService itemsService;
         private readonly ICache cache;
+        private readonly IItemsService itemsService;
         private readonly IUserService userService;
-        private readonly IPictureService pictureService;
 
-        public ItemsController(IItemsService itemsService, ICache cache, IUserService userService, IPictureService pictureService)
+        public ItemsController(IItemsService itemsService, ICache cache, IUserService userService)
         {
             this.itemsService = itemsService;
             this.cache = cache;
             this.userService = userService;
-            this.pictureService = pictureService;
         }
 
         public async Task<IActionResult> Index()
@@ -38,14 +36,14 @@ namespace AuctionSystem.Web.Controllers
             if (serviceItems == null)
             {
                 this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
-                return View();
+                return this.View();
             }
 
             var items = serviceItems
                 .Select(Mapper.Map<ItemIndexViewModel>)
                 .ToList();
 
-            return View(items);
+            return this.View(items);
         }
 
         public async Task<IActionResult> List(string id, int pageIndex = 1)
@@ -65,7 +63,7 @@ namespace AuctionSystem.Web.Controllers
 
             if (!serviceItems.Any())
             {
-                return RedirectToHome();
+                return this.RedirectToHome();
             }
 
             var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>)
@@ -209,12 +207,12 @@ namespace AuctionSystem.Web.Controllers
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
 
-                return RedirectToHome();
+                return this.RedirectToHome();
             }
 
             var item = Mapper.Map<ItemDetailsViewModel>(serviceItem);
 
-            return View(item);
+            return this.View(item);
         }
 
         [ActionName(nameof(Delete))]
@@ -239,11 +237,11 @@ namespace AuctionSystem.Web.Controllers
             if (!isDeleted)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemDeletedError);
-                return this.RedirectToAction(nameof(Delete), new { id });
+                return this.RedirectToAction(nameof(this.Delete), new { id });
             }
 
             this.ShowSuccessMessage(NotificationMessages.ItemDeletedSuccessfully);
-            return this.RedirectToAction(nameof(Index));
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         public async Task<IActionResult> Search(string query, int pageIndex = 1)
