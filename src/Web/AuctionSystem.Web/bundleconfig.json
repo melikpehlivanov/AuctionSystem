@@ -78,5 +78,23 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/bootstrap-datetimepicker.min.css",
+    "inputFiles": [
+      "wwwroot/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/bootstrap-datetimepicker.min.js",
+    "inputFiles": [
+      "wwwroot/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
