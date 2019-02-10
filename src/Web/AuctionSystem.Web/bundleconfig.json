@@ -96,5 +96,14 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/time-calculator.min.js",
+    "inputFiles": [
+      "wwwroot/time-calculator/js/time-calculator.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
