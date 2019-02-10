@@ -120,12 +120,12 @@
 <input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
 
 @section Scripts{
-    <script src="~/js/time-calculator.js"></script>
-    <script src="~/js/slick.js"></script>
-    <script src="~/js/elevatezoom/elevatezoom-init.js"></script>
+    <script src="~/bundle/time-calculator.min.js" asp-append-version="true"></script>
+    <script src="~/bundle/slick.min.js" asp-append-version="true"></script>
+    <script src="~/bundle/elevatezoom.min.js" asp-append-version="true"></script>
 }
 
 @section CustomCss{
-    <link href="~/css/item-details.css" rel="stylesheet">
-    <link href="~/css/slick.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/bundle/item-details.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/bundle/slick.min.css" asp-append-version="true" />
 }

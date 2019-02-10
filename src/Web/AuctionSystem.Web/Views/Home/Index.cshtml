@@ -53,12 +53,6 @@
             }
         </div>
     </div>
-
-
-    @section CustomCss{
-        <link rel="stylesheet" href="~/css/slick.css" />
-        <link rel="stylesheet" href="~/css/slick-theme.css" />
-    }
 }
 
 <div class="pt-5 container">
@@ -99,7 +93,22 @@
     </div>
 </div>
 
+@section CustomCss{
+    <link rel="stylesheet" href="~/bundle/slick.min.css" asp-append-version="true" />
+}
+
 @section Scripts{
-    <script src="~/js/slick.js" asp-append-version="true"></script>
-    <script src="~/js/initialize-slick-slider.js" asp-append-version="true"></script>
+    <script src="~/bundle/slick.min.js" asp-append-version="true"></script>
+   
+    <script>
+        $(document).ready(function () {
+            $('.slick').slick({
+                dots: true,
+                slidesToShow: 4,
+                slidesToScroll: 3,
+                autoplay: true,
+                autoplaySpeed: 4000
+            });
+        });
+    </script>
 }

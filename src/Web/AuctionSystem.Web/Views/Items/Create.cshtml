@@ -64,11 +64,11 @@
 </div>
 
 @section CustomCss {
-    <link href="~/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/bundle/bootstrap-datetimepicker.min.css" asp-append-version="true" />
 }
 
 @section Scripts {
-    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/bundle/bootstrap-datetimepicker.min.js" asp-append-version="true"></script>
 
     <script>
         $('#startTime, #endTime').datetimepicker({
