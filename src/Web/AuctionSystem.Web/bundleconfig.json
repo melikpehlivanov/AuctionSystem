@@ -59,5 +59,14 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/item-details.min.css",
+    "inputFiles": [
+      "wwwroot/item-details/css/item-details.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
