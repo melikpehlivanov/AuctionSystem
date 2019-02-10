@@ -26,7 +26,7 @@
                         <form class="d-flex flex-row" asp-action="AddToRole" method="post">
                             <input type="submit" class="btn btn-outline-primary" value="Add to role" />
                             <input type="hidden" name="userEmail" value="@user.Email" />
-                            <select name="role" asp-items="@(new SelectList(user.NonCurrentRoles))" class="form-control ml-1">
+                            <select name="role" asp-items="@(new SelectList(user.NonCurrentRoles))" class="custom-select form-control ml-1">
                                 <option disabled selected>Select</option>
                             </select>
                         </form>
@@ -35,7 +35,7 @@
                         <form class="d-flex flex-row" asp-action="RemoveFromRole" method="post">
                             <input type="submit" class="btn btn-outline-danger" value="Remove from role" />
                             <input type="hidden" name="userEmail" value="@user.Email" />
-                            <select name="role" asp-items="@(new SelectList(user.CurrentRoles))" class="form-control ml-1">
+                            <select name="role" asp-items="@(new SelectList(user.CurrentRoles))" class="custom-select form-control ml-1">
                                 <option disabled selected>Select</option>
                             </select>
                         </form>
