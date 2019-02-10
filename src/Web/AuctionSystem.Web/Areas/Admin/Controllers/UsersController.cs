@@ -25,7 +25,7 @@
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var users = this.userService.GetAllUsers<UserListingServiceModel>()
+            var users = (await this.userService.GetAllUsersAsync<UserListingServiceModel>())
                 .Select(Mapper.Map<UserListingViewModel>)
                 .ToPaginatedList(page, WebConstants.UsersCountPerPage);
             
