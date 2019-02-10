@@ -1,4 +1,4 @@
-﻿namespace AuctionSystem.Web.ViewModels.Home
+﻿namespace AuctionSystem.Web.ViewModels.Contact
 {
     using System.ComponentModel.DataAnnotations;
 

@@ -8,7 +8,7 @@
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Models.User;
+    using Models.Users;
     using Services.Interfaces;
     using Services.Models.AuctionUser;
 
