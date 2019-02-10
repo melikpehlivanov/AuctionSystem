@@ -579,7 +579,41 @@
                 .Should()
                 .HaveCount(1);
         }
-        
+
+        [Fact]
+        public async Task DeleteAsync_WithInvalidInput_ShouldReturnFalse()
+        {
+            // Act
+            var result = await this.itemsService.DeleteAsync(null);
+
+            // Assert
+            result
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public async Task DeleteAsync_WithValidInput_ShouldReturnTrueAndDeleteItemFromDatabase()
+        {
+            // Assert
+            await this.SeedItems(1);
+            var item = await this.dbContext.Items.FirstOrDefaultAsync();
+            var currentDbCount = this.dbContext.Items.Count();
+
+            // Act
+            var result = await this.itemsService.DeleteAsync(item.Id);
+
+            // Assert
+            result
+                .Should()
+                .BeTrue();
+
+            this.dbContext
+                .Items
+                .Should()
+                .HaveCountLessThan(currentDbCount);
+        }
+
         [Fact]
         public async Task GetAllItemsInGivenCategoryByCategoryIdAsync_WithInvalidId_ShouldReturnNull()
         {
