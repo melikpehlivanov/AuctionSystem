@@ -2,7 +2,7 @@
   {
     "outputFileName": "wwwroot/bundle/vendor.min.css",
     "inputFiles": [
-      "wwwroot/vendor/css/bootstrap.css"
+      "wwwroot/source/vendor/css/bootstrap.css"
     ],
     "minify": {
       "enabled": true
@@ -11,11 +11,11 @@
   {
     "outputFileName": "wwwroot/bundle/vendor.min.js",
     "inputFiles": [
-      "wwwroot/vendor/js/jquery.js",
-      "wwwroot/vendor/js/bootstrap.js",
-      "wwwroot/vendor/js/moment.js",
-      "wwwroot/vendor/js/jquery.validate.js",
-      "wwwroot/vendor/js/jquery.validate.unobtrusive.js.js"
+      "wwwroot/source/vendor/js/jquery.js",
+      "wwwroot/source/vendor/js/bootstrap.js",
+      "wwwroot/source/vendor/js/moment.js",
+      "wwwroot/source/vendor/js/jquery.validate.js",
+      "wwwroot/source/vendor/js/jquery.validate.unobtrusive.js.js"
     ],
     "minify": {
       "enabled": true
@@ -24,8 +24,8 @@
   {
     "outputFileName": "wwwroot/bundle/main.min.css",
     "inputFiles": [
-      "wwwroot/main/css/cookiealert.css",
-      "wwwroot/main/css/site.css"
+      "wwwroot/source/main/css/cookiealert.css",
+      "wwwroot/source/main/css/site.css"
     ],
     "minify": {
       "enabled": true
@@ -34,8 +34,8 @@
   {
     "outputFileName": "wwwroot/bundle/main.min.js",
     "inputFiles": [
-      "wwwroot/main/js/moment-helper.js",
-      "wwwroot/main/js/auto-dropdown.js"
+      "wwwroot/source/main/js/moment-helper.js",
+      "wwwroot/source/main/js/auto-dropdown.js"
     ],
     "minify": {
       "enabled": true
@@ -44,7 +44,7 @@
   {
     "outputFileName": "wwwroot/bundle/datatables.min.css",
     "inputFiles": [
-      "wwwroot/datatables/css/datatables.css"
+      "wwwroot/source/datatables/css/datatables.css"
     ],
     "minify": {
       "enabled": true
@@ -53,8 +53,8 @@
   {
     "outputFileName": "wwwroot/bundle/datatables.min.js",
     "inputFiles": [
-      "wwwroot/datatables/js/datatables.js",
-      "wwwroot/datatables/js/datatables-init.js"
+      "wwwroot/source/datatables/js/datatables.js",
+      "wwwroot/source/datatables/js/datatables-init.js"
     ],
     "minify": {
       "enabled": true
@@ -63,7 +63,7 @@
   {
     "outputFileName": "wwwroot/bundle/item-details.min.css",
     "inputFiles": [
-      "wwwroot/item-details/css/item-details.css"
+      "wwwroot/source/item-details/css/item-details.css"
     ],
     "minify": {
       "enabled": true
@@ -72,8 +72,8 @@
   {
     "outputFileName": "wwwroot/bundle/elevatezoom.min.js",
     "inputFiles": [
-      "wwwroot/elevatezoom/js/jquery.elevatezoom.js",
-      "wwwroot/elevatezoom/js/elevatezoom-init.js"
+      "wwwroot/source/elevatezoom/js/jquery.elevatezoom.js",
+      "wwwroot/source/elevatezoom/js/elevatezoom-init.js"
     ],
     "minify": {
       "enabled": true
@@ -82,7 +82,7 @@
   {
     "outputFileName": "wwwroot/bundle/bootstrap-datetimepicker.min.css",
     "inputFiles": [
-      "wwwroot/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"
+      "wwwroot/source/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"
     ],
     "minify": {
       "enabled": true
@@ -91,7 +91,7 @@
   {
     "outputFileName": "wwwroot/bundle/bootstrap-datetimepicker.min.js",
     "inputFiles": [
-      "wwwroot/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"
+      "wwwroot/source/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"
     ],
     "minify": {
       "enabled": true
@@ -100,7 +100,7 @@
   {
     "outputFileName": "wwwroot/bundle/time-calculator.min.js",
     "inputFiles": [
-      "wwwroot/time-calculator/js/time-calculator.js"
+      "wwwroot/source/time-calculator/js/time-calculator.js"
     ],
     "minify": {
       "enabled": true
@@ -109,8 +109,8 @@
   {
     "outputFileName": "wwwroot/bundle/slick.min.css",
     "inputFiles": [
-      "wwwroot/slick/css/slick.css",
-      "wwwroot/slick/css/slick-theme.css"
+      "wwwroot/source/slick/css/slick.css",
+      "wwwroot/source/slick/css/slick-theme.css"
     ],
     "minify": {
       "enabled": true
@@ -119,7 +119,7 @@
   {
     "outputFileName": "wwwroot/bundle/slick.min.js",
     "inputFiles": [
-      "wwwroot/slick/js/slick.js"
+      "wwwroot/source/slick/js/slick.js"
     ],
     "minify": {
       "enabled": true
@@ -128,7 +128,7 @@
   {
     "outputFileName": "wwwroot/bundle/bidding.min.css",
     "inputFiles": [
-      "wwwroot/bidding/css/bid.css"
+      "wwwroot/source/bidding/css/bid.css"
     ],
     "minify": {
       "enabled": true
@@ -137,9 +137,9 @@
   {
     "outputFileName": "wwwroot/bundle/bidding.min.js",
     "inputFiles": [
-      "wwwroot/bidding/js/signalr.js",
-      "wwwroot/bidding/js/notify.js",
-      "wwwroot/bidding/js/bid.js"
+      "wwwroot/source/bidding/js/signalr.js",
+      "wwwroot/source/bidding/js/notify.js",
+      "wwwroot/source/bidding/js/bid.js"
     ],
     "minify": {
       "enabled": true
@@ -148,7 +148,7 @@
   {
     "outputFileName": "wwwroot/bundle/edit-item.min.js",
     "inputFiles": [
-      "wwwroot/edit-item/js/edit-item.js"
+      "wwwroot/source/edit-item/js/edit-item.js"
     ],
     "minify": {
       "enabled": true
