@@ -74,24 +74,29 @@
         public async Task GetByIdAsync_WithValidId_ShouldReturnCorrectEntity()
         {
             // Arrange
-            const string testId = "1";
-            const int count = 4;
-            for (int i = 1; i <= count; i++)
+            await this.SeedItems(10);
+            const string expected = "expectedId";
+            await this.dbContext.Items.AddAsync(new Item
             {
-                await this.dbContext.Items.AddAsync(new Item { Id = i.ToString(), Title = $"Title_{i}" });
-
-            }
+                Id = expected,
+                Title = SampleTitle,
+                Description = SampleDescription,
+                StartingPrice = SampleStartingPrice,
+                MinIncrease = SampleMinIncrease,
+                StartTime = SampleStartTime,
+                EndTime = SampleEndTime,
+                UserId = this.dbContext.Users.FirstOrDefault()?.Id,
+                SubCategoryId = this.dbContext.SubCategories.FirstOrDefault()?.Id,
+            });
             await this.dbContext.SaveChangesAsync();
 
             // Act
-            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(testId);
+            var result = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(expected);
 
             // Assert
             result
                 .Should()
-                .Match(x => x.As<ItemDetailsServiceModel>().Id == testId)
-                .And
-                .Match(x => x.As<ItemDetailsServiceModel>().Title == $"Title_{testId}");
+                .Match(x => x.As<ItemDetailsServiceModel>().Id == expected);
         }
 
         [Fact]
@@ -147,8 +152,12 @@
         public async Task GetAllLiveItemsAsync_WithInvalidStartTime_ShouldReturnNull()
         {
             // Arrange
-            await this.dbContext.Items.AddAsync(new Item { StartTime = DateTime.UtcNow.AddMinutes(10), EndTime = DateTime.UtcNow.AddDays(10),
-                Pictures = new List<Picture>() { new Picture(), new Picture(), new Picture() } });
+            await this.dbContext.Items.AddAsync(new Item
+            {
+                StartTime = DateTime.UtcNow.AddMinutes(10),
+                EndTime = DateTime.UtcNow.AddDays(10),
+                Pictures = new List<Picture>() { new Picture(), new Picture(), new Picture() }
+            });
             await this.dbContext.SaveChangesAsync();
             // Act
             var result = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
@@ -237,14 +246,15 @@
         {
             // Arrange
             const string expectedTitle = "expected";
-            await this.dbContext.Items.AddAsync(new Item {
+            await this.dbContext.Items.AddAsync(new Item
+            {
                 Title = expectedTitle,
                 Description = SampleDescription,
                 StartingPrice = SampleStartingPrice,
                 MinIncrease = SampleMinIncrease,
                 StartTime = SampleStartTime,
                 EndTime = SampleEndTime,
-                User = new AuctionUser { FullName =  SampleUserFullName, UserName = SampleUsername},
+                User = new AuctionUser { FullName = SampleUserFullName, UserName = SampleUsername },
                 SubCategory = new SubCategory()
             });
             await this.dbContext.Items.AddAsync(new Item
