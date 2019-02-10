@@ -76,16 +76,15 @@
                     {
                         Email = $"test{i}@test.com",
                         FullName = $"Test Testov{i}",
-                        UserName = $"test{i}@test.com"
-                    }
-                        ;
+                        UserName = $"test{i}@test.com",
+                        EmailConfirmed = true
+                    };
+                    
                     allUsers.Add(user);
                 }
 
                 foreach (var user in allUsers)
                 {
-                    user.EmailConfirmed = true;
-
                     await userManager.CreateAsync(user, "test123");
                 }
 
@@ -93,8 +92,10 @@
                 {
                     Email = "admin@admin.com",
                     FullName = "Admin Adminski",
-                    UserName = "admin@admin.com"
+                    UserName = "admin@admin.com",
+                    EmailConfirmed = true
                 };
+                
                 await userManager.CreateAsync(admin, "admin123");
                 await userManager.AddToRoleAsync(admin, WebConstants.AdministratorRole);
             }
