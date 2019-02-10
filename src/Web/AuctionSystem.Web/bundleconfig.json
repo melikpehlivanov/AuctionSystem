@@ -144,5 +144,14 @@
     "minify": {
       "enabled": true
     }
+  },
+  {
+    "outputFileName": "wwwroot/bundle/edit-item.min.js",
+    "inputFiles": [
+      "wwwroot/edit-item/js/edit-item.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
