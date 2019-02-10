@@ -1,0 +1,54 @@
+﻿@model IEnumerable<UserListingViewModel>
+@{
+    ViewData["Title"] = "All users";
+}
+
+<div class="container">
+    <table id="items" class="table table-hover mt-3 dt-responsive dataTable nowrap">
+        <thead>
+            <tr class="font-weight-bold">
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Add to role</th>
+                <th>Remove from role</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        @(user.CurrentRoles.Any() ? string.Join(", ", user.CurrentRoles) : "None")
+                    </td>
+                    <td>
+                        <form class="d-flex flex-row" asp-action="AddToRole" method="post">
+                            <input type="submit" class="btn btn-outline-primary" value="Add to role" />
+                            <input type="hidden" name="userEmail" value="@user.Email" />
+                            <select name="role" asp-items="@(new SelectList(user.NonCurrentRoles))" class="custom-select form-control ml-1">
+                                <option disabled selected>Select</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <form class="d-flex flex-row" asp-action="RemoveFromRole" method="post">
+                            <input type="submit" class="btn btn-outline-danger" value="Remove from role" />
+                            <input type="hidden" name="userEmail" value="@user.Email" />
+                            <select name="role" asp-items="@(new SelectList(user.CurrentRoles))" class="custom-select form-control ml-1">
+                                <option disabled selected>Select</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section CustomCss{
+    <link rel="stylesheet" href="~/bundle/datatables.min.css" />
+}
+@section Scripts{
+    <script src="~/bundle/datatables.min.js"></script>
+}
