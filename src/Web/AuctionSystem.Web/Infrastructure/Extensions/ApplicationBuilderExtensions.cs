@@ -122,12 +122,13 @@
                     int i = 1;
                     foreach (var subCategory in category.SubCategories)
                     {
+                        var startTime = DateTime.UtcNow.AddDays(random.Next(0, 5));
                         var item = new Item
                         {
                             Description = $"Test Description_{i}",
                             Title = $"Test Title_{i}",
-                            StartTime = DateTime.UtcNow.AddDays(random.Next(0, 5)),
-                            EndTime = DateTime.UtcNow.AddHours(random.Next(0, 3)),
+                            StartTime = startTime,
+                            EndTime = startTime.AddHours(random.Next(1, 10)),
                             StartingPrice = random.Next(10, 500),
                             MinIncrease = random.Next(1, 100),
                             SubCategoryId = subCategory.Id,
