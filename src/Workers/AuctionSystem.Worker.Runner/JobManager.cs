@@ -15,8 +15,11 @@
         private const string AppMainEmailAddress = "mytestedauctionsystem@gmail.com";
         private const string CongratsMessage =
             "Congratulations {0}! You won bid for item - {1}. You will be contacted shortly by the seller for additional information.";
+        private const string CongratsMessageForItemSeller =
+            "Congratulations {0}! Your item - {1} - was sucessfully sold for €{2}. Please contact the buyer to arrange the shipping and etc. Buyer email - {3}.";
 
         private const string LogMessage = "Email was sent successfully on {0} utc time to {1} regarding his winning of item {2}";
+        private const string LogMessageForItemOwner = "Email was sent successfully on {0} utc time to {1} regarding of {2} being sold";
         private const string ExceptionMessage = "Entity update failed. Exception message: {0}";
         private readonly AuctionSystemDbContext dbContext;
         private readonly IEmailSender emailSender;
@@ -48,6 +51,8 @@
                     Title = i.Title,
                     IsEmailSent = i.IsEmailSent,
                     WinnerAmount = i.Bids.Max(b => b.Amount),
+                    UserEmail = i.User.Email,
+                    UserFullName = i.User.FullName,
                 })
                 .ToListAsync();
 
@@ -59,13 +64,19 @@
                     {
                         UserEmail = b.User.Email,
                         UserFullName = b.User.FullName,
+                        b.Amount,
                     })
                     .SingleOrDefaultAsync();
 
+                var isEmailSendToItemOwner = await this.emailSender.SendEmailAsync(AppMainEmailAddress, item.UserEmail,
+                    "Your item was sold!",
+                    string.Format(CongratsMessageForItemSeller, item.UserFullName, item.Title, winnerBid.Amount,
+                        winnerBid.UserEmail));
                 var isSuccessful = await this.emailSender.SendEmailAsync(AppMainEmailAddress, winnerBid.UserEmail, "You won a bid!",
                    string.Format(CongratsMessage, winnerBid.UserFullName, item.Title));
 
-                if (!isSuccessful) continue;
+                if (!isSuccessful || isEmailSendToItemOwner)
+                    continue;
                 try
                 {
                     var dbItem = await this.dbContext.Items.FindAsync(item.Id);
@@ -77,7 +88,8 @@
                     dbItem.IsEmailSent = true;
                     this.dbContext.Items.Update(dbItem);
                     await this.dbContext.SaveChangesAsync();
-                    this.logger.LogInformation(string.Format(LogMessage, DateTime.UtcNow, winnerBid.UserEmail, item.Id));
+                    this.logger.LogInformation(string.Format(LogMessage, DateTime.UtcNow, winnerBid.UserEmail, item.Title));
+                    this.logger.LogInformation(string.Format(LogMessageForItemOwner, DateTime.UtcNow, item.UserEmail, item.Title));
                 }
                 catch (Exception ex)
                 {
