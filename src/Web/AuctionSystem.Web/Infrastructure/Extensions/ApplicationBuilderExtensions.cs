@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Middleware;
     using Models;
     using Newtonsoft.Json;
 
@@ -30,6 +31,9 @@
 
             return builder;
         }
+
+        public static IApplicationBuilder AddDefaultSecurityHeaders(this IApplicationBuilder app, SecurityHeadersBuilder builder)
+            => app.UseMiddleware<SecurityHeadersMiddleware>(builder.Policy());
 
         private static async Task SeedRequiredData(AuctionSystemDbContext dbContext,
             UserManager<AuctionUser> userManager,
