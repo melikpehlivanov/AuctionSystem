@@ -28,7 +28,7 @@
                              {
                                  var picture = pictures[i];
                                  <li>
-                                     <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt=""/></a>
+                                     <a class="zoomGalleryActive" href="#" data-image="@picture.Url" data-zoom-image="@picture.Url"><img class="resize-image" src="@picture.Url" alt=""/></a>
                                      <input id="urls[@i]" name="urls[@i]" value="@picture.Url" hidden="hidden" class="item-picture"/>
                                      <i class="fas fa-times-circle pointer"></i>
                                  </li>

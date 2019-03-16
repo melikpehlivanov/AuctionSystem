@@ -19,7 +19,7 @@
                         {
                             foreach (var picture in Model.Pictures)
                             {
-                                <li><a href="#" class="zoom-gallery" data-image="@picture.Url" data-zoom-image="@picture.Url"><img src="@picture.Url" alt="" /></a></li>
+                                <li><a href="#" class="zoom-gallery" data-image="@picture.Url" data-zoom-image="@picture.Url"><img class="resize-image" src="@picture.Url" alt="" /></a></li>
                             }
                         }
                     </ul>

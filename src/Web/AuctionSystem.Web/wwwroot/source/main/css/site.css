@@ -31,6 +31,11 @@ html {
     }
 }
 
+.resize-image {
+    height: 100px;
+    width: 100%;
+}
+
 .card-img-listing {
     width: 100%;
     height: 30vh;
@@ -74,12 +79,12 @@ html {
     height: 80vh;
 }
 
-.error-box .error-heading{
-    color: dimgray;
-    font-size: 5em;
-}
+    .error-box .error-heading {
+        color: dimgray;
+        font-size: 5em;
+    }
 
-.no-bullets{
+.no-bullets {
     list-style-type: none;
 }
 
