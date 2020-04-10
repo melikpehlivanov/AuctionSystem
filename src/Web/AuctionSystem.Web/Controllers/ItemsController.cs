@@ -1,6 +1,7 @@
 namespace AuctionSystem.Web.Controllers
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -114,6 +115,8 @@ namespace AuctionSystem.Web.Controllers
             serviceModel.StartTime = serviceModel.StartTime.ToUniversalTime();
             serviceModel.EndTime = serviceModel.EndTime.ToUniversalTime();
             serviceModel.UserName = this.User.Identity.Name;
+            serviceModel.PictureStreams = model.PictFormFiles?.Select(p => p.OpenReadStream()).ToArray()
+                ?? new Stream[0];
 
             var id = await this.itemsService.CreateAsync(serviceModel);
 
