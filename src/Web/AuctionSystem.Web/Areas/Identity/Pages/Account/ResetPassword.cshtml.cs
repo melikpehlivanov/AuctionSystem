@@ -26,7 +26,6 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -43,7 +42,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
             public string Code { get; set; }
         }
 
-        public IActionResult OnGet(string code = null)
+        public IActionResult OnGet(string code, string email)
         {
             if (code == null)
             {
@@ -53,6 +52,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
             {
                 Input = new InputModel
                 {
+                    Email = email,
                     Code = code
                 };
                 return Page();
@@ -69,7 +69,6 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
