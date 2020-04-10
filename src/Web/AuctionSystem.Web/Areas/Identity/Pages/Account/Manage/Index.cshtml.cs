@@ -6,12 +6,13 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using AuctionSystem.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using AuctionSystem.Common.EmailSender.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
 {
+
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<AuctionUser> _userManager;
@@ -137,6 +138,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
+                WebConstants.AppMainEmailAddress,
                 email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
