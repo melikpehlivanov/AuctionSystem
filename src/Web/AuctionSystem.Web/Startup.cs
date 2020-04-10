@@ -17,7 +17,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Models;
     using Services.Models;
     using SignalRHubs;
 
@@ -54,20 +53,10 @@
             services
                 .Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
 
-            services.AddDbContext<AuctionSystemDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<AuctionUser, IdentityRole>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-
-                options.SignIn.RequireConfirmedEmail = true;
-            })
-                .AddEntityFrameworkStores<AuctionSystemDbContext>()
-                .AddDefaultTokenProviders();
+            services
+                .AddDbContext<AuctionSystemDbContext>(options => options
+                    .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")))
+                .AddIdentity();
 
             services.AddControllersWithViews(options =>
             {

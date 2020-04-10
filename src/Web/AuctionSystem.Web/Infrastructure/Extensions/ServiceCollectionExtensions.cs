@@ -3,7 +3,10 @@
     using System.Linq;
     using System.Reflection;
     using Common.EmailSender.Interface;
+    using Data;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
+    using Models;
     using Services.Interfaces;
 
     public static class ServiceCollectionExtensions
@@ -31,6 +34,22 @@
 
             AddAssemblyServices(services, assembly, true);
 
+            return services;
+        }
+
+        public static IServiceCollection AddIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<AuctionUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+
+                    options.SignIn.RequireConfirmedEmail = true;
+                })
+                .AddEntityFrameworkStores<AuctionSystemDbContext>()
+                .AddDefaultTokenProviders();
             return services;
         }
 
