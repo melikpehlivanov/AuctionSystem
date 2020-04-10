@@ -34,7 +34,8 @@
         {
             services
                 .AddAppSettings(this.Configuration)
-                .ConfigureCookies();
+                .ConfigureCookies()
+                .ConfigureSecurityStampValidator();
 
             services
                 .AddDbContext<AuctionSystemDbContext>(options => options
@@ -56,11 +57,6 @@
                 .AddApplicationServices()
                 .AddCommonProjectServices()
                 .AddAuthentication();
-
-            services.Configure<SecurityStampValidatorOptions>(options =>
-            {
-                options.ValidationInterval = TimeSpan.Zero;
-            });
 
             services
                 .Configure<RouteOptions>(options => options.LowercaseUrls = true);

@@ -1,5 +1,6 @@
 ﻿namespace AuctionSystem.Web.Infrastructure.Extensions
 {
+    using System;
     using System.Linq;
     using System.Reflection;
     using Common.EmailSender;
@@ -86,6 +87,17 @@
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 })
                 .Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureSecurityStampValidator(this IServiceCollection services)
+        {
+            services
+                .Configure<SecurityStampValidatorOptions>(options =>
+                {
+                    options.ValidationInterval = TimeSpan.Zero;
+                });
 
             return services;
         }
