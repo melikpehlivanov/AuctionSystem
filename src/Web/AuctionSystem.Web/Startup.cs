@@ -55,7 +55,7 @@
 
             services
                 .AddDbContext<AuctionSystemDbContext>(options => options
-                    .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")))
+                    .UseSqlServer(this.Configuration.GetDefaultConnectionString()))
                 .AddIdentity();
 
             services.AddControllersWithViews(options =>
