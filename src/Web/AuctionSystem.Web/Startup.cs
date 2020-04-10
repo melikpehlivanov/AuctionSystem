@@ -33,16 +33,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .Configure<CloudinaryOptions>(options =>
-                {
-                    options.CloudName = this.Configuration.GetSection("Cloudinary:CloudName").Value;
-                    options.ApiKey = this.Configuration.GetSection("Cloudinary:ApiKey").Value;
-                    options.ApiSecret = this.Configuration.GetSection("Cloudinary:ApiSecret").Value;
-                })
-                .Configure<SendGridOptions>(options =>
-                {
-                    options.SendGridApiKey = this.Configuration.GetSection("SendGrid:ApiKey").Value;
-                })
+                .AddAppSettings(this.Configuration)
                 .Configure<CookiePolicyOptions>(options =>
                 {
                     // This lambda determines whether user consent for non-essential cookies is needed for a given request.

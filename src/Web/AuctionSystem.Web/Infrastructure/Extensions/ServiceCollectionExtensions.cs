@@ -2,12 +2,15 @@
 {
     using System.Linq;
     using System.Reflection;
+    using Common.EmailSender;
     using Common.EmailSender.Interface;
     using Data;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Models;
     using Services.Interfaces;
+    using Services.Models;
 
     public static class ServiceCollectionExtensions
     {
@@ -50,6 +53,22 @@
                 })
                 .AddEntityFrameworkStores<AuctionSystemDbContext>()
                 .AddDefaultTokenProviders();
+            return services;
+        }
+
+        public static IServiceCollection AddAppSettings(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+                .Configure<CloudinaryOptions>(options =>
+                {
+                    options.CloudName = configuration.GetSection("Cloudinary:CloudName").Value;
+                    options.ApiKey = configuration.GetSection("Cloudinary:ApiKey").Value;
+                    options.ApiSecret = configuration.GetSection("Cloudinary:ApiSecret").Value;
+                })
+                .Configure<SendGridOptions>(options => { options.SendGridApiKey = configuration.GetSection("SendGrid:ApiKey").Value; });
+
             return services;
         }
 
