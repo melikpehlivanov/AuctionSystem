@@ -17,11 +17,13 @@
     {
         private const string CategoriesKey = "_CategoriesStoredInCache";
 
+        private readonly IMapper mapper;
         private readonly IDistributedCache cache;
         private readonly ICategoriesService categoriesService;
 
-        public Cache(ICategoriesService categoriesService, IDistributedCache cache)
+        public Cache(IMapper mapper, ICategoriesService categoriesService, IDistributedCache cache)
         {
+            this.mapper = mapper;
             this.categoriesService = categoriesService;
             this.cache = cache;
         }
@@ -35,7 +37,7 @@
             {
                 var serviceCategories = await this.categoriesService.GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>();
                 var categories = serviceCategories
-                    .Select(Mapper.Map<CategoryViewModel>)
+                    .Select(this.mapper.Map<CategoryViewModel>)
                     .ToList();
 
                 foreach (var category in categories)

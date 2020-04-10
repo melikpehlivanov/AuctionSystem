@@ -20,7 +20,7 @@
         public CategoriesServiceTests()
         {
             this.dbContext = base.DatabaseInstance;
-            this.categoriesService = new CategoriesService(this.dbContext);
+            this.categoriesService = new CategoriesService(this.mapper, this.dbContext);
         }
 
         [Theory]

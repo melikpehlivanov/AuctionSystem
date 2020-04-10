@@ -3,6 +3,7 @@ namespace AuctionSystem.Services.Implementations
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
@@ -11,7 +12,8 @@ namespace AuctionSystem.Services.Implementations
 
     public class CategoriesService : BaseService, ICategoriesService
     {
-        public CategoriesService(AuctionSystemDbContext context) : base(context)
+        public CategoriesService(IMapper mapper, AuctionSystemDbContext context) 
+            : base(mapper, context)
         {
         }
 
@@ -20,7 +22,7 @@ namespace AuctionSystem.Services.Implementations
         {
             var categories = await this.Context.Categories
                 .OrderBy(c => c.Name)
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
 
             return categories;

@@ -12,13 +12,15 @@
 
     public class HomeController : BaseController
     {
+        private readonly IMapper mapper;
         private readonly ICache cache;
         private readonly IItemsService itemsService;
 
-        public HomeController(IItemsService itemsService, ICache cache)
+        public HomeController(IMapper mapper, ICache cache, IItemsService itemsService)
         {
-            this.itemsService = itemsService;
+            this.mapper = mapper;
             this.cache = cache;
+            this.itemsService = itemsService;
         }
 
         public async Task<IActionResult> Index()
@@ -26,8 +28,8 @@
             var serviceModelHottestItems = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
             var serviceLiveItems = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
 
-            var liveItems = serviceLiveItems.Select(Mapper.Map<LiveItemViewModel>);
-            var hottestItems = serviceModelHottestItems.Select(Mapper.Map<HottestItemViewModel>);
+            var liveItems = serviceLiveItems.Select(this.mapper.Map<LiveItemViewModel>);
+            var hottestItems = serviceModelHottestItems.Select(this.mapper.Map<HottestItemViewModel>);
 
             var model = new HomeViewModel
             {

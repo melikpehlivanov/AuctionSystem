@@ -13,8 +13,8 @@
 
     public class BidService : BaseService, IBidService
     {
-        public BidService(AuctionSystemDbContext context)
-            : base(context)
+        public BidService(IMapper mapper, AuctionSystemDbContext context) 
+            : base(mapper, context)
         {
         }
 
@@ -25,7 +25,7 @@
                 return false;
             }
 
-            var bid = Mapper.Map<Bid>(model);
+            var bid = this.mapper.Map<Bid>(model);
 
             try
             {

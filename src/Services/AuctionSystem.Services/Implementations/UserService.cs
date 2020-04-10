@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
@@ -9,8 +10,8 @@
 
     public class UserService : BaseService, IUserService
     {
-        public UserService(AuctionSystemDbContext context)
-            : base(context)
+        public UserService(IMapper mapper, AuctionSystemDbContext context) 
+            : base(mapper, context)
         {
         }
 
@@ -26,7 +27,7 @@
         public async Task<IEnumerable<T>> GetAllUsersAsync<T>()
             => await this.Context
                 .Users
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
     }
 }

@@ -58,14 +58,14 @@
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<AuctionUser, IdentityRole>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
 
-                    options.SignIn.RequireConfirmedEmail = true;
-                })
+                options.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddEntityFrameworkStores<AuctionSystemDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -98,13 +98,13 @@
 
             services
                 .AddResponseCompression(options => options.EnableForHttps = true);
+
+            services.AddAutoMapper(typeof(DefaultProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Mapper.Initialize(config => config.AddProfile<DefaultProfile>());
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -124,7 +124,6 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseRouting();
 
             app.UseAuthentication();
@@ -144,7 +143,7 @@
                 endpoints.MapControllerRoute(
                     name: "items",
                     pattern: "Items/{action}/{id}/{slug:required}",
-                    defaults: new {controller = "Items", action = "Details"});
+                    defaults: new { controller = "Items", action = "Details" });
                 endpoints.MapRazorPages();
             });
 

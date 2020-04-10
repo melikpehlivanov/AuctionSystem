@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AuctionSystem.Models;
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
@@ -21,8 +22,8 @@
         private readonly CloudinaryOptions options;
         private readonly Cloudinary cloudinary;
 
-        public PictureService(AuctionSystemDbContext context, IOptions<CloudinaryOptions> options)
-            : base(context)
+        public PictureService(IMapper mapper, AuctionSystemDbContext context, IOptions<CloudinaryOptions> options)
+            : base(mapper, context)
         {
             this.options = options.Value;
 
@@ -58,7 +59,7 @@
             => await this.Context
                 .Pictures
                 .Where(p => p.Id == pictureId)
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
         public async Task<IEnumerable<UploadResult>> Upload(ICollection<Stream> pictureStreams, string itemId)
