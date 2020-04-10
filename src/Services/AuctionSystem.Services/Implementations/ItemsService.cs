@@ -16,8 +16,8 @@ namespace AuctionSystem.Services.Implementations
     {
         private readonly IPictureService pictureService;
 
-        public ItemsService(AuctionSystemDbContext context, IPictureService pictureService)
-            : base(context)
+        public ItemsService(IMapper mapper, AuctionSystemDbContext context, IPictureService pictureService) 
+            : base(mapper, context)
         {
             this.pictureService = pictureService;
         }
@@ -31,7 +31,7 @@ namespace AuctionSystem.Services.Implementations
             }
 
             var item = await this.Context.Items
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(i => i.Id == id);
 
             return item;
@@ -41,14 +41,14 @@ namespace AuctionSystem.Services.Implementations
             where T : BaseItemServiceModel
             => await this.Context.Items
                 .Where(i => i.StartingPrice > 10000 && i.StartTime > DateTime.UtcNow)
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<IEnumerable<T>> GetAllLiveItemsAsync<T>()
             where T : BaseItemServiceModel
             => await this.Context.Items
                 .Where(i => i.StartTime < DateTime.UtcNow && i.EndTime > DateTime.UtcNow && i.Pictures.Count > 2)
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<IEnumerable<T>> GetAllItemsForGivenUser<T>(string userId)
@@ -56,7 +56,7 @@ namespace AuctionSystem.Services.Implementations
             => await this.Context.Items
                 .Where(i => i.UserId == userId)
                 .OrderByDescending(i => i.EndTime)
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<string> CreateAsync(ItemCreateServiceModel serviceModel)
@@ -74,7 +74,7 @@ namespace AuctionSystem.Services.Implementations
                 return null;
             }
 
-            var item = Mapper.Map<Item>(serviceModel);
+            var item = this.mapper.Map<Item>(serviceModel);
             item.UserId = user.Id;
 
             await this.Context.AddAsync(item);
@@ -96,7 +96,7 @@ namespace AuctionSystem.Services.Implementations
             var allItemsInGivenCategory = await this.Context
                 .Items
                 .Where(i => i.SubCategoryId == id)
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return allItemsInGivenCategory;
@@ -105,7 +105,7 @@ namespace AuctionSystem.Services.Implementations
         public async Task<IEnumerable<T>> GetAllItemsAsync<T>()
             => await this.Context
                     .Items
-                    .ProjectTo<T>()
+                    .ProjectTo<T>(this.mapper.ConfigurationProvider)
                     .ToListAsync();
 
         public async Task<IEnumerable<T>> SearchByTitleAsync<T>(string query)
@@ -121,7 +121,7 @@ namespace AuctionSystem.Services.Implementations
             var matchingItems = await this.Context
                 .Items
                 .Where(i => i.Title.ToLower().Contains(query))
-                .ProjectTo<T>()
+                .ProjectTo<T>(this.mapper.ConfigurationProvider)
                 .ToArrayAsync();
 
             return matchingItems;

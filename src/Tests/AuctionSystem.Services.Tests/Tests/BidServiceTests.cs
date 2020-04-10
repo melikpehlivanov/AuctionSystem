@@ -24,7 +24,7 @@
         public BidServiceTests()
         {
             this.dbContext = base.DatabaseInstance;
-            this.bidService = new BidService(this.dbContext);
+            this.bidService = new BidService(this.mapper, this.dbContext);
         }
 
         [Fact]

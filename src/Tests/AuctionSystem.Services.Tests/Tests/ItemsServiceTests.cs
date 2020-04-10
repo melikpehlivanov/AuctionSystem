@@ -34,7 +34,7 @@
         public ItemsServiceTests()
         {
             this.dbContext = base.DatabaseInstance;
-            this.itemsService = new ItemsService(this.dbContext, Mock.Of<IPictureService>());
+            this.itemsService = new ItemsService(this.mapper, this.dbContext, Mock.Of<IPictureService>());
         }
 
         [Fact]

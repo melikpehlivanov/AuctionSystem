@@ -21,7 +21,7 @@
         public UserServiceTests()
         {
             this.dbContext = base.DatabaseInstance;
-            this.userService = new UserService(this.dbContext);
+            this.userService = new UserService(this.mapper, this.dbContext);
         }
 
         [Fact]

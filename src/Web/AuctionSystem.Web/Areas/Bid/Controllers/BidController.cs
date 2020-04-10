@@ -11,14 +11,16 @@
     [Area("Bid")]
     public class BidController : BaseController
     {
+        private readonly IMapper mapper;
         private readonly IBidService bidService;
         private readonly IItemsService itemsService;
         private readonly IUserService userService;
 
-        public BidController(IItemsService itemsService, IBidService bidService, IUserService userService)
+        public BidController(IMapper mapper, IBidService bidService, IItemsService itemsService, IUserService userService)
         {
-            this.itemsService = itemsService;
+            this.mapper = mapper;
             this.bidService = bidService;
+            this.itemsService = itemsService;
             this.userService = userService;
         }
 
@@ -34,7 +36,7 @@
             var serviceModel = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
             var highestBid = await this.bidService.GetHighestBidAmountForGivenItemAsync(id);
 
-            var viewModel = Mapper.Map<BidDetailsViewModel>(serviceModel);
+            var viewModel = this.mapper.Map<BidDetailsViewModel>(serviceModel);
             viewModel.UserId = await this.userService.GetUserIdByUsernameAsync(this.User.Identity.Name);
             viewModel.ReturnUrl = this.HttpContext.Request.Path.ToString();
             viewModel.HighestBid = highestBid ?? 0;

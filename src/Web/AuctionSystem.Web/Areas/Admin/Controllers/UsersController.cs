@@ -14,19 +14,21 @@
 
     public class UsersController : AdminController
     {
+        private readonly IMapper mapper;
         private readonly UserManager<AuctionUser> userManager;
         private readonly IUserService userService;
 
-        public UsersController(IUserService userService, UserManager<AuctionUser> userManager)
+        public UsersController(IMapper mapper, UserManager<AuctionUser> userManager, IUserService userService)
         {
-            this.userService = userService;
+            this.mapper = mapper;
             this.userManager = userManager;
+            this.userService = userService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
             var users = (await this.userService.GetAllUsersAsync<UserListingServiceModel>())
-                .Select(Mapper.Map<UserListingViewModel>)
+                .Select(this.mapper.Map<UserListingViewModel>)
                 .ToPaginatedList(page, WebConstants.UsersCountPerPage);
             
             var adminIds = (await this.userManager

@@ -2,15 +2,18 @@ namespace AuctionSystem.Services.Implementations
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
     using Data;
-    using Interfaces;
+    using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
     public abstract class BaseService
     {
+        protected readonly IMapper mapper;
         protected readonly AuctionSystemDbContext Context;
 
-        protected BaseService(AuctionSystemDbContext context)
+        protected BaseService(IMapper mapper, AuctionSystemDbContext context)
         {
+            this.mapper = mapper;
             this.Context = context;
         }
 

@@ -16,14 +16,16 @@ namespace AuctionSystem.Web.Controllers
 
     public class ItemsController : BaseController
     {
+        private readonly IMapper mapper;
         private readonly ICache cache;
         private readonly IItemsService itemsService;
         private readonly IUserService userService;
 
-        public ItemsController(IItemsService itemsService, ICache cache, IUserService userService)
+        public ItemsController(IMapper mapper, ICache cache, IItemsService itemsService, IUserService userService)
         {
-            this.itemsService = itemsService;
+            this.mapper = mapper;
             this.cache = cache;
+            this.itemsService = itemsService;
             this.userService = userService;
         }
 
@@ -41,7 +43,7 @@ namespace AuctionSystem.Web.Controllers
             }
 
             var items = serviceItems
-                .Select(Mapper.Map<ItemIndexViewModel>)
+                .Select(this.mapper.Map<ItemIndexViewModel>)
                 .ToList();
 
             return this.View(items);
@@ -67,7 +69,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>)
+            var allItems = serviceItems.Select(this.mapper.Map<ItemListingDto>)
                 .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 
             var items = new ItemListingViewModel { Items = allItems };
@@ -84,7 +86,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var viewModel = Mapper.Map<ItemDetailsViewModel>(serviceModel);
+            var viewModel = this.mapper.Map<ItemDetailsViewModel>(serviceModel);
 
             return this.View(viewModel);
         }
@@ -111,7 +113,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.View(model);
             }
 
-            var serviceModel = Mapper.Map<ItemCreateServiceModel>(model);
+            var serviceModel = this.mapper.Map<ItemCreateServiceModel>(model);
             serviceModel.StartTime = serviceModel.StartTime.ToUniversalTime();
             serviceModel.EndTime = serviceModel.EndTime.ToUniversalTime();
             serviceModel.UserName = this.User.Identity.Name;
@@ -147,7 +149,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var model = Mapper.Map<ItemEditBindingModel>(serviceModel);
+            var model = this.mapper.Map<ItemEditBindingModel>(serviceModel);
 
             model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
 
@@ -213,7 +215,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var item = Mapper.Map<ItemDetailsViewModel>(serviceItem);
+            var item = this.mapper.Map<ItemDetailsViewModel>(serviceItem);
 
             return this.View(item);
         }
@@ -269,7 +271,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var allItems = serviceItems.Select(Mapper.Map<ItemListingDto>)
+            var allItems = serviceItems.Select(this.mapper.Map<ItemListingDto>)
                 .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 
             var items = new ItemSearchViewModel
