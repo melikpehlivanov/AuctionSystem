@@ -35,7 +35,12 @@
                 {
                     return this.NotFound();
                 }
-                var uploads = await this.pictureService.Upload((ICollection<IFormFile>)this.Request.Form.Files, id);
+
+                var pictureStreams = this.Request.Form.Files
+                    .Select(p => p.OpenReadStream())
+                    .ToArray();
+                
+                var uploads = await this.pictureService.Upload(pictureStreams, id);
                 var urls = uploads.Select(p => p.SecureUri.AbsoluteUri).ToList();
                 return this.Json(new { urls });
             }

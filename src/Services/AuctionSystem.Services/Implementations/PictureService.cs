@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using AuctionSystem.Models;
@@ -11,7 +12,6 @@
     using CloudinaryDotNet.Actions;
     using Data;
     using Interfaces;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
     using Models;
@@ -61,16 +61,16 @@
                 .ProjectTo<T>()
                 .SingleOrDefaultAsync();
 
-        public async Task<IEnumerable<UploadResult>> Upload(ICollection<IFormFile> pictures, string itemId)
+        public async Task<IEnumerable<UploadResult>> Upload(ICollection<Stream> pictureStreams, string itemId)
         {
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
-            Parallel.ForEach(pictures, (picture) =>
+            Parallel.ForEach(pictureStreams, (pictureStream) =>
             {
                 var guid = Guid.NewGuid().ToString();
                 var uploadParams = new ImageUploadParams
                 {
                     PublicId = guid,
-                    File = new FileDescription(guid, picture.OpenReadStream()),
+                    File = new FileDescription(guid, pictureStream),
                     Folder = $"{itemId}",
                 };
                 var uploadResult = this.cloudinary.UploadLarge(uploadParams);

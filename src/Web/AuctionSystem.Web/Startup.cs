@@ -11,12 +11,12 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Models;
     using Services.Models;
     using SignalRHubs;
@@ -66,9 +66,15 @@
 
                     options.SignIn.RequireConfirmedEmail = true;
                 })
-                .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<AuctionSystemDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
+
+            services.AddRazorPages();
 
             services
                 .AddDistributedMemoryCache();
@@ -92,21 +98,16 @@
 
             services
                 .AddResponseCompression(options => options.EnableForHttps = true);
-
-            services
-                .AddMvc(options => { options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>(); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Mapper.Initialize(config => config.AddProfile<DefaultProfile>());
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -124,24 +125,27 @@
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseSignalR(config=> config.MapHub<BidHub>("/bidHub"));
-            
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseStatusCodePagesWithReExecute("/error/{0}");
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapHub<BidHub>("/bidHub");
+                endpoints.MapControllerRoute(
                     name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
                     name: "items",
-                    template: "Items/{action}/{id}/{slug:required}",
-                    defaults: new { controller = "Items", action = "Details" });
+                    pattern: "Items/{action}/{id}/{slug:required}",
+                    defaults: new {controller = "Items", action = "Details"});
+                endpoints.MapRazorPages();
             });
 
             app.SeedData();
