@@ -117,7 +117,7 @@
             }
 
             app.UseResponseCompression();
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.AddDefaultSecurityHeaders(
                 new SecurityHeadersBuilder()
                     .AddDefaultSecurePolicy());
@@ -128,8 +128,6 @@
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseEndpoints(endpoints =>
             {
