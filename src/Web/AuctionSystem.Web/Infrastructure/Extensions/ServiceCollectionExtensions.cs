@@ -5,7 +5,10 @@
     using Common.EmailSender;
     using Common.EmailSender.Interface;
     using Data;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Models;
@@ -68,6 +71,21 @@
                     options.ApiSecret = configuration.GetSection("Cloudinary:ApiSecret").Value;
                 })
                 .Configure<SendGridOptions>(options => { options.SendGridApiKey = configuration.GetSection("SendGrid:ApiKey").Value; });
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureCookies(
+            this IServiceCollection services)
+        {
+            services
+                .Configure<CookiePolicyOptions>(options =>
+                {
+                    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                    options.CheckConsentNeeded = context => true;
+                    options.MinimumSameSitePolicy = SameSiteMode.None;
+                })
+                .Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
 
             return services;
         }
