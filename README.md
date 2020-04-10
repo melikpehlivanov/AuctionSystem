@@ -1,4 +1,6 @@
 # AuctionSystem
+# Azure DevOps - Build Status
+[![Build status](https://dev.azure.com/melikpehlivanov/AuctionSystem/_apis/build/status/AuctionSystem-ASP.NET%20Core-CI)](https://dev.azure.com/melikpehlivanov/AuctionSystem/_build/latest?definitionId=-1)
 
 ## Automatically generated users
 | Username        	| Password 	| Role          	|
