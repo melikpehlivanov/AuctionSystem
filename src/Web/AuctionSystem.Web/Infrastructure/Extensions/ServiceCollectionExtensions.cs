@@ -67,11 +67,11 @@
             services
                 .Configure<CloudinaryOptions>(options =>
                 {
-                    options.CloudName = configuration.GetSection("Cloudinary:CloudName").Value;
-                    options.ApiKey = configuration.GetSection("Cloudinary:ApiKey").Value;
-                    options.ApiSecret = configuration.GetSection("Cloudinary:ApiSecret").Value;
+                    options.CloudName = configuration.GetCloudinaryCloudName();
+                    options.ApiKey = configuration.GetCloudinaryApiKey();
+                    options.ApiSecret = configuration.GetCloudinaryApiSecret();
                 })
-                .Configure<SendGridOptions>(options => { options.SendGridApiKey = configuration.GetSection("SendGrid:ApiKey").Value; });
+                .Configure<SendGridOptions>(options => { options.SendGridApiKey = configuration.GetSendgridApiKey(); });
 
             return services;
         }
@@ -94,10 +94,7 @@
         public static IServiceCollection ConfigureSecurityStampValidator(this IServiceCollection services)
         {
             services
-                .Configure<SecurityStampValidatorOptions>(options =>
-                {
-                    options.ValidationInterval = TimeSpan.Zero;
-                });
+                .Configure<SecurityStampValidatorOptions>(options => { options.ValidationInterval = TimeSpan.Zero; });
 
             return services;
         }
