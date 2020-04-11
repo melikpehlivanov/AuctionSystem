@@ -8,5 +8,11 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\AuctionSystem.Infrastructure\AuctionSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Persistance\Persistance.csproj" />
+  </ItemGroup>
+
 
 </Project>
