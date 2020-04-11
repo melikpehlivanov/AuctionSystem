@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     const euroSign = '€';
     const currentUserId = $('#currentUserId').val();
     const consoleId = $('#consoleId').val();
@@ -49,7 +49,7 @@
 
                 let messageArea = $('#chat-messages');
 
-                messageArea.append(li).fadeIn(350);
+                li.hide().appendTo(messageArea).fadeIn(350);
 
                 let chat = document.getElementsByClassName('chat');
                 chat[0].scrollTop = chat[0].scrollHeight;
