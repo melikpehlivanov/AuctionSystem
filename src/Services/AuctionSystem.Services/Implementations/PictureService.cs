@@ -35,12 +35,12 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public void Delete(string itemId)
-            => this.cloudinary.DeleteResourcesByPrefix($"{itemId}/");
+        public async Task Delete(string itemId)
+            => await this.cloudinary.DeleteResourcesByPrefixAsync($"{itemId}/");
 
         public async Task Delete(string itemId, string pictureId)
         {
-            this.cloudinary.DeleteResourcesByPrefix($"{itemId}/{pictureId}");
+            await this.cloudinary.DeleteResourcesByPrefixAsync($"{itemId}/{pictureId}");
 
             var pictureToRemove = await this.Context
                 .Pictures

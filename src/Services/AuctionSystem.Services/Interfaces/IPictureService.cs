@@ -9,7 +9,7 @@
     {
         Task<IEnumerable<UploadResult>> Upload(ICollection<Stream> pictureStreams, string itemId);
 
-        void Delete(string itemId);
+        Task Delete(string itemId);
         Task Delete(string itemId, string pictureId);
         Task<T> GetPictureById<T>(string pictureId);
     }
