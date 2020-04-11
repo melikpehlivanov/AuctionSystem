@@ -101,6 +101,8 @@
                 return;
             }
 
+            bidInput.val('');
+
             connection.invoke('CreateBidAsync', bidAmount, consoleId);
         });
 
