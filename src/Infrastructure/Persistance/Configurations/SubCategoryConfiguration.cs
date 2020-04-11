@@ -10,9 +10,10 @@
         public void Configure(EntityTypeBuilder<SubCategory> builder)
         {
             builder
-                .Property(p => p.Id)
-                .HasColumnName("Id")
-                .ValueGeneratedOnAdd();
+                .ToTable("SubCategories");
+
+            builder
+                .HasKey(p => p.Id);
 
             builder
                 .Property(p => p.Name)

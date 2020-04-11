@@ -8,10 +8,12 @@
     {
         public void Configure(EntityTypeBuilder<Picture> builder)
         {
+
             builder
-                .Property(p => p.Id)
-                .HasColumnName("Id")
-                .ValueGeneratedOnAdd();
+                .ToTable("Pictures");
+
+            builder
+                .HasKey(p => p.Id);
 
             builder
                 .Property(p => p.Url)

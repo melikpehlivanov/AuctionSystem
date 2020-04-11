@@ -10,9 +10,10 @@
         public void Configure(EntityTypeBuilder<Item> builder)
         {
             builder
-                .Property(p => p.Id)
-                .HasColumnName("Id")
-                .ValueGeneratedOnAdd();
+                .ToTable("Items");
+
+            builder
+                .HasKey(p => p.Id);
 
             builder
                 .Property(p => p.Title)
@@ -45,7 +46,7 @@
                 .IsRequired();
 
             builder
-                .Property(p => p.UserId)
+                .Property(p => p.AuctionUserId)
                 .IsRequired();
 
             builder
@@ -54,11 +55,14 @@
 
             builder
                 .HasMany(b => b.Bids)
-                .WithOne(i => i.Item);
+                .WithOne(i => i.Item)
+                .HasForeignKey(i=> i.ItemId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasMany(b => b.Pictures)
-                .WithOne(i => i.Item);
+                .WithOne(i => i.Item)
+                .HasForeignKey(i=> i.ItemId);
         }
     }
 }

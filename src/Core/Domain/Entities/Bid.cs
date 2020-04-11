@@ -7,7 +7,10 @@
     {
         public string Id { get; set; }
         public decimal Amount { get; set; }
-        public string UserId { get; set; }
+
+        public string AuctionUserId { get; set; }
+        public AuctionUser AuctionUser { get; set; }
+
         public DateTime MadeOn { get; set; }
 
         public string ItemId { get; set; }

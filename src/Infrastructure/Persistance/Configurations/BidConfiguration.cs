@@ -9,25 +9,26 @@
         public void Configure(EntityTypeBuilder<Bid> builder)
         {
             builder
-                .Property(p => p.Id)
-                .HasColumnName("Id");
+                .ToTable("Bids");
+
+            builder
+                .HasKey(p => p.Id);
 
             builder
                 .Property(p => p.Amount)
                 .IsRequired();
 
             builder
-                .Property(p => p.UserId)
+                .Property(p => p.AuctionUserId)
                 .IsRequired();
 
             builder
-                .Property(p => p.Item)
+                .Property(p => p.ItemId)
                 .IsRequired();
 
             builder
                 .Property(p => p.MadeOn)
                 .IsRequired();
-
         }
     }
 }

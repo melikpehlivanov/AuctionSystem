@@ -8,11 +8,11 @@
 
     public class UserManagerService : IUserManager
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UserManagerService(UserManager<ApplicationUser> userManager)
         {
-            this._userManager = userManager;
+            this.userManager = userManager;
         }
 
         public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
@@ -23,14 +23,14 @@
                 Email = userName,
             };
 
-            var result = await this._userManager.CreateAsync(user, password);
+            var result = await this.userManager.CreateAsync(user, password);
 
             return (result.ToApplicationResult(), user.Id);
         }
 
         public async Task<Result> DeleteUserAsync(string userId)
         {
-            var user = this._userManager.Users.SingleOrDefault(u => u.Id == userId);
+            var user = this.userManager.Users.SingleOrDefault(u => u.Id == userId);
 
             if (user != null)
             {
@@ -43,7 +43,7 @@
 
         public async Task<Result> DeleteUserAsync(ApplicationUser user)
         {
-            var result = await this._userManager.DeleteAsync(user);
+            var result = await this.userManager.DeleteAsync(user);
 
             return result.ToApplicationResult();
         }

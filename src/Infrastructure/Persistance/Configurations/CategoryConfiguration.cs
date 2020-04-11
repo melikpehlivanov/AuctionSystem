@@ -10,9 +10,10 @@
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder
-                .Property(p => p.Id)
-                .HasColumnName("Id")
-                .ValueGeneratedOnAdd();
+                .ToTable("Categories");
+
+            builder
+                .HasKey(p => p.Id);
 
             builder
                 .Property(p => p.Name)
@@ -21,7 +22,8 @@
 
             builder
                 .HasMany(x => x.SubCategories)
-                .WithOne(c => c.Category);
+                .WithOne(c => c.Category)
+                .HasForeignKey(c=> c.CategoryId);
         }
     }
 }

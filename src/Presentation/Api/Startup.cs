@@ -24,8 +24,8 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddInfrastructure(this.Configuration)
                 .AddPersistence(this.Configuration)
+                .AddInfrastructure(this.Configuration)
                 .AddApplication();
 
             services.AddControllers();
@@ -48,6 +48,8 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+
+            app.SeedData();
         }
     }
 }
