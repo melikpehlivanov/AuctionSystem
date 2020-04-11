@@ -30,16 +30,9 @@
         }
 
         [Authorize]
-        public async Task CreateBidAsync(string bidAmount, string consoleId)
+        public async Task CreateBidAsync(decimal bidAmount, string consoleId)
         {
-            if (bidAmount == null || consoleId == null)
-            {
-                return;
-            }
-
-            var isParsed = decimal.TryParse(bidAmount, out var parsedBidAmount);
-            
-            if (!isParsed)
+            if (consoleId == null)
             {
                 return;
             }
@@ -50,9 +43,10 @@
             {
                 return;
             }
+
             var canBid = this.bidService.CanBid(item);
 
-            if (!canBid || item.StartingPrice > parsedBidAmount)
+            if (!canBid || item.StartingPrice > bidAmount)
             {
                 return;
             }
@@ -60,7 +54,7 @@
             var userId = this.Context.UserIdentifier;
             var serviceModel = new BidCreateServiceModel
             {
-                Amount = parsedBidAmount,
+                Amount = bidAmount,
                 MadeOn = DateTime.UtcNow,
                 ItemId = item.Id,
                 UserId = userId
@@ -73,7 +67,7 @@
                 return;
             }
 
-            await this.Clients.Groups(consoleId).SendAsync("ReceivedMessage", parsedBidAmount, userId);
+            await this.Clients.Groups(consoleId).SendAsync("ReceivedMessage", bidAmount, userId);
         }
     }
 }
