@@ -1,8 +1,9 @@
 ﻿namespace Domain.Entities
 {
     using System.Collections.Generic;
+    using Common;
 
-    public class Category
+    public class Category : AuditableEntity
     {
         public string Id { get; set; }
         public string Name { get; set; }

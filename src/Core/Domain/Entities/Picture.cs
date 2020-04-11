@@ -1,6 +1,8 @@
 ﻿namespace Domain.Entities
 {
-    public class Picture
+    using Common;
+
+    public class Picture : AuditableEntity
     {
         public string Id { get; set; }
         public string Url { get; set; }

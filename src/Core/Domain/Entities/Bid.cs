@@ -1,8 +1,9 @@
 ﻿namespace Domain.Entities
 {
     using System;
+    using Common;
 
-    public class Bid
+    public class Bid : AuditableEntity
     {
         public string Id { get; set; }
         public decimal Amount { get; set; }

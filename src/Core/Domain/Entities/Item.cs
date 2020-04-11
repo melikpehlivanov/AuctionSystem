@@ -2,8 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using Common;
 
-    public class Item
+    public class Item : AuditableEntity
     {
         public string Id { get; set; }
         public string Title { get; set; }
