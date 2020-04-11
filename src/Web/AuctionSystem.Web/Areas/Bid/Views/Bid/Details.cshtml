@@ -95,7 +95,7 @@
                     {
                         if (Model.EndTime > DateTime.UtcNow)
                         {
-                            <h1 class="text-center">Highest bid atm</h1>
+                            <h1 class="text-center">Highest bid</h1>
                         }
                         else
                         {
@@ -126,15 +126,15 @@
                         <div class="form-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">€</span>
-                                <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control"
+                                <input id="bid-amount" type="number" class="form-control" placeholder="Amount to bid"
                                        min="@Model.StartingPrice.ToString("F2")">
                             </div>
-                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-bid">Bid</button>
+                            <button class="btn btn-danger btn-lg btn-block mt-1" type="button" id="button-bid">Bid</button>
                         </div>
                         <div class="text-center mb-2">
 
                             <div>
-                                <button id="suggested-bid-button" class="btn btn-primary btn-lg d-inline-block" type="submit">
+                                <button id="suggested-bid-button" class="btn btn-primary btn-lg d-inline-block" type="button">
                                     Bid €@suggestedBid
                                 </button>
                             </div>

@@ -88,7 +88,7 @@
             let enteredBid = bidInput.val();
 
             if (!enteredBid) {
-                $(bidInput).notify('Please enter bid amount');
+                $(bidInput).notify('Please enter bidding amount');
                 return;
             }
 
