@@ -84,7 +84,15 @@
             return highestBid === 0 ? startingPrice : highestBid + minIncrease;
         }
 
-        bidButton.click(function () {
+        bidButton.click(submitBid);
+
+        bidInput.on('keypress', function (e) {
+            if (e.which === 13) {
+                submitBid();
+            }
+        });
+
+        function submitBid() {
             let enteredBid = bidInput.val();
 
             if (!enteredBid) {
@@ -104,7 +112,7 @@
             bidInput.val('');
 
             connection.invoke('CreateBidAsync', bidAmount, consoleId);
-        });
+        }
 
         $('#suggested-bid-button').click(function () {
             connection.invoke('CreateBidAsync', getMinBid(), consoleId);
