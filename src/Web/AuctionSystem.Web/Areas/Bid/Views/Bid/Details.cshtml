@@ -1,4 +1,4 @@
-﻿@model BidDetailsViewModel
+@model BidDetailsViewModel
 
 @{
     ViewData["Title"] = Model.Title;    
@@ -125,10 +125,10 @@
                         <div class="form-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">€</span>
-                                <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control" placeholder="Amount (minimum - @Model.StartingPrice)"
+                                <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control"
                                        min="@Model.StartingPrice.ToString("F2")">
                             </div>
-                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-addon2">Bid</button>
+                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-bid">Bid</button>
                         </div>
                         <div class="text-center mb-2">
 
@@ -159,8 +159,10 @@
 <input type="hidden" id="currentUserId" value="@Model.UserId" />
 <input type="hidden" id="consoleId" value="@Model.Id" />
 <input type="hidden" id="highestBid" value="@Model.HighestBid" />
+<input type="hidden" id="startingPrice" value="@Model.StartingPrice" />
+<input type="hidden" id="minIncrease" value="@Model.MinIncrease" />
 
-@* It's necessary id to be exactly like down below or js won't work *@
+@* It's necessary for id to be exactly like down below or js won't work *@
 <input type="hidden" id="end-time-id-for-calculator" value="@Model.EndTime.ToString("O")" />
 <input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
 
