@@ -52,7 +52,7 @@
     <div class="container">
         @if (TempData.ContainsKey(WebConstants.TempDataSuccessMessageKey))
         {
-            <div class="alert alert-primary fade show mb-0" role="alert">
+            <div class="alert alert-primary fade show mb-2" role="alert">
                 <div class="container d-flex flex-row">
                     <i class="fas fa-check fa-2x align-self-center"></i>
                     <p class="pl-3 my-2" style="font-size: large;">@TempData[WebConstants.TempDataSuccessMessageKey]</p>
@@ -67,7 +67,7 @@
 
         @if (TempData.ContainsKey(WebConstants.TempDataErrorMessageKey))
         {
-            <div class="alert alert-danger fade show mb-0" role="alert">
+            <div class="alert alert-danger fade show mb-2" role="alert">
                 <div class="container d-flex flex-row">
                     <i class="fas fa-exclamation-circle fa-2x align-self-center"></i>
                     <p class="pl-3 my-2" style="font-size: large;">@TempData[WebConstants.TempDataErrorMessageKey]</p>
