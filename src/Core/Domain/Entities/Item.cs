@@ -14,9 +14,7 @@
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public bool IsEmailSent { get; set; } = false;
-
-        public string AuctionUserId { get; set; }
-        public AuctionUser AuctionUser { get; set; }
+        public string UserId { get; set; }
 
         public string SubCategoryId { get; set; }
         public SubCategory SubCategory { get; set; }

@@ -24,18 +24,6 @@ namespace Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SubCategories",
                 columns: table => new
                 {
@@ -74,18 +62,12 @@ namespace Persistance.Migrations
                     StartTime = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
                     IsEmailSent = table.Column<bool>(nullable: false),
-                    AuctionUserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     SubCategoryId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_Users_AuctionUserId",
-                        column: x => x.AuctionUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Items_SubCategories_SubCategoryId",
                         column: x => x.SubCategoryId,
@@ -104,19 +86,13 @@ namespace Persistance.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModified = table.Column<DateTime>(nullable: true),
                     Amount = table.Column<decimal>(nullable: false),
-                    AuctionUserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     MadeOn = table.Column<DateTime>(nullable: false),
                     ItemId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bids", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bids_Users_AuctionUserId",
-                        column: x => x.AuctionUserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bids_Items_ItemId",
                         column: x => x.ItemId,
@@ -149,19 +125,9 @@ namespace Persistance.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bids_AuctionUserId",
-                table: "Bids",
-                column: "AuctionUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Bids_ItemId",
                 table: "Bids",
                 column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Items_AuctionUserId",
-                table: "Items",
-                column: "AuctionUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_SubCategoryId",
@@ -189,9 +155,6 @@ namespace Persistance.Migrations
 
             migrationBuilder.DropTable(
                 name: "Items");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "SubCategories");

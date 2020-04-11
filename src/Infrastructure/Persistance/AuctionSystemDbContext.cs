@@ -33,7 +33,6 @@
         public DbSet<Item> Items { get; set; }
         public DbSet<Bid> Bids { get; set; }
         public DbSet<Picture> Pictures { get; set; }
-        public DbSet<AuctionUser> AuctionUsers { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

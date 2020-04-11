@@ -10,7 +10,7 @@ using Persistance;
 namespace Persistance.Migrations
 {
     [DbContext(typeof(AuctionSystemDbContext))]
-    [Migration("20200411184327_Initial")]
+    [Migration("20200411195141_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,19 +21,6 @@ namespace Persistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Domain.Entities.AuctionUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("Domain.Entities.Bid", b =>
                 {
                     b.Property<string>("Id")
@@ -41,10 +28,6 @@ namespace Persistance.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("AuctionUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -65,9 +48,11 @@ namespace Persistance.Migrations
                     b.Property<DateTime>("MadeOn")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AuctionUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ItemId");
 
@@ -104,10 +89,6 @@ namespace Persistance.Migrations
             modelBuilder.Entity("Domain.Entities.Item", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AuctionUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
@@ -151,9 +132,11 @@ namespace Persistance.Migrations
                         .HasColumnType("nvarchar(120)")
                         .HasMaxLength(120);
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AuctionUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("SubCategoryId");
 
@@ -227,12 +210,6 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Bid", b =>
                 {
-                    b.HasOne("Domain.Entities.AuctionUser", "AuctionUser")
-                        .WithMany("Bids")
-                        .HasForeignKey("AuctionUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Item", "Item")
                         .WithMany("Bids")
                         .HasForeignKey("ItemId")
@@ -242,12 +219,6 @@ namespace Persistance.Migrations
 
             modelBuilder.Entity("Domain.Entities.Item", b =>
                 {
-                    b.HasOne("Domain.Entities.AuctionUser", "AuctionUser")
-                        .WithMany("ItemsSold")
-                        .HasForeignKey("AuctionUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.SubCategory", "SubCategory")
                         .WithMany("Items")
                         .HasForeignKey("SubCategoryId")

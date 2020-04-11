@@ -19,7 +19,7 @@
                 .IsRequired();
 
             builder
-                .Property(p => p.AuctionUserId)
+                .Property(p => p.UserId)
                 .IsRequired();
 
             builder
