@@ -9,7 +9,7 @@
 
         public string CategoryId { get; set; }
         public Category Category { get; set; }
-        
-        public ICollection<Item> Items { get; set; }
+
+        public ICollection<Item> Items { get; set; } = new HashSet<Item>();
     }
 }

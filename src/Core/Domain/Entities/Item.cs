@@ -18,7 +18,8 @@
         public string SubCategoryId { get; set; }
         public SubCategory SubCategory { get; set; }
 
-        public ICollection<Bid> Bids { get; set; }
-        public ICollection<Picture> Pictures { get; set; }
+        public ICollection<Bid> Bids { get; set; } = new HashSet<Bid>();
+
+        public ICollection<Picture> Pictures { get; set; } = new HashSet<Picture>();
     }
 }
