@@ -137,7 +137,7 @@ namespace AuctionSystem.Services.Implementations
                 return false;
             }
 
-            await this.pictureService.Delete(item.Title, item.Id);
+            await this.pictureService.DeleteItemFolder(item.Id);
 
             this.Context.Remove(item);
             await this.Context.SaveChangesAsync();
