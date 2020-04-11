@@ -1,9 +1,10 @@
-@model BidDetailsViewModel
+﻿@model BidDetailsViewModel
 
 @{
     ViewData["Title"] = Model.Title;    
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
-    var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal)0.1).ToString("F2");
+    var suggestedBid = (Model.HighestBid == 0 ? Model.StartingPrice : Model.HighestBid + Model.MinIncrease)
+        .ToString("F2");
 }
 
 <div class="container">
@@ -133,8 +134,8 @@
                         <div class="text-center mb-2">
 
                             <div>
-                                <button id="bid-10-percent-higher-button" class="btn btn-primary btn-lg d-inline-block" type="submit">
-                                    Bid: 10% higher (@tenPercentHigherThanTheBiggestBid)
+                                <button id="suggested-bid-button" class="btn btn-primary btn-lg d-inline-block" type="submit">
+                                    Bid €@suggestedBid
                                 </button>
                             </div>
                         </div>
