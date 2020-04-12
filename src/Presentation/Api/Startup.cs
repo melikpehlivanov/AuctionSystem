@@ -2,6 +2,7 @@ namespace Api
 {
     using Common;
     using Application;
+    using Application.Common.Interfaces;
     using AuctionSystem.Infrastructure;
     using Extensions;
     using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ namespace Api
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Persistance;
+    using Services;
 
     public class Startup
     {
@@ -30,6 +32,7 @@ namespace Api
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddControllers();
         }
 
