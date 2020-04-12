@@ -1,5 +1,6 @@
 ﻿namespace AuctionSystem.Infrastructure.Identity
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Application.Common.Interfaces;
@@ -96,6 +97,20 @@
             }
 
             return Result.Success();
+        }
+
+        public async Task<(Result Result, string UserId)> CheckCredentials(string email, string password)
+        {
+            var user = await this.userManager.FindByNameAsync(email);
+            if (user == null)
+            {
+                return (Result.Failure(new List<string> { "User not found" }), null);
+            }
+
+            var passwordValid = await this.userManager.CheckPasswordAsync(user, password);
+            return !passwordValid 
+                ? (Result.Failure(new List<string> { "Wrong password" }), null) 
+                : (Result.Success(), user.Id);
         }
 
 
