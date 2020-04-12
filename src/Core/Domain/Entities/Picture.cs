@@ -1,13 +1,14 @@
 ﻿namespace Domain.Entities
 {
+    using System;
     using Common;
 
     public class Picture : AuditableEntity
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Url { get; set; }
 
-        public string ItemId { get; set; }
+        public Guid ItemId { get; set; }
         public Item Item { get; set; }
     }
 }

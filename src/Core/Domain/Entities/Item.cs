@@ -6,7 +6,7 @@
 
     public class Item : AuditableEntity
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal StartingPrice { get; set; }
@@ -16,7 +16,7 @@
         public bool IsEmailSent { get; set; } = false;
         public string UserId { get; set; }
 
-        public string SubCategoryId { get; set; }
+        public Guid SubCategoryId { get; set; }
         public SubCategory SubCategory { get; set; }
 
         public ICollection<Bid> Bids { get; set; } = new HashSet<Bid>();

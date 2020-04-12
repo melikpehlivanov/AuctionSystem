@@ -11,7 +11,7 @@ namespace Persistance.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -27,13 +27,13 @@ namespace Persistance.Migrations
                 name: "SubCategories",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModified = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    CategoryId = table.Column<string>(nullable: false)
+                    CategoryId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,14 +43,14 @@ namespace Persistance.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Items",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -63,7 +63,7 @@ namespace Persistance.Migrations
                     EndTime = table.Column<DateTime>(nullable: false),
                     IsEmailSent = table.Column<bool>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    SubCategoryId = table.Column<string>(nullable: false)
+                    SubCategoryId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,7 +80,7 @@ namespace Persistance.Migrations
                 name: "Bids",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
@@ -88,7 +88,7 @@ namespace Persistance.Migrations
                     Amount = table.Column<decimal>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
                     MadeOn = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<string>(nullable: false)
+                    ItemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,13 +105,13 @@ namespace Persistance.Migrations
                 name: "Pictures",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModified = table.Column<DateTime>(nullable: true),
                     Url = table.Column<string>(nullable: false),
-                    ItemId = table.Column<string>(nullable: false)
+                    ItemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
