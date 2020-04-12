@@ -73,7 +73,7 @@
             return result.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, string fullName)
+        public async Task<Result> CreateUserAsync(string userName, string password, string fullName)
         {
             var user = new ApplicationUser
             {
@@ -83,8 +83,7 @@
             };
 
             var result = await this.userManager.CreateAsync(user, password);
-
-            return (result.ToApplicationResult(), user.Id);
+            return result.ToApplicationResult();
         }
 
         public async Task<Result> DeleteUserAsync(string userId)

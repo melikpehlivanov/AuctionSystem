@@ -17,8 +17,8 @@
 
         public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await this.userManager.CreateUserAsync(request.Email, request.Password, request.FullName);
-            return user.Result;
+            var result = await this.userManager.CreateUserAsync(request.Email, request.Password, request.FullName);
+            return result;
         }
     }
 }
