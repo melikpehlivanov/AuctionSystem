@@ -2,6 +2,7 @@
 {
     using System.Reflection;
     using AutoMapper;
+    using Common.Behaviours;
     using global::Common.AutoMapping.Profiles;
     using MediatR;
     using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +15,10 @@
                 .AddAutoMapper(typeof(DefaultProfile));
             services
                 .AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+
             // TODO: Add behaviour later on
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
 
             return services;
         }
