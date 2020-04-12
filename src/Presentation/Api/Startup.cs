@@ -45,7 +45,6 @@ namespace Api
                 .UseCustomExceptionHandler()
                 .UseRouting()
                 .UseAuthentication()
-                .UseIdentityServer()
                 .UseAuthorization()
                 //Allow anything for now
                 .UseCors(options => options

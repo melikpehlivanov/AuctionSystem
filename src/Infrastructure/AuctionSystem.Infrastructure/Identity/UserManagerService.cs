@@ -72,12 +72,13 @@
             return result.UserName;
         }
 
-        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+        public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password, string fullName)
         {
             var user = new ApplicationUser
             {
                 UserName = userName,
                 Email = userName,
+                FullName = fullName,
             };
 
             var result = await this.userManager.CreateAsync(user, password);
