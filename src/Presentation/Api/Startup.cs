@@ -1,6 +1,7 @@
 namespace Api
 {
     using Application;
+    using AuctionSystem.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ namespace Api
         {
             services
                 .AddPersistence(this.Configuration)
+                .AddInfrastructure(this.Configuration)
                 .AddApplication();
 
             services.AddControllers();
