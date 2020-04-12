@@ -4,15 +4,34 @@
     using System.Threading.Tasks;
     using Application.Common.Interfaces;
     using Application.Common.Models;
+    using AutoMapper;
     using Microsoft.AspNetCore.Identity;
 
     public class UserManagerService : IUserManager
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMapper mapper;
 
-        public UserManagerService(UserManager<ApplicationUser> userManager)
+        public UserManagerService(UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             this.userManager = userManager;
+            this.mapper = mapper;
+        }
+
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            var result = await this.userManager.FindByNameAsync(username);
+            var user = this.mapper.Map<User>(result);
+
+            return user;
+        }
+
+        public async Task<User> GetUserByIdAsync(string id)
+        {
+            var result = await this.userManager.FindByIdAsync(id);
+            var user = this.mapper.Map<User>(result);
+
+            return user;
         }
 
         public async Task<string> GetUserUsernameByIdAsync(string id)
