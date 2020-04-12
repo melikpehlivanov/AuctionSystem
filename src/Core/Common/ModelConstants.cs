@@ -9,8 +9,8 @@
 
         public static class Bid
         {
-            public const string MinAmount = "0.01";
-            public const string MaxAmount = "999999999999";
+            public const decimal MinAmount = 0.01m;
+            public const decimal MaxAmount = 999999999999;
         }
 
         public static class Category
@@ -22,10 +22,10 @@
         {
             public const int TitleMaxLength = 120;
             public const int DescriptionMaxLength = 500;
-            public const string MinStartingPrice = "0.01";
-            public const string MaxStartingPrice = "79228162514264337593543950335";
-            public const string MinMinIncrease = "0.01";
-            public const string MaxMinIncrease = "79228162514264337593543950335";
+            public const decimal MinStartingPrice = 0.01m;
+            public const decimal MaxStartingPrice = decimal.MaxValue;
+            public const decimal MinMinIncrease = 0.01m;
+            public const decimal MaxMinIncrease = decimal.MaxValue;
         }
 
         public static class SubCategory
