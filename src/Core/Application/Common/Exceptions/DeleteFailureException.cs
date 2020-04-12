@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Northwind.Application.Common.Exceptions
+﻿namespace Application.Common.Exceptions
 {
+    using System;
+
     public class DeleteFailureException : Exception
     {
         public DeleteFailureException(string name, object key, string message)
