@@ -5,6 +5,7 @@ namespace Api
     using Application.Common.Interfaces;
     using AuctionSystem.Infrastructure;
     using Extensions;
+    using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -33,7 +34,9 @@ namespace Api
                 .AddApplication()
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                 .AddScoped<ICurrentUserService, CurrentUserService>()
-                .AddControllers();
+                .AddSwagger()
+                .AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IAuctionSystemDbContext>());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -47,8 +50,10 @@ namespace Api
                 .UseHttpsRedirection()
                 .UseCustomExceptionHandler()
                 .UseRouting()
+                .UseHsts()
                 .UseAuthentication()
                 .UseAuthorization()
+                .UseSwaggerUi()
                 //Allow anything for now
                 .UseCors(options => options
                     .AllowAnyOrigin()
