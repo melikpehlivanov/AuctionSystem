@@ -1,5 +1,6 @@
 namespace Api
 {
+    using Api.Common;
     using Application;
     using AuctionSystem.Infrastructure;
     using Microsoft.AspNetCore.Builder;
@@ -38,18 +39,13 @@ namespace Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            app.SeedData();
+            app
+                .UseHttpsRedirection()
+                .UseRouting()
+                .UseAuthorization()
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); })
+                .UseCustomExceptionHandler()
+                .SeedData();
         }
     }
 }
