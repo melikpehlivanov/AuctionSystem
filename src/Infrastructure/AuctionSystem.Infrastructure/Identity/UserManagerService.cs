@@ -4,24 +4,38 @@
     using System.Threading.Tasks;
     using Application.Common.Interfaces;
     using Application.Common.Models;
-    using AutoMapper;
     using Microsoft.AspNetCore.Identity;
 
     public class UserManagerService : IUserManager
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IMapper mapper;
 
-        public UserManagerService(UserManager<ApplicationUser> userManager, IMapper mapper)
+        public UserManagerService(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
-            this.mapper = mapper;
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             var result = await this.userManager.FindByNameAsync(username);
-            var user = this.mapper.Map<User>(result);
+            if (result == null)
+            {
+                return null;
+            }
+
+            var user = new User
+            {
+                Id = result.Id,
+                Email = result.Email,
+                UserName = result.UserName,
+                FullName = result.FullName,
+                AccessFailedCount = result.AccessFailedCount,
+                IsEmailConfirmed = result.EmailConfirmed,
+                LockoutEnd = result.LockoutEnd,
+                PhoneNumber = result.PhoneNumber,
+                PhoneNumberConfirmed = result.PhoneNumberConfirmed,
+                TwoFactorEnabled = result.TwoFactorEnabled,
+            };
 
             return user;
         }
@@ -29,7 +43,24 @@
         public async Task<User> GetUserByIdAsync(string id)
         {
             var result = await this.userManager.FindByIdAsync(id);
-            var user = this.mapper.Map<User>(result);
+            if (result == null)
+            {
+                return null;
+            }
+
+            var user = new User
+            {
+                Id = result.Id,
+                Email = result.Email,
+                UserName = result.UserName,
+                FullName = result.FullName,
+                AccessFailedCount = result.AccessFailedCount,
+                IsEmailConfirmed = result.EmailConfirmed,
+                LockoutEnd = result.LockoutEnd,
+                PhoneNumber = result.PhoneNumber,
+                PhoneNumberConfirmed = result.PhoneNumberConfirmed,
+                TwoFactorEnabled = result.TwoFactorEnabled,
+            };
 
             return user;
         }
