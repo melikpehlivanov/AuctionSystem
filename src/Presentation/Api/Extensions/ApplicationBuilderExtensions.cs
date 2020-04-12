@@ -1,4 +1,4 @@
-﻿namespace Api
+﻿namespace Api.Extensions
 {
     using AuctionSystem.Infrastructure.Identity;
     using Microsoft.AspNetCore.Builder;
@@ -8,7 +8,7 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder SeedData(this IApplicationBuilder builder)
+        public static IApplicationBuilder ApplyMigrations(this IApplicationBuilder builder)
         {
             using (var serviceScope =
                 builder.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())

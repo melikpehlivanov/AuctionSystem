@@ -1,8 +1,9 @@
 namespace Api
 {
-    using Api.Common;
+    using Common;
     using Application;
     using AuctionSystem.Infrastructure;
+    using Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -27,9 +28,9 @@ namespace Api
             services
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
-                .AddApplication();
-
-            services.AddControllers();
+                .AddApplication()
+                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                .AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,11 +42,18 @@ namespace Api
 
             app
                 .UseHttpsRedirection()
-                .UseRouting()
-                .UseAuthorization()
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); })
                 .UseCustomExceptionHandler()
-                .SeedData();
+                .UseRouting()
+                .UseAuthentication()
+                .UseIdentityServer()
+                .UseAuthorization()
+                //Allow anything for now
+                .UseCors(options => options
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod())
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); })
+                .ApplyMigrations();
         }
     }
 }
