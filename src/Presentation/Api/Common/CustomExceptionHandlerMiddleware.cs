@@ -5,8 +5,11 @@
     using System.Threading.Tasks;
     using Application.Common.Exceptions;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Http;
+    using Models;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     public class CustomExceptionHandlerMiddleware
     {
@@ -32,18 +35,17 @@
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var code = HttpStatusCode.InternalServerError;
-
-            var result = string.Empty;
+            var errorMsg = string.Empty;
 
             switch (exception)
             {
                 case ValidationException validationException:
                     code = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.Failures);
+                    errorMsg = JsonConvert.SerializeObject(validationException.Failures);
                     break;
                 case BadRequestException badRequestException:
                     code = HttpStatusCode.BadRequest;
-                    result = badRequestException.Message;
+                    errorMsg = badRequestException.Message;
                     break;
                 case NotFoundException _:
                     code = HttpStatusCode.NotFound;
@@ -55,12 +57,8 @@
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
-
-            if (result == string.Empty)
-            {
-                result = JsonConvert.SerializeObject(new { error = exception.Message });
-            }
-
+            var errorModel = new ErrorModel { Title = code.ToString(), Status = (int) code, TraceId = context.TraceIdentifier, Error = errorMsg };
+            var result = JsonConvert.SerializeObject(errorModel);
             return context.Response.WriteAsync(result);
         }
     }
