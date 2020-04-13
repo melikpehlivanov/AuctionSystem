@@ -1,11 +1,11 @@
 ﻿namespace Api.SwaggerExamples.Requests
 {
-    using Models.Users;
+    using Application.Users.Commands.LoginUser;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class LoginUserRequestExample : IExamplesProvider<LoginUserRequestModel>
+    public class LoginUserRequestExample : IExamplesProvider<LoginUserCommand>
     {
-        public LoginUserRequestModel GetExamples()
-            => new LoginUserRequestModel { Email = "test@test.com", Password = "test123" };
+        public LoginUserCommand GetExamples()
+            => new LoginUserCommand { Email = "test@test.com", Password = "test123" };
     }
 }

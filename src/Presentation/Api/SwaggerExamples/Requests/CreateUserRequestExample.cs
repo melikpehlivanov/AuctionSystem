@@ -1,11 +1,11 @@
 ﻿namespace Api.SwaggerExamples.Requests
 {
-    using Models.Users;
+    using Application.Users.Commands.CreateUser;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class CreateUserRequestExample : IExamplesProvider<CreateUserRequestModel>
+    public class CreateUserRequestExample : IExamplesProvider<CreateUserCommand>
     {
-        public CreateUserRequestModel GetExamples()
-            => new CreateUserRequestModel { Email = "test@test.com", FullName = "Melik Pehlivanov", Password = "Test123" };
+        public CreateUserCommand GetExamples()
+            => new CreateUserCommand { Email = "test@test.com", FullName = "Melik Pehlivanov", Password = "Test123" };
     }
 }

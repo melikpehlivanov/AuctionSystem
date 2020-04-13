@@ -41,7 +41,7 @@ namespace Api
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
                 .AddCloudinarySettings(this.Configuration)
-                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
+                .AddJwtAuthentication(services.AddJwtSecret(this.Configuration))
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddSwagger()
                 .AddControllers()

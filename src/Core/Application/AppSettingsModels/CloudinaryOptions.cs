@@ -1,4 +1,4 @@
-﻿namespace Application.Pictures
+﻿namespace Application.AppSettingsModels
 {
     public class CloudinaryOptions
     {

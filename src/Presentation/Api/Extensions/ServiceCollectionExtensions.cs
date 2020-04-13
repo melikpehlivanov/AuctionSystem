@@ -3,10 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Text;
-    using Application.Pictures;
+    using Application.AppSettingsModels;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -17,11 +16,11 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static AppSettings GetApplicationSettings(
+        public static AppSettings AddJwtSecret(
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            var applicationSettingsConfiguration = configuration.GetSection("ApplicationSettings");
+            var applicationSettingsConfiguration = configuration.GetJwtSecretSection();
             services.Configure<AppSettings>(applicationSettingsConfiguration);
             return applicationSettingsConfiguration.Get<AppSettings>();
         }
@@ -62,7 +61,7 @@
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
                     };
                 });
 

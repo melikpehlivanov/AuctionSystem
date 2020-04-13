@@ -1,4 +1,4 @@
-﻿namespace Api
+﻿namespace Application.AppSettingsModels
 {
     public class AppSettings
     {

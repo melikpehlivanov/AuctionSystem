@@ -26,7 +26,7 @@
             }
 
             var jwtToken = await this.mediator
-                .Send(new GenerateJwtTokenCommand(userId, request.Email, request.Secret), cancellationToken);
+                .Send(new GenerateJwtTokenCommand(userId, request.Email), cancellationToken);
             return new LoginUserResponseModel { Token = jwtToken };
         }
     }

@@ -4,17 +4,14 @@
 
     public class GenerateJwtTokenCommand : IRequest<string>
     {
-        public GenerateJwtTokenCommand(string userId, string username, string secret)
+        public GenerateJwtTokenCommand(string userId, string username)
         {
             this.UserId = userId;
             this.Username = username;
-            this.Secret = secret;
         }
 
         public string UserId { get; }
 
         public string Username { get; }
-
-        public string Secret { get; }
     }
 }

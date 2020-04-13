@@ -1,9 +1,8 @@
 ﻿namespace Application.Users.Commands.CreateUser
 {
-    using Common.Models;
     using MediatR;
 
-    public class CreateUserCommand : IRequest<Result>
+    public class CreateUserCommand : IRequest
     {
         public string Email { get; set; }
 

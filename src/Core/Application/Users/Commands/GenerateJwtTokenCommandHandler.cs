@@ -8,14 +8,23 @@ namespace Application.Users.Commands
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using AppSettingsModels;
+    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
     public class GenerateJwtTokenCommandHandler : IRequestHandler<GenerateJwtTokenCommand, string>
     {
+        private readonly AppSettings options;
+
+        public GenerateJwtTokenCommandHandler(IOptions<AppSettings> options)
+        {
+            this.options = options.Value;
+        }
+
         public async Task<string> Handle(GenerateJwtTokenCommand request, CancellationToken cancellationToken)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(request.Secret);
+            var key = Encoding.ASCII.GetBytes(this.options.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
