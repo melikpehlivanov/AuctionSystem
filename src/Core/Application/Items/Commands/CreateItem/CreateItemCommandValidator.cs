@@ -6,8 +6,12 @@
 
     public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
     {
-        public CreateItemCommandValidator()
+        private readonly IDateTime dateTime;
+
+        public CreateItemCommandValidator(IDateTime dateTime)
         {
+            this.dateTime = dateTime;
+
             this.RuleFor(p => p.Title).NotNull().MaximumLength(ModelConstants.Item.TitleMaxLength);
             this.RuleFor(p => p.Description).NotNull().MaximumLength(ModelConstants.Item.DescriptionMaxLength);
             this.RuleFor(p => p.StartingPrice).NotNull()
@@ -21,7 +25,7 @@
             this.RuleFor(m => new { m.StartTime, m.EndTime }).NotNull()
                 .Must(x => x.EndTime.Date.ToUniversalTime() >= x.StartTime.Date.ToUniversalTime())
                 .WithMessage("End time must be after start time")
-                .Must(x=> x.StartTime.ToUniversalTime() >= DateTime.UtcNow)
+                .Must(x=> x.StartTime.ToUniversalTime() >= this.dateTime.Now.ToUniversalTime())
                 .WithMessage("The Start time must be after the current time");
 
             this.RuleFor(p => p.SubCategoryId).NotNull();

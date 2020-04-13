@@ -13,11 +13,13 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ApplicationDbContext context;
 
-        public UserManagerService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserManagerService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.context = context;
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
@@ -141,6 +143,11 @@
             return user.Id;
         }
 
+        public async Task<string> GetUserIdByUsernameAsync(string username)
+        {
+            var user = await this.context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+            return user?.Id;
+        }
 
         public async Task<Result> DeleteUserAsync(ApplicationUser user)
         {

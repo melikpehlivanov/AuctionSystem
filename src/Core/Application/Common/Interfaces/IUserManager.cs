@@ -24,5 +24,6 @@
         Task AddToRoleAsync(ApplicationUser user, string role);
 
         Task<string> GetFirstUserId();
+        Task<string> GetUserIdByUsernameAsync(string username);
     }
 }
