@@ -3,10 +3,10 @@
     using Models.Errors;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class UnauthorizedResponseModel : IExamplesProvider<BaseErrorModel>
+    public class UnauthorizedResponseModel : IExamplesProvider<UnauthorizedErrorModel>
     {
-        public BaseErrorModel GetExamples()
-            => new ErrorModel
+        public UnauthorizedErrorModel GetExamples()
+            => new UnauthorizedErrorModel
             {
                 Error = "Log-in required", 
                 Status = 401, 

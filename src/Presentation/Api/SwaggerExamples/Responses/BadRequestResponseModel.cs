@@ -3,10 +3,10 @@
     using Models.Errors;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class BadRequestResponseModel : IExamplesProvider<BaseErrorModel>
+    public class BadRequestResponseModel : IExamplesProvider<BadRequestErrorModel>
     {
-        public BaseErrorModel GetExamples()
-            => new ErrorModel
+        public BadRequestErrorModel GetExamples()
+            => new BadRequestErrorModel
             {
                 Error = "Invalid user credentials",
                 Title = "BadRequest",

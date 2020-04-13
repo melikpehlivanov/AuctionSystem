@@ -3,10 +3,10 @@
     using Models.Errors;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class NotFoundResponseModel : IExamplesProvider<BaseErrorModel>
+    public class NotFoundResponseModel : IExamplesProvider<NotFoundErrorModel>
     {
-        public BaseErrorModel GetExamples()
-            => new ErrorModel
+        public NotFoundErrorModel GetExamples()
+            => new NotFoundErrorModel
             {
                 Error = "Such entity does not exist or this field could be empty", 
                 Status = 404, 
