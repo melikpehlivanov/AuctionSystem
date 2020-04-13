@@ -3,17 +3,21 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Application;
     using Application.Common.Interfaces;
     using Application.Common.Models;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
     public class UserManagerService : IUserManager
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public UserManagerService(UserManager<ApplicationUser> userManager)
+        public UserManagerService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
@@ -86,6 +90,12 @@
             return result.ToApplicationResult();
         }
 
+        public async Task<Result> CreateUserAsync(ApplicationUser user, string password)
+        {
+            var result = await this.userManager.CreateAsync(user, password);
+            return result.ToApplicationResult();
+        }
+
         public async Task<Result> DeleteUserAsync(string userId)
         {
             var user = this.userManager.Users.SingleOrDefault(u => u.Id == userId);
@@ -107,9 +117,28 @@
             }
 
             var passwordValid = await this.userManager.CheckPasswordAsync(user, password);
-            return !passwordValid 
-                ? (Result.Failure(new List<string> { "Wrong password" }), null) 
+            return !passwordValid
+                ? (Result.Failure(new List<string> { "Wrong password" }), null)
                 : (Result.Success(), user.Id);
+        }
+
+        public async Task CreateRoleAsync(IdentityRole role)
+        {
+            var roleExist = await this.roleManager.RoleExistsAsync(AppConstants.AdministratorRole);
+
+            if (!roleExist)
+            {
+                await this.roleManager.CreateAsync(new IdentityRole(AppConstants.AdministratorRole));
+            }
+        }
+
+        public async Task AddToRoleAsync(ApplicationUser user, string role)
+            => await this.userManager.AddToRoleAsync(user, role);
+
+        public async Task<string> GetFirstUserId()
+        {
+            var user = await this.userManager.Users.FirstAsync();
+            return user.Id;
         }
 
 
