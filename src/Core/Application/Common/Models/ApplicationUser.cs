@@ -1,4 +1,4 @@
-﻿namespace AuctionSystem.Infrastructure.Identity
+﻿namespace Application.Common.Models
 {
     using Microsoft.AspNetCore.Identity;
 

@@ -1,8 +1,11 @@
 ﻿namespace AuctionSystem.Infrastructure
 {
+    using System.Reflection;
     using Application.Common.Interfaces;
+    using Application.Common.Models;
     using Common;
     using Identity;
+    using MediatR;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -13,20 +16,21 @@
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IUserManager, UserManagerService>();
+            services
+                .AddScoped<IUserManager, UserManagerService>()
+                .AddTransient<IDateTime, MachineDateTime>()
+                .AddMediatR(Assembly.GetExecutingAssembly())
+                .AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(configuration.GetDefaultConnectionString()))
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
+                    {
+                        options.Password.RequireDigit = false;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequireUppercase = false;
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetDefaultConnectionString()));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-
-                    options.SignIn.RequireConfirmedEmail = true;
-                })
+                        options.SignIn.RequireConfirmedEmail = true;
+                    })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

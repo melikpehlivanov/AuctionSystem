@@ -41,11 +41,11 @@
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = this.currentUserService.UserId;
+                        entry.Entity.CreatedBy = this.currentUserService?.UserId;
                         entry.Entity.Created = this.dateTime.Now;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = this.currentUserService.UserId;
+                        entry.Entity.LastModifiedBy = this.currentUserService?.UserId;
                         entry.Entity.LastModified = this.dateTime.Now;
                         break;
                 }

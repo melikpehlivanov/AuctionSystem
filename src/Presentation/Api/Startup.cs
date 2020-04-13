@@ -67,8 +67,7 @@ namespace Api
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod())
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); })
-                .ApplyMigrations();
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
