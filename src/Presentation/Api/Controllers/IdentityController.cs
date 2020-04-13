@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using Models.Errors;
+    using SwaggerExamples;
     using Swashbuckle.AspNetCore.Annotations;
 
     public class IdentityController : BaseController
