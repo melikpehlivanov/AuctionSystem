@@ -4,8 +4,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
 
-    [Produces("application/json")]
     [ApiController]
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public abstract class BaseController : ControllerBase
     {

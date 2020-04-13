@@ -1,40 +1,63 @@
 ﻿namespace Api.Controllers
 {
     using System.Threading.Tasks;
+    using Models.Users;
     using Application.Users.Commands.CreateUser;
     using Application.Users.Commands.LoginUser;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
+    using Models.Errors;
+    using Swashbuckle.AspNetCore.Annotations;
 
     public class IdentityController : BaseController
     {
         private readonly AppSettings appSettings;
+        private readonly IMapper mapper;
 
-        public IdentityController(IOptions<AppSettings> appSettings)
+        public IdentityController(IOptions<AppSettings> appSettings, IMapper mapper)
         {
+            this.mapper = mapper;
             this.appSettings = appSettings.Value;
         }
 
+        //TODO: Implement refresh token
+     
+        /// <summary>
+        /// Creates a new user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route(nameof(Register))]
-        public async Task<IActionResult> Register(CreateUserCommand model)
+        [SwaggerResponse(StatusCodes.Status200OK, "The user was created")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "The user data is invalid", typeof(BadRequestErrorModel))]
+        public async Task<IActionResult> Register(CreateUserRequestModel model)
         {
-            var result = await this.Mediator.Send(model);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            return Ok();
+            await this.Mediator.Send(this.mapper.Map<CreateUserCommand>(model));
+            return this.Ok();
         }
 
+        /// <summary>
+        /// Verifies user credentials and generates JWT token
+        /// </summary>
         [HttpPost]
         [Route(nameof(Login))]
-        public async Task<IActionResult> Login(LoginUserCommand model)
+        [SwaggerResponse(
+            StatusCodes.Status200OK, 
+            "Jwt token successfully generated", 
+            typeof(LoginUserResponseModel))]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest, 
+            "The user credentials are invalid", 
+            typeof(BadRequestErrorModel))]
+        public async Task<IActionResult> Login(LoginUserRequestModel model)
         {
-            model.Secret = this.appSettings.Secret;
-            var result = await this.Mediator.Send(model);
-            return Ok(result);
+            var appModel = this.mapper.Map<LoginUserCommand>(model);
+            appModel.Secret = this.appSettings.Secret;
+            var result = await this.Mediator.Send(appModel);
+            return this.Ok(result);
         }
     }
 }
