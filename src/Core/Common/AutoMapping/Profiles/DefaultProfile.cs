@@ -17,7 +17,7 @@
             var allTypes = AppDomain
                 .CurrentDomain
                 .GetAssemblies()
-                .Where(a => a.GetName().FullName.Contains("Application"))
+                .Where(a => a.GetName().FullName.Contains("Application") || a.GetName().FullName.Contains("Api"))
                 .SelectMany(a => a.GetTypes())
                 .ToArray();
 
