@@ -1,9 +1,7 @@
-﻿namespace Api.Models
+﻿namespace Api.Models.Errors
 {
-    public class ErrorModel
+    public abstract class BaseErrorModel
     {
-        public string Error { get; set; }
-
         public string Title { get; set; }
 
         public int Status { get; set; }

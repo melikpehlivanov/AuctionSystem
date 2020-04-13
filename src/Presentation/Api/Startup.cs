@@ -1,6 +1,5 @@
 namespace Api
 {
-    using System.Text.Json;
     using Common;
     using Application;
     using Application.Common.Interfaces;

@@ -1,15 +1,14 @@
 ﻿namespace Api.Common
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
     using Application.Common.Exceptions;
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Http;
-    using Models;
+    using Models.Errors;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
 
     public class CustomExceptionHandlerMiddleware
     {
@@ -36,12 +35,13 @@
         {
             var code = HttpStatusCode.InternalServerError;
             var errorMsg = string.Empty;
+            IDictionary<string, string[]> validationErrorMessages = new Dictionary<string, string[]>();
 
             switch (exception)
             {
                 case ValidationException validationException:
                     code = HttpStatusCode.BadRequest;
-                    errorMsg = JsonConvert.SerializeObject(validationException.Failures);
+                    validationErrorMessages = validationException.Failures;
                     break;
                 case BadRequestException badRequestException:
                     code = HttpStatusCode.BadRequest;
@@ -57,8 +57,31 @@
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
-            var errorModel = new ErrorModel { Title = code.ToString(), Status = (int) code, TraceId = context.TraceIdentifier, Error = errorMsg };
-            var result = JsonConvert.SerializeObject(errorModel);
+            string result;
+            if (validationErrorMessages.Count == 0)
+            {
+                var errorModel = new ErrorModel
+                {
+                    Title = code.ToString(), 
+                    Status = (int)code, 
+                    TraceId = context.TraceIdentifier, 
+                    Error = errorMsg
+                };
+                result = JsonConvert.SerializeObject(errorModel);
+            }
+            else
+            {
+                var errorModel = new ValidationErrorModel
+                {
+                    Title = "One or more validation errors occured.",
+                    Status = (int)code,
+                    TraceId = context.TraceIdentifier,
+                    Errors = validationErrorMessages
+                };
+
+                result = JsonConvert.SerializeObject(errorModel);
+            }
+
             return context.Response.WriteAsync(result);
         }
     }
