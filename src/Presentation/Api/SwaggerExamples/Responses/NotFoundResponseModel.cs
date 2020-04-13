@@ -1,11 +1,11 @@
 ﻿namespace Api.SwaggerExamples.Responses
 {
-    using Models;
+    using Models.Errors;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class NotFoundResponse : IExamplesProvider<ErrorModel>
+    public class NotFoundResponseModel : IExamplesProvider<BaseErrorModel>
     {
-        public ErrorModel GetExamples()
+        public BaseErrorModel GetExamples()
             => new ErrorModel
             {
                 Error = "Such entity does not exist or this field could be empty", 

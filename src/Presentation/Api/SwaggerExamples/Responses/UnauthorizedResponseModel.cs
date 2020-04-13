@@ -1,16 +1,16 @@
 ﻿namespace Api.SwaggerExamples.Responses
 {
-    using Models;
+    using Models.Errors;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class UnauthorizedResponse : IExamplesProvider<ErrorModel>
+    public class UnauthorizedResponseModel : IExamplesProvider<BaseErrorModel>
     {
-        public ErrorModel GetExamples()
+        public BaseErrorModel GetExamples()
             => new ErrorModel
             {
                 Error = "Log-in required", 
                 Status = 401, 
-                Title = "BadRequest", 
+                Title = "Unauthorized", 
                 TraceId = "8000006c-0007-ff00-b63f-84710c7967bb"
             };
     }
