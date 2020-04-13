@@ -1,8 +1,10 @@
 namespace Api
 {
+    using System.Text.Json;
     using Common;
     using Application;
     using Application.Common.Interfaces;
+    using Application.Users.Commands.CreateUser;
     using AuctionSystem.Infrastructure;
     using Extensions;
     using FluentValidation.AspNetCore;
@@ -11,8 +13,10 @@ namespace Api
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Newtonsoft.Json;
     using Persistance;
     using Services;
+    using Newtonsoft.Json.Serialization;
 
     public class Startup
     {
@@ -28,6 +32,11 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
             services
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
@@ -36,7 +45,7 @@ namespace Api
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddSwagger()
                 .AddControllers()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IAuctionSystemDbContext>());
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
