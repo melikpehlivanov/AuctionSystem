@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Retrieves all items (max 24)
+        /// Retrieves all items (max 24 per request)
         /// </summary>
         [HttpGet]
         [AllowAnonymous]
