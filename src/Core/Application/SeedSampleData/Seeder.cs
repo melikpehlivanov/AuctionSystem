@@ -105,7 +105,7 @@
                     int i = 1;
                     foreach (var subCategory in category.SubCategories)
                     {
-                        var startTime = DateTime.UtcNow.AddDays(random.Next(0, 5));
+                        var startTime = DateTime.UtcNow.AddDays(random.Next(0, 5)).ToUniversalTime();
                         var item = new Item
                         {
                             Description = $"Test Description_{i}",

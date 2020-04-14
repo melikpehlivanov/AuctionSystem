@@ -16,6 +16,7 @@ namespace Api
     using Persistance;
     using Services;
     using Newtonsoft.Json.Serialization;
+    using Microsoft.AspNetCore.Http;
 
     public class Startup
     {
@@ -43,6 +44,13 @@ namespace Api
                 .AddCloudinarySettings(this.Configuration)
                 .AddJwtAuthentication(services.AddJwtSecret(this.Configuration))
                 .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddScoped<IUriService>(provider =>
+                {
+                    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+                    var request = accessor.HttpContext.Request;
+                    var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent(), request.Path);
+                    return new UriService(absoluteUri);
+                })
                 .AddSwagger()
                 .AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
