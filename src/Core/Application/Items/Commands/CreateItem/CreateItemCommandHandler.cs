@@ -10,6 +10,8 @@
     using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using Application.Pictures.Commands.CreatePicture;
+    using System.Linq;
 
     public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Response<Guid>>
     {
@@ -19,9 +21,9 @@
         private readonly IMediator mediator;
 
         public CreateItemCommandHandler(
-            IMapper mapper, 
-            IAuctionSystemDbContext context, 
-            IUserManager userManager, 
+            IMapper mapper,
+            IAuctionSystemDbContext context,
+            IUserManager userManager,
             IMediator mediator)
         {
             this.mapper = mapper;
@@ -44,8 +46,12 @@
             item.UserId = userId;
 
             await this.context.Items.AddAsync(item, cancellationToken);
-            await this.mediator.Publish(new ItemCreatedNotification(item.Id, request.Pictures), cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
+
+            if (request.Pictures.Any())
+            {
+                await this.mediator.Send(new CreatePictureCommand { ItemId = item.Id, Pictures = request.Pictures }, cancellationToken);
+            }
 
             return new Response<Guid>(item.Id);
         }

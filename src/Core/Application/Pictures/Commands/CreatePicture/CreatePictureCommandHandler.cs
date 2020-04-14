@@ -1,31 +1,38 @@
-﻿namespace Application.Pictures
+﻿namespace Application.Pictures.Commands.CreatePicture
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Interfaces;
+    using Common.Interfaces;
     using AppSettingsModels;
-    using AutoMapper;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
     using Domain.Entities;
-    using Items;
     using MediatR;
     using Microsoft.Extensions.Options;
+    using Microsoft.EntityFrameworkCore;
+    using AutoMapper;
+    using Common.Models;
 
-    public class ItemCreatedNotificationHandler : INotificationHandler<ItemCreatedNotification>
+    public class CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, Response<PictureResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
+        private readonly ICurrentUserService currentUserService;
+        private readonly IMapper mapper;
         private readonly CloudinaryOptions options;
         private readonly Cloudinary cloudinary;
 
-        public ItemCreatedNotificationHandler(IAuctionSystemDbContext context, IOptions<CloudinaryOptions> options)
+        public CreatePictureCommandHandler(
+            IAuctionSystemDbContext context,
+            ICurrentUserService currentUserService,
+            IMapper mapper,
+            IOptions<CloudinaryOptions> options)
         {
             this.context = context;
+            this.currentUserService = currentUserService;
+            this.mapper = mapper;
             this.options = options.Value;
 
             var account = new Account(
@@ -36,27 +43,31 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public ItemCreatedNotificationHandler(IAuctionSystemDbContext context)
+        public async Task<Response<PictureResponseModel>> Handle(CreatePictureCommand request, CancellationToken cancellationToken)
         {
-            this.context = context;
-        }
+            var item = await this.context
+                .Items
+                .Select(i => new
+                {
+                    i.Id,
+                    i.UserId,
 
-        public async Task Handle(ItemCreatedNotification notification, CancellationToken cancellationToken)
-        {
-            if (!notification.Pictures.Any())
-            {
-                return;
-            }
+                })
+                .SingleOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
+            //if (!request.Pictures.Any() || item.UserId != this.currentUserService.UserId)
+            //{
+            //    return Unit.Value;
+            //}
 
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
-            foreach (var picture in notification.Pictures)
+            foreach (var picture in request.Pictures)
             {
                 var guid = Guid.NewGuid().ToString();
                 var uploadParams = new ImageUploadParams
                 {
                     PublicId = Guid.NewGuid().ToString(),
                     File = new FileDescription(guid, picture.OpenReadStream()),
-                    Folder = $"{notification.ItemId}",
+                    Folder = $"{request.ItemId}",
                 };
                 var uploadResult = await this.cloudinary.UploadAsync(uploadParams);
                 uploadResults.Add(uploadResult);
@@ -65,12 +76,15 @@
             var picturesToAdd = uploadResults.Select(picture => new Picture
             {
                 Id = Guid.Parse(picture.PublicId.Substring(picture.PublicId.LastIndexOf('/') + 1)),
-                ItemId = notification.ItemId,
+                ItemId = request.ItemId,
                 Url = picture.SecureUri.AbsoluteUri
             }).ToList();
 
             await this.context.Pictures.AddRangeAsync(picturesToAdd, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
+
+            var result = new Response<PictureResponseModel>(picturesToAdd.Select(p => this.mapper.Map<PictureResponseModel>(p)).ToList());
+            return result;
         }
     }
 }
