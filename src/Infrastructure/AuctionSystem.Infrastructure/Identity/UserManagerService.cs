@@ -6,16 +6,17 @@
     using Application;
     using Application.Common.Interfaces;
     using Application.Common.Models;
+    using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class UserManagerService : IUserManager
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<AuctionUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        private readonly ApplicationDbContext context;
+        private readonly IAuctionSystemDbContext context;
 
-        public UserManagerService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
+        public UserManagerService(UserManager<AuctionUser> userManager, RoleManager<IdentityRole> roleManager, IAuctionSystemDbContext context)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -81,7 +82,7 @@
 
         public async Task<Result> CreateUserAsync(string userName, string password, string fullName)
         {
-            var user = new ApplicationUser
+            var user = new AuctionUser
             {
                 UserName = userName,
                 Email = userName,
@@ -92,7 +93,7 @@
             return result.ToApplicationResult();
         }
 
-        public async Task<Result> CreateUserAsync(ApplicationUser user, string password)
+        public async Task<Result> CreateUserAsync(AuctionUser user, string password)
         {
             var result = await this.userManager.CreateAsync(user, password);
             return result.ToApplicationResult();
@@ -134,7 +135,7 @@
             }
         }
 
-        public async Task AddToRoleAsync(ApplicationUser user, string role)
+        public async Task AddToRoleAsync(AuctionUser user, string role)
             => await this.userManager.AddToRoleAsync(user, role);
 
         public async Task<string> GetFirstUserId()
@@ -149,7 +150,7 @@
             return user?.Id;
         }
 
-        public async Task<Result> DeleteUserAsync(ApplicationUser user)
+        public async Task<Result> DeleteUserAsync(AuctionUser user)
         {
             var result = await this.userManager.DeleteAsync(user);
 

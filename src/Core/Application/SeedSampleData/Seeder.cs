@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Common.Interfaces;
     using Domain.Entities;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
 
@@ -24,9 +25,50 @@
 
         public async Task SeedAllAsync(CancellationToken cancellationToken)
         {
+            await this.SeedUsers();
             await SeedCategories(this.context, cancellationToken);
             await SeedItems(this.context, this.userManager, cancellationToken);
         }
+
+        private async Task SeedUsers()
+        {
+            if (!await this.context.Users.AnyAsync())
+            {
+                var allUsers = new List<AuctionUser>();
+                for (int i = 1; i <= 2; i++)
+                {
+                    var user = new AuctionUser
+                    {
+                        Email = $"test{i}@test.com",
+                        FullName = $"Test Testov{i}",
+                        UserName = $"test{i}@test.com",
+                        EmailConfirmed = true
+                    };
+
+                    allUsers.Add(user);
+                }
+
+                foreach (var user in allUsers)
+                {
+                    var user2 = await this.userManager.CreateUserAsync(user, "test123");
+                }
+
+                var admin = new AuctionUser
+                {
+                    Email = "admin@admin.com",
+                    FullName = "Admin Adminski",
+                    UserName = "admin@admin.com",
+                    EmailConfirmed = true
+                };
+
+                await this.userManager.CreateUserAsync(admin, "admin123");
+                await this.SeedAdminRole();
+                await this.userManager.AddToRoleAsync(admin, AppConstants.AdministratorRole);
+            }
+        }
+
+        private async Task SeedAdminRole()
+            => await this.userManager.CreateRoleAsync(new IdentityRole(AppConstants.AdministratorRole));
 
         private static async Task SeedCategories(IAuctionSystemDbContext dbContext, CancellationToken cancellationToken)
         {

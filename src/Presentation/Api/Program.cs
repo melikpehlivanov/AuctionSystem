@@ -29,16 +29,9 @@ namespace Api
                 {
                     var auctionSystemDbContext = services.GetRequiredService<AuctionSystemDbContext>();
                     auctionSystemDbContext.Database.Migrate();
-                    logger.LogInformation("Migrated auction system db context");
-
-                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
-                    identityContext.Database.Migrate();
-                    logger.LogInformation("Migrated identity db");
+                    logger.LogInformation("Migrated database.");
 
                     var mediator = services.GetRequiredService<IMediator>();
-                    await mediator.Send(new SeedUsersCommand(), CancellationToken.None);
-                    logger.LogInformation("Seeded sample users and roles");
-
                     await mediator.Send(new SeedSampleDataCommand(), CancellationToken.None);
                     logger.LogInformation("Seeded sample data such as items, categories and etc.");
 

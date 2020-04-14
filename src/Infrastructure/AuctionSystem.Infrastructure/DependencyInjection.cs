@@ -18,28 +18,7 @@
         {
             services
                 .AddScoped<IUserManager, UserManagerService>()
-                .AddTransient<IDateTime, MachineDateTime>()
-                .AddMediatR(Assembly.GetExecutingAssembly())
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(configuration.GetDefaultConnectionString()))
-                .AddIdentity<ApplicationUser, IdentityRole>(options =>
-                    {
-                        options.Password.RequireDigit = false;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Password.RequireUppercase = false;
-
-                        options.SignIn.RequireConfirmedEmail = true;
-                    })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+                .AddTransient<IDateTime, MachineDateTime>();
 
             return services;
         }

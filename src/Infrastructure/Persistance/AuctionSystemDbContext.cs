@@ -6,9 +6,10 @@
     using Common;
     using Domain.Common;
     using Domain.Entities;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    public class AuctionSystemDbContext : DbContext, IAuctionSystemDbContext
+    public class AuctionSystemDbContext : IdentityDbContext<AuctionUser>, IAuctionSystemDbContext
     {
         private readonly ICurrentUserService currentUserService;
         private readonly IDateTime dateTime;

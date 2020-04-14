@@ -12,6 +12,7 @@
         DbSet<Item> Items { get; set; }
         DbSet<Bid> Bids { get; set; }
         DbSet<Picture> Pictures { get; set; }
+        DbSet<AuctionUser> Users { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
