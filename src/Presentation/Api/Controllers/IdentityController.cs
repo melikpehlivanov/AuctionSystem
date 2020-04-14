@@ -1,6 +1,7 @@
 ﻿namespace Api.Controllers
 {
     using System.Threading.Tasks;
+    using Application.Common.Models;
     using Application.Users.Commands.CreateUser;
     using Application.Users.Commands.LoginUser;
     using Microsoft.AspNetCore.Http;
@@ -35,7 +36,7 @@
         [SwaggerResponse(
             StatusCodes.Status200OK,
             "Jwt token successfully generated",
-            typeof(LoginUserResponseModel))]
+            typeof(Response<LoginUserResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             "The user credentials are invalid",
