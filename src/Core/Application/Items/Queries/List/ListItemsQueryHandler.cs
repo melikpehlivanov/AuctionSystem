@@ -3,7 +3,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Helpers;
+    using Common.Helpers;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Common.Interfaces;
@@ -11,13 +11,13 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class ListItemsRequestHandler : IRequestHandler<ListItemsRequest, PagedResponse<ListItemsResponseModel>>
+    public class ListItemsQueryHandler : IRequestHandler<ListItemsQuery, PagedResponse<ListItemsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
         private readonly IUriService uriService;
 
-        public ListItemsRequestHandler(IAuctionSystemDbContext context, IMapper mapper, IUriService uriService)
+        public ListItemsQueryHandler(IAuctionSystemDbContext context, IMapper mapper, IUriService uriService)
         {
             this.context = context;
             this.mapper = mapper;
@@ -25,7 +25,7 @@
         }
 
         public async Task<PagedResponse<ListItemsResponseModel>> Handle(
-            ListItemsRequest request,
+            ListItemsQuery request,
             CancellationToken cancellationToken)
         {
             request.PageSize = request.PageSize > AppConstants.PageSize ? AppConstants.PageSize : request.PageSize;

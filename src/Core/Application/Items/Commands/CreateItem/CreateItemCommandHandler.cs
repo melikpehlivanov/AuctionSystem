@@ -6,11 +6,12 @@
     using Common.Exceptions;
     using Common.Interfaces;
     using AutoMapper;
+    using Common.Models;
     using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Guid>
+    public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Response<Guid>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -29,7 +30,7 @@
             this.mediator = mediator;
         }
 
-        public async Task<Guid> Handle(CreateItemCommand request, CancellationToken cancellationToken)
+        public async Task<Response<Guid>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
             var userId = await this.userManager.GetUserIdByUsernameAsync(request.UserName);
 
@@ -46,7 +47,7 @@
             await this.mediator.Publish(new ItemCreatedNotification(item.Id, request.Pictures), cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            return item.Id;
+            return new Response<Guid>(item.Id);
         }
     }
 }

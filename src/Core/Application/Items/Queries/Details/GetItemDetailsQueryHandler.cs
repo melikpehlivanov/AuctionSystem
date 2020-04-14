@@ -7,10 +7,12 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Common.Interfaces;
+    using Common.Models;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using Models;
 
-    public class GetItemDetailsQueryHandler : IRequestHandler<GetItemDetailsRequest, ItemDetailsResponseModel>
+    public class GetItemDetailsQueryHandler : IRequestHandler<GetItemDetailsQuery, Response<ItemDetailsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -21,7 +23,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<ItemDetailsResponseModel> Handle(GetItemDetailsRequest request, CancellationToken cancellationToken)
+        public async Task<Response<ItemDetailsResponseModel>> Handle(GetItemDetailsQuery request, CancellationToken cancellationToken)
         {
             var item = await this.context
                 .Items
@@ -33,8 +35,7 @@
                 throw new NotFoundException($"Item with Id {request.Id} does not exist!");
             }
 
-            var result = this.mapper.Map<ItemDetailsResponseModel>(item);
-            return result;
+            return new Response<ItemDetailsResponseModel>(this.mapper.Map<ItemDetailsResponseModel>(item));
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿namespace Application.Items.Queries.Details
 {
     using System;
+    using Common.Models;
     using MediatR;
+    using Models;
 
-    public class GetItemDetailsRequest : IRequest<ItemDetailsResponseModel>
+    public class GetItemDetailsQuery : IRequest<Response<ItemDetailsResponseModel>>
     {
-        public GetItemDetailsRequest(Guid id)
+        public GetItemDetailsQuery(Guid id)
         {
             this.Id = id;
         }

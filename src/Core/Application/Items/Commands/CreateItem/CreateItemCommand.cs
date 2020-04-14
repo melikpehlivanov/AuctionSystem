@@ -2,12 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using Common.Models;
     using Domain.Entities;
     using global::Common.AutoMapping.Interfaces;
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    public class CreateItemCommand : IRequest<Guid>, IMapWith<Item>
+    public class CreateItemCommand : IRequest<Response<Guid>>, IMapWith<Item>
     {
         public string Title { get; set; }
 

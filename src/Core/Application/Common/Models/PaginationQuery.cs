@@ -3,7 +3,7 @@
     using global::Common.AutoMapping.Interfaces;
     using Items.Queries.List;
 
-    public class PaginationQuery : IMapWith<ListItemsRequest>
+    public class PaginationQuery : IMapWith<ListItemsQuery>
     {
         public PaginationQuery()
         {

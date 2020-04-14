@@ -1,4 +1,4 @@
-﻿namespace Application.Items.Queries.Details
+﻿namespace Application.Items.Queries.Details.Models
 {
     using System;
     using System.Collections.Generic;

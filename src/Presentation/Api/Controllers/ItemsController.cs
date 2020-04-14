@@ -10,6 +10,7 @@
     using System;
     using Application.Items.Queries.Details;
     using Application.Common.Models;
+    using Application.Items.Queries.Details.Models;
     using Application.Items.Queries.List;
     using AutoMapper;
 
@@ -23,12 +24,15 @@
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Retrieves all items (max 24)
+        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         [SwaggerResponse(
             StatusCodes.Status200OK,
-            "Successfully found item and returns it.",
-            typeof(ItemDetailsResponseModel))]
+            "Returns items",
+            typeof(PagedResponse<ListItemsResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             "Item with the provided id does not exist",
@@ -39,17 +43,20 @@
             typeof(UnauthorizedErrorModel))]
         public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery)
         {
-            var model = this.mapper.Map<ListItemsRequest>(paginationQuery);
+            var model = this.mapper.Map<ListItemsQuery>(paginationQuery);
             var result = await this.Mediator.Send(model);
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves item with given id
+        /// </summary>
         [HttpGet("{id}")]
         [AllowAnonymous]
         [SwaggerResponse(
             StatusCodes.Status200OK,
             "Successfully found item and returns it.",
-            typeof(ItemDetailsResponseModel))]
+            typeof(Response<ItemDetailsResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             "Item with the provided id does not exist",
@@ -60,10 +67,13 @@
             typeof(UnauthorizedErrorModel))]
         public async Task<IActionResult> Get(Guid id)
         {
-            var result = await this.Mediator.Send(new GetItemDetailsRequest(id));
+            var result = await this.Mediator.Send(new GetItemDetailsQuery(id));
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates item
+        /// </summary>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status201Created, "Creates item successfully and returns the Id of the item")]
         [SwaggerResponse(
