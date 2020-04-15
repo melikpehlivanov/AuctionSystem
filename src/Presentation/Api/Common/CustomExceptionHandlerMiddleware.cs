@@ -47,8 +47,9 @@
                     code = HttpStatusCode.BadRequest;
                     errorMsg = badRequestException.Message;
                     break;
-                case NotFoundException _:
+                case NotFoundException notFoundException:
                     code = HttpStatusCode.NotFound;
+                    errorMsg = notFoundException.Message;
                     break;
                 case UnauthorizedException _:
                     code = HttpStatusCode.Unauthorized;
