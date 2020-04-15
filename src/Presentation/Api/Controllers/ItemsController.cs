@@ -96,6 +96,11 @@
             return CreatedAtAction(nameof(this.Post), result);
         }
 
+        /// <summary>
+        /// Updates item
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
         [HttpPut("{id}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Item is updated successfully")]
         [SwaggerResponse(
@@ -117,6 +122,10 @@
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes item
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Item is deleted successfully")]
         [SwaggerResponse(
