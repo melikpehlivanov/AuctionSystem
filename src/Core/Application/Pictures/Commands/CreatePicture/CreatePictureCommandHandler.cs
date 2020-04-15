@@ -15,6 +15,7 @@
     using Microsoft.EntityFrameworkCore;
     using AutoMapper;
     using Common.Models;
+    using Application.Common.Exceptions;
 
     public class CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, Response<PictureResponseModel>>
     {
@@ -54,10 +55,10 @@
 
                 })
                 .SingleOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
-            //if (!request.Pictures.Any() || item.UserId != this.currentUserService.UserId)
-            //{
-            //    return Unit.Value;
-            //}
+            if (!request.Pictures.Any() || item.UserId != this.currentUserService.UserId)
+            {
+                throw new NotFoundException(nameof(Picture));
+            }
 
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
             foreach (var picture in request.Pictures)
