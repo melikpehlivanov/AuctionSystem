@@ -22,7 +22,11 @@
                     {
                         Id = Guid.NewGuid(),
                         Title = "Some random title 1",
+                        Description = "Some random description 1",
                         StartingPrice = 500m,
+                        MinIncrease = 10m,
+                        StartTime = DateTime.UtcNow.AddDays(20),
+                        EndTime = DateTime.UtcNow.AddDays(21),
                         UserFullName = "test@test.com",
                         Pictures = new List<PictureResponseModel>
                         {
@@ -33,7 +37,11 @@
                     {
                         Id = Guid.NewGuid(),
                         Title = "Some random title 2",
-                        StartingPrice = 1000m,
+                        Description = "Some random description 1",
+                        StartingPrice = 500m,
+                        MinIncrease = 10m,
+                        StartTime = DateTime.UtcNow.AddDays(50),
+                        EndTime = DateTime.UtcNow.AddDays(55),
                         UserFullName = "test1@test.com",
                         Pictures = new List<PictureResponseModel>
                         {
@@ -44,7 +52,11 @@
                     {
                         Id = Guid.NewGuid(),
                         Title = "Some random title 3",
-                        StartingPrice = 10000m,
+                        Description = "Some random description 1",
+                        StartingPrice = 500m,
+                        MinIncrease = 10m,
+                        StartTime = DateTime.UtcNow.AddDays(100),
+                        EndTime = DateTime.UtcNow.AddDays(110),
                         UserFullName = "test2@test.com"
                     }
                 }
