@@ -14,6 +14,7 @@
     using Application.Items.Queries.Details.Models;
     using Application.Items.Queries.List;
     using AutoMapper;
+    using Application.Items.Commands.UpdateItem;
 
     [Authorize]
     public class ItemsController : BaseController
@@ -88,10 +89,31 @@
             StatusCodes.Status401Unauthorized,
             "Available only for authorized users",
             typeof(UnauthorizedErrorModel))]
-        public async Task<IActionResult> Post(CreateItemCommand model)
+        public async Task<IActionResult> Post([FromBody] CreateItemCommand model)
         {
             var result = await this.Mediator.Send(model);
             return CreatedAtAction(nameof(this.Post), result);
+        }
+
+        [HttpPut("{id}")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Item is updated successfully")]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest,
+            "Failed due to invalid data.",
+            typeof(BadRequestErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status404NotFound, 
+            "Item does not exist in database", 
+            typeof(NotFoundErrorModel))]
+        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateItemCommand model)
+        {
+            if (id != model.Id)
+            {
+                return BadRequest();
+            }
+
+            await this.Mediator.Send(model);
+            return NoContent();
         }
     }
 }

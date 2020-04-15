@@ -1,10 +1,9 @@
 ﻿namespace Application.Items.Commands.UpdateItem
 {
     using System;
-    using Common.Models;
     using MediatR;
 
-    public class UpdateItemCommand : IRequest<Response<ItemResponseModel>>
+    public class UpdateItemCommand : IRequest
     {
         public Guid Id { get; set; }
 
