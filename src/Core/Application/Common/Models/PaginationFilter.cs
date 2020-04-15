@@ -16,7 +16,7 @@
         public PaginationFilter(int pageNumber, int pageSize)
         {
             this.PageNumber = pageNumber < DefaultPageNumber ? DefaultPageNumber : pageNumber;
-            this.PageSize = pageSize >= AppConstants.PageSize ? AppConstants.PageSize : pageSize;
+            this.PageSize = pageSize >= AppConstants.PageSize || pageSize < 1 ? AppConstants.PageSize : pageSize;
         }
 
         public int PageNumber { get; set; }
