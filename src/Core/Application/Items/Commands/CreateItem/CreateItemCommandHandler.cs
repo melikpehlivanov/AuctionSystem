@@ -1,6 +1,5 @@
 ﻿namespace Application.Items.Commands.CreateItem
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Exceptions;
@@ -13,37 +12,37 @@
     using Application.Pictures.Commands.CreatePicture;
     using System.Linq;
 
-    public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Response<Guid>>
+    public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Response<ItemResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
-        private readonly IUserManager userManager;
+        private readonly ICurrentUserService userService;
         private readonly IMediator mediator;
 
         public CreateItemCommandHandler(
             IMapper mapper,
             IAuctionSystemDbContext context,
-            IUserManager userManager,
-            IMediator mediator)
+            ICurrentUserService userService,
+            IMediator mediator
+            )
         {
             this.mapper = mapper;
             this.context = context;
-            this.userManager = userManager;
+            this.userService = userService;
             this.mediator = mediator;
+            this.userService = userService;
         }
 
-        public async Task<Response<Guid>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
+        public async Task<Response<ItemResponseModel>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
-            var userId = await this.userManager.GetUserIdByUsernameAsync(request.UserName);
-
-            if (userId == null ||
+            if (this.userService.UserId == null ||
                 !await this.context.SubCategories.AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
             {
                 throw new BadRequestException("An error occured while creating item.");
             }
 
             var item = this.mapper.Map<Item>(request);
-            item.UserId = userId;
+            item.UserId = this.userService.UserId;
 
             await this.context.Items.AddAsync(item, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
@@ -53,7 +52,7 @@
                 await this.mediator.Send(new CreatePictureCommand { ItemId = item.Id, Pictures = request.Pictures }, cancellationToken);
             }
 
-            return new Response<Guid>(item.Id);
+            return new Response<ItemResponseModel>(new ItemResponseModel(item.Id));
         }
     }
 }

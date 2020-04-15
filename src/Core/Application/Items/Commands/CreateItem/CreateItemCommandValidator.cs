@@ -29,7 +29,6 @@
                 .WithMessage("The Start time must be after the current time");
 
             this.RuleFor(p => p.SubCategoryId).NotNull();
-            this.RuleFor(p => p.UserName).NotNull();
         }
     }
 }

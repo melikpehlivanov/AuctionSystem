@@ -8,7 +8,7 @@
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    public class CreateItemCommand : IRequest<Response<Guid>>, IMapWith<Item>
+    public class CreateItemCommand : IRequest<Response<ItemResponseModel>>, IMapWith<Item>
     {
         public string Title { get; set; }
 
@@ -23,8 +23,6 @@
         public DateTime EndTime { get; set; }
 
         public Guid SubCategoryId { get; set; }
-
-        public string UserName { get; set; }
 
         public ICollection<IFormFile> Pictures { get; set; } = new HashSet<IFormFile>();
     }
