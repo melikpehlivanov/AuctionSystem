@@ -8,6 +8,7 @@
     using AutoMapper.QueryableExtensions;
     using Common.Interfaces;
     using Common.Models;
+    using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Models;
@@ -32,7 +33,7 @@
 
             if (item == null)
             {
-                throw new NotFoundException($"Item with Id {request.Id} does not exist!");
+                throw new NotFoundException(nameof(Item), request.Id);
             }
 
             return new Response<ItemDetailsResponseModel>(this.mapper.Map<ItemDetailsResponseModel>(item));
