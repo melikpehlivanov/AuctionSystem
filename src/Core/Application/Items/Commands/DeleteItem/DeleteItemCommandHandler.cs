@@ -24,7 +24,8 @@
                 .Items
                 .FindAsync(request.Id);
 
-            if (itemToDelete == null || itemToDelete.UserId != this.currentUserService.UserId)
+            if (itemToDelete == null || 
+                (itemToDelete.UserId != this.currentUserService.UserId && !this.currentUserService.IsAdmin))
             {
                 throw new NotFoundException(nameof(Item), request.Id);
             }

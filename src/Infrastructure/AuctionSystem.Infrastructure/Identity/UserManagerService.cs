@@ -138,6 +138,14 @@
         public async Task AddToRoleAsync(AuctionUser user, string role)
             => await this.userManager.AddToRoleAsync(user, role);
 
+        public async Task<IList<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            var userRoles = await this.userManager.GetRolesAsync(user);
+
+            return userRoles;
+        }
+
         public async Task<string> GetFirstUserId()
         {
             var user = await this.userManager.Users.FirstAsync();

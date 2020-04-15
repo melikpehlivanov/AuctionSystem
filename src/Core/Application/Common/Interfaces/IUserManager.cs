@@ -1,5 +1,6 @@
 ﻿namespace Application.Common.Interfaces
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
@@ -20,11 +21,15 @@
         Task<Result> DeleteUserAsync(string userId);
 
         Task<(Result Result, string UserId)> CheckCredentials(string email, string password);
+
         Task CreateRoleAsync(IdentityRole role);
 
         Task AddToRoleAsync(AuctionUser user, string role);
 
+        Task<IList<string>> GetUserRolesAsync(string userId);
+
         Task<string> GetFirstUserId();
+
         Task<string> GetUserIdByUsernameAsync(string username);
     }
 }
