@@ -22,7 +22,7 @@
         [HttpPost]
         [SwaggerResponse(
             StatusCodes.Status200OK,
-            "Pictures were uploaded successfully and their corresponding data is returned",
+            SwaggerDocumentation.PictureConstants.SuccessfulGetRequestDescriptionMessage,
             typeof(Response<PictureResponseModel>))]
         public async Task<IActionResult> Post([FromBody] CreatePictureCommand model)
         {
@@ -34,10 +34,12 @@
         /// Deletes picture
         /// </summary>
         [HttpDelete("{id}")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Picture is deleted successfully")]
+        [SwaggerResponse(
+            StatusCodes.Status204NoContent, 
+            SwaggerDocumentation.PictureConstants.SuccessfulDeleteRequestDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status404NotFound,
-            "Picture either does not exist or user does not have permission to delete it.",
+            SwaggerDocumentation.PictureConstants.BadRequestDescriptionMessage,
             typeof(NotFoundErrorModel))]
         public async Task<IActionResult> Delete(Guid id, [FromBody] DeletePictureCommand model)
         {

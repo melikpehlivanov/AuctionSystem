@@ -33,7 +33,7 @@
         [HttpGet]
         [SwaggerResponse(
             StatusCodes.Status200OK,
-            "Returns items",
+            SwaggerDocumentation.ItemConstants.SuccessfulGetRequestMessage,
             typeof(PagedResponse<ListItemsResponseModel>))]
         public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery, [FromQuery]ItemsFilter filters)
         {
@@ -50,11 +50,11 @@
         [HttpGet("{id}")]
         [SwaggerResponse(
             StatusCodes.Status200OK,
-            "Successfully found item and returns it.",
+            SwaggerDocumentation.ItemConstants.SuccessfulGetRequestWithIdDescriptionMessage,
             typeof(Response<ItemDetailsResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
-            "Item with the provided id does not exist",
+            SwaggerDocumentation.ItemConstants.BadRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -68,16 +68,16 @@
         [Authorize]
         [HttpPost]
         [SwaggerResponse(
-            StatusCodes.Status201Created, 
-            "Creates item successfully and returns the Id of the item",
+            StatusCodes.Status201Created,
+            SwaggerDocumentation.ItemConstants.SuccessfulPostRequestDescriptionMessage,
             typeof(Response<ItemResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
-            "Failed due to invalid data.",
+            SwaggerDocumentation.ItemConstants.BadRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
-            "Available only for authorized users")]
+            SwaggerDocumentation.ItemConstants.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Post([FromBody] CreateItemCommand model)
         {
             var result = await this.Mediator.Send(model);
@@ -91,15 +91,20 @@
         /// <param name="model"></param>
         [Authorize]
         [HttpPut("{id}")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Item is updated successfully")]
+        [SwaggerResponse(
+            StatusCodes.Status204NoContent, 
+            SwaggerDocumentation.ItemConstants.SuccessfulPutRequestDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
-            "Failed due to invalid data.",
+            SwaggerDocumentation.ItemConstants.BadRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
         [SwaggerResponse(
-            StatusCodes.Status404NotFound, 
-            "Item does not exist in database", 
+            StatusCodes.Status404NotFound,
+            SwaggerDocumentation.ItemConstants.NotFoundDescriptionMessage,
             typeof(NotFoundErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status401Unauthorized,
+            SwaggerDocumentation.ItemConstants.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Put(Guid id, [FromBody] UpdateItemCommand model)
         {
             if (id != model.Id)
@@ -117,11 +122,16 @@
         /// <param name="id"></param>
         [Authorize]
         [HttpDelete("{id}")]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Item is deleted successfully")]
         [SwaggerResponse(
-            StatusCodes.Status404NotFound, 
-            "Item either does not exist or user does not have permission to delete it.",
+            StatusCodes.Status204NoContent, 
+            SwaggerDocumentation.ItemConstants.SuccessfulDeleteRequestDescriptionMessage)]
+        [SwaggerResponse(
+            StatusCodes.Status404NotFound,
+            SwaggerDocumentation.ItemConstants.BadRequestDescriptionMessage,
             typeof(NotFoundErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status401Unauthorized,
+            SwaggerDocumentation.ItemConstants.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Delete(Guid id)
         {
             await this.Mediator.Send(new DeleteItemCommand(id));

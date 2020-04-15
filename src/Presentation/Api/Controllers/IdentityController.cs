@@ -20,8 +20,13 @@
         /// <returns></returns>
         [HttpPost]
         [Route(nameof(Register))]
-        [SwaggerResponse(StatusCodes.Status200OK, "The user was created")]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, "The user data is invalid", typeof(BadRequestErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status200OK,
+            SwaggerDocumentation.IdentityConstants.SuccessfulRegisterRequestDescriptionMessage)]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest,
+            SwaggerDocumentation.IdentityConstants.BadRequestOnRegisterDescriptionMessage,
+            typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Register(CreateUserCommand model)
         {
             await this.Mediator.Send(model);
@@ -35,11 +40,11 @@
         [Route(nameof(Login))]
         [SwaggerResponse(
             StatusCodes.Status200OK,
-            "Jwt token successfully generated",
+            SwaggerDocumentation.IdentityConstants.SuccessfulLoginRequestDescriptionMessage,
             typeof(Response<LoginUserResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
-            "The user credentials are invalid",
+            SwaggerDocumentation.IdentityConstants.BadRequestOnLoginDescriptionMessage,
             typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Login(LoginUserCommand model)
         {

@@ -12,17 +12,18 @@
     public class BidsController : BaseController
     {
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status204NoContent, "Bid is created successfully")]
+        [SwaggerResponse(StatusCodes.Status204NoContent,
+            SwaggerDocumentation.BidConstants.SuccessfulPostRequestDescriptionMessage)]
         [SwaggerResponse(
-            StatusCodes.Status400BadRequest, 
-            "Provided data is invalid",
+            StatusCodes.Status400BadRequest,
+            SwaggerDocumentation.BidConstants.BadRequestOnPostRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
         [SwaggerResponse(
-            StatusCodes.Status401Unauthorized, 
-            "Indicates that user is not logged in")]
+            StatusCodes.Status401Unauthorized,
+            SwaggerDocumentation.BidConstants.UnauthorizedOnPostRequestDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status404NotFound,
-            "Indicates that such item does not exist.",
+            SwaggerDocumentation.BidConstants.NotFoundOnPostRequestDescriptionMessage,
             typeof(NotFoundErrorModel))]
         public async Task<IActionResult> Post([FromBody]CreateBidCommand model)
         {

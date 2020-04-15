@@ -12,12 +12,12 @@
     {
         [HttpGet]
         [SwaggerResponse(
-            StatusCodes.Status200OK, 
-            "Returns all categories with their subcategories",
+            StatusCodes.Status200OK,
+            SwaggerDocumentation.CategoriesConstants.SuccessfulGetRequestMessage,
             typeof(Response<ListCategoriesResponseModel>))]
         [SwaggerResponse(
-            StatusCodes.Status404NotFound, 
-            "Indicates that there are not any categories",
+            StatusCodes.Status404NotFound,
+            SwaggerDocumentation.CategoriesConstants.BadRequestDescriptionMessage,
             typeof(NotFoundErrorModel))]
         public async Task<IActionResult> Get()
         {
