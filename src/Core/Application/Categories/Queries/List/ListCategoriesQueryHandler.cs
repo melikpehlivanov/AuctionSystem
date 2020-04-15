@@ -10,6 +10,7 @@
     using AutoMapper.QueryableExtensions;
     using System.Linq;
     using Application.Common.Exceptions;
+    using Domain.Entities;
 
     public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, Response<ListCategoriesResponseModel>>
     {
@@ -32,7 +33,7 @@
 
             if (!categories.Any())
             {
-                throw new NotFoundException("Currently there are not any categories.");
+                throw new NotFoundException(nameof(Category));
             }
 
             return new Response<ListCategoriesResponseModel>(categories);

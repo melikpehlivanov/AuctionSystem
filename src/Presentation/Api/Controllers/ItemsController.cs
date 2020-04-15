@@ -11,6 +11,7 @@
     using Application.Items.Queries.Details;
     using Application.Common.Models;
     using Application.Items.Commands;
+    using Application.Items.Commands.DeleteItem;
     using Application.Items.Queries.Details.Models;
     using Application.Items.Queries.List;
     using AutoMapper;
@@ -113,6 +114,18 @@
             }
 
             await this.Mediator.Send(model);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [SwaggerResponse(StatusCodes.Status204NoContent, "Item is deleted successfully")]
+        [SwaggerResponse(
+            StatusCodes.Status404NotFound, 
+            "Item either does not exist or user does not have permission to delete it.",
+            typeof(NotFoundErrorModel))]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await this.Mediator.Send(new DeleteItemCommand(id));
             return NoContent();
         }
     }
