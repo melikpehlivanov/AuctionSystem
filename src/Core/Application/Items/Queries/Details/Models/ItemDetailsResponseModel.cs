@@ -24,7 +24,7 @@
 
         public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
 
-        public string UserUserName { get; set; }
+        public string UserFullName { get; set; }
 
         public ICollection<PictureResponseModel> Pictures { get; set; }
 

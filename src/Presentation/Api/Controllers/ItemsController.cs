@@ -10,6 +10,7 @@
     using System;
     using Application.Items.Queries.Details;
     using Application.Common.Models;
+    using Application.Items.Commands;
     using Application.Items.Queries.Details.Models;
     using Application.Items.Queries.List;
     using AutoMapper;
@@ -75,7 +76,10 @@
         /// Creates item
         /// </summary>
         [HttpPost]
-        [SwaggerResponse(StatusCodes.Status201Created, "Creates item successfully and returns the Id of the item")]
+        [SwaggerResponse(
+            StatusCodes.Status201Created, 
+            "Creates item successfully and returns the Id of the item",
+            typeof(Response<ItemResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             "Failed due to invalid data.",
