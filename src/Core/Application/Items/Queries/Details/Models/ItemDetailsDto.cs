@@ -24,7 +24,7 @@
 
         public ICollection<PictureResponseModel> Pictures { get; set; }
 
-        public string UserUserName { get; set; }
+        public string UserFullName { get; set; }
 
         public string SubCategoryName { get; set; }
     }
