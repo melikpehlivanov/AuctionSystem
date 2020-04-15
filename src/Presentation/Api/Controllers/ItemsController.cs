@@ -77,8 +77,7 @@
             typeof(BadRequestErrorModel))]
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
-            "Available only for authorized users",
-            typeof(UnauthorizedErrorModel))]
+            "Available only for authorized users")]
         public async Task<IActionResult> Post([FromBody] CreateItemCommand model)
         {
             var result = await this.Mediator.Send(model);
