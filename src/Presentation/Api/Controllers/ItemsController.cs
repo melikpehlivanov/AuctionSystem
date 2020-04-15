@@ -16,8 +16,8 @@
     using Application.Items.Queries.List;
     using AutoMapper;
     using Application.Items.Commands.UpdateItem;
+    using Models;
 
-    [Authorize]
     public class ItemsController : BaseController
     {
         private readonly IMapper mapper;
@@ -31,22 +31,15 @@
         /// Retrieves all items (max 24 per request)
         /// </summary>
         [HttpGet]
-        [AllowAnonymous]
         [SwaggerResponse(
             StatusCodes.Status200OK,
             "Returns items",
             typeof(PagedResponse<ListItemsResponseModel>))]
-        [SwaggerResponse(
-            StatusCodes.Status400BadRequest,
-            "Item with the provided id does not exist",
-            typeof(BadRequestErrorModel))]
-        [SwaggerResponse(
-            StatusCodes.Status401Unauthorized,
-            "Available only for authorized users",
-            typeof(UnauthorizedErrorModel))]
-        public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery)
+        public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery, [FromQuery]ItemsFilter filters)
         {
-            var model = this.mapper.Map<ListItemsQuery>(paginationQuery);
+            var paginationFilter = this.mapper.Map<PaginationFilter>(paginationQuery);
+            var model = this.mapper.Map<ListItemsQuery>(paginationFilter);
+            model.Filters = this.mapper.Map<ListAllItemsQueryFilter>(filters);
             var result = await this.Mediator.Send(model);
             return Ok(result);
         }
@@ -55,7 +48,6 @@
         /// Retrieves item with given id
         /// </summary>
         [HttpGet("{id}")]
-        [AllowAnonymous]
         [SwaggerResponse(
             StatusCodes.Status200OK,
             "Successfully found item and returns it.",
@@ -64,10 +56,6 @@
             StatusCodes.Status400BadRequest,
             "Item with the provided id does not exist",
             typeof(BadRequestErrorModel))]
-        [SwaggerResponse(
-            StatusCodes.Status401Unauthorized,
-            "Available only for authorized users",
-            typeof(UnauthorizedErrorModel))]
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await this.Mediator.Send(new GetItemDetailsQuery(id));
@@ -77,6 +65,7 @@
         /// <summary>
         /// Creates item
         /// </summary>
+        [Authorize]
         [HttpPost]
         [SwaggerResponse(
             StatusCodes.Status201Created, 
@@ -101,6 +90,7 @@
         /// </summary>
         /// <param name="id"></param>
         /// <param name="model"></param>
+        [Authorize]
         [HttpPut("{id}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Item is updated successfully")]
         [SwaggerResponse(
@@ -126,6 +116,7 @@
         /// Deletes item
         /// </summary>
         /// <param name="id"></param>
+        [Authorize]
         [HttpDelete("{id}")]
         [SwaggerResponse(StatusCodes.Status204NoContent, "Item is deleted successfully")]
         [SwaggerResponse(

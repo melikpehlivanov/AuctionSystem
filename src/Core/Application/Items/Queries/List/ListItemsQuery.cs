@@ -3,7 +3,8 @@
     using Common.Models;
     using MediatR;
 
-    public class ListItemsQuery : PaginationQuery, IRequest<PagedResponse<ListItemsResponseModel>>
+    public class ListItemsQuery : PaginationFilter, IRequest<PagedResponse<ListItemsResponseModel>>
     {
+        public ListAllItemsQueryFilter Filters { get; set; }
     }
 }

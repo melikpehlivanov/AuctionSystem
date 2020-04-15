@@ -14,7 +14,7 @@
             this.baseUri = baseUri;
         }
 
-        public Uri GetPaginationUri(PaginationQuery paginationQuery = null)
+        public Uri GetPaginationUri(PaginationFilter paginationQuery = null)
         {
             var uri = new Uri(this.baseUri);
 

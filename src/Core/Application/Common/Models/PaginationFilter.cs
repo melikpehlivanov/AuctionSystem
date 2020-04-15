@@ -3,17 +3,19 @@
     using global::Common.AutoMapping.Interfaces;
     using Items.Queries.List;
 
-    public class PaginationQuery : IMapWith<ListItemsQuery>
+    public class PaginationFilter : IMapWith<ListItemsQuery>
     {
-        public PaginationQuery()
+        private const int DefaultPageNumber = 1;
+
+        public PaginationFilter()
         {
-            this.PageNumber = 1;
+            this.PageNumber = DefaultPageNumber;
             this.PageSize = AppConstants.PageSize;
         }
 
-        public PaginationQuery(int pageNumber, int pageSize)
+        public PaginationFilter(int pageNumber, int pageSize)
         {
-            this.PageNumber = pageNumber;
+            this.PageNumber = pageNumber < DefaultPageNumber ? DefaultPageNumber : pageNumber;
             this.PageSize = pageSize >= AppConstants.PageSize ? AppConstants.PageSize : pageSize;
         }
 

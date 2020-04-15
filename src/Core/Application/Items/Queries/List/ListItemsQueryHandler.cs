@@ -8,6 +8,7 @@
     using AutoMapper.QueryableExtensions;
     using Common.Interfaces;
     using Common.Models;
+    using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
@@ -28,17 +29,53 @@
             ListItemsQuery request,
             CancellationToken cancellationToken)
         {
-            request.PageSize = request.PageSize > AppConstants.PageSize ? AppConstants.PageSize : request.PageSize;
             var skipCount = (request.PageNumber - 1) * request.PageSize;
-            var items = await this.context
-                .Items
-                .ProjectTo<ListItemsResponseModel>(this.mapper.ConfigurationProvider)
+            var queryable = this.context.Items.AsQueryable();
+
+            queryable = AddFiltersOnQuery(request.Filters, queryable);
+            var items = await queryable
                 .Skip(skipCount)
                 .Take(request.PageSize)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ProjectTo<ListItemsResponseModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
 
             var result = PaginationHelpers.CreatePaginatedResponse(this.uriService, request, items);
             return result;
+        }
+
+        private static IQueryable<Item> AddFiltersOnQuery(ListAllItemsQueryFilter filters, IQueryable<Item> queryable)
+        {
+            if (!string.IsNullOrEmpty(filters?.Title))
+            {
+                queryable = queryable.Where(i => i.Title.Contains(filters.Title));
+            }
+
+            if (!string.IsNullOrEmpty(filters?.UserId))
+            {
+                queryable = queryable.Where(i => i.UserId == filters.UserId);
+            }
+
+            if (filters?.StartingPrice != null)
+            {
+                queryable = queryable.Where(i => i.StartingPrice >= filters.StartingPrice);
+            }
+
+            if (filters?.StartTime != null)
+            {
+                queryable = queryable.Where(i => i.StartTime >= filters.StartTime);
+            }
+
+            if (filters?.EndTime != null)
+            {
+                queryable = queryable.Where(i => i.EndTime <= filters.EndTime);
+            }
+
+            if (filters?.MinimumPicturesCount != null)
+            {
+                queryable = queryable.Where(i => i.Pictures.Count >= filters.MinimumPicturesCount);
+            }
+
+            return queryable;
         }
     }
 }

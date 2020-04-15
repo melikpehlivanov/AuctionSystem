@@ -5,6 +5,6 @@
 
     public interface IUriService
     {
-        Uri GetPaginationUri(PaginationQuery paginationQuery = null);
+        Uri GetPaginationUri(PaginationFilter paginationQuery = null);
     }
 }
