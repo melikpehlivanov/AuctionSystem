@@ -26,7 +26,7 @@
 
             if (item == null || item.UserId != this.currentUserService.UserId)
             {
-                throw new BadRequestException("Item not found!");
+                throw new NotFoundException(nameof(item), request.Id);
             }
 
             if (!await this.context
