@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Reflection;
-    using Common.EmailSender;
+    using AuctionSystem.Infrastructure;
     using Common.EmailSender.Interface;
     using Data;
     using Microsoft.AspNetCore.Builder;

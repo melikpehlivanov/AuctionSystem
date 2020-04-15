@@ -42,6 +42,7 @@ namespace Api
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
                 .AddCloudinarySettings(this.Configuration)
+                .AddSendGridSettings(this.Configuration)
                 .AddJwtAuthentication(services.AddJwtSecret(this.Configuration))
                 .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddScoped<IUriService>(provider =>

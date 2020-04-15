@@ -40,6 +40,19 @@
             return services;
         }
 
+        public static IServiceCollection AddSendGridSettings(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+                .Configure<SendGridOptions>(options =>
+                {
+                    options.SendGridApiKey = configuration.GetSendGridApiKey();
+                });
+
+            return services;
+        }
+
         public static IServiceCollection AddJwtAuthentication(
             this IServiceCollection services,
             AppSettings appSettings)

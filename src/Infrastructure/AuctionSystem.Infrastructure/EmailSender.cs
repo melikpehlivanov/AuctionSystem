@@ -1,8 +1,9 @@
-﻿namespace AuctionSystem.Common.EmailSender.Implementation
+﻿namespace AuctionSystem.Infrastructure
 {
     using System.Net;
     using System.Threading.Tasks;
-    using Interface;
+    using Application.AppSettingsModels;
+    using Application.Common.Interfaces;
     using Microsoft.Extensions.Options;
     using SendGrid;
     using SendGrid.Helpers.Mail;

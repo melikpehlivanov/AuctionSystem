@@ -1,4 +1,4 @@
-﻿namespace AuctionSystem.Common.EmailSender.Interface
+﻿namespace Application.Common.Interfaces
 {
     using System.Threading.Tasks;
 
