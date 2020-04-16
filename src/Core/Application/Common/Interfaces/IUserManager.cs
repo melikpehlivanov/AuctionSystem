@@ -38,6 +38,7 @@
 
         Task<IEnumerable<string>> GetUsersInRoleAsync(string role);
 
-        Task<bool> RemoveFromRoleAsync(string username, string role);
+        //TODO: Extract in model
+        Task<(bool isSuccess, string errorMessage)> RemoveFromRoleAsync(string username, string role);
     }
 }

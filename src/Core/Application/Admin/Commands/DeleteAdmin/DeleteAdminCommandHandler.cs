@@ -24,10 +24,9 @@
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(request.Email, request.Role);
-            if (!result)
+            if (!result.isSuccess)
             {
-                throw new BadRequestException(string.Format(
-                    ExceptionMessages.Admin.UserNotRemovedSuccessfullyFromRole, request.Role));
+                throw new BadRequestException(result.errorMessage);
             }
 
             return Unit.Value;

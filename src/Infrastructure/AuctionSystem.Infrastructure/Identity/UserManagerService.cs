@@ -182,16 +182,22 @@
             return users.Select(r => r.Id).ToList();
         }
 
-        public async Task<bool> RemoveFromRoleAsync(string username, string role)
+        public async Task<(bool isSuccess, string errorMessage)> RemoveFromRoleAsync(string username, string role)
         {
             var user = await this.userManager.FindByNameAsync(username);
             if (user == null)
             {
-                return false;
+                return (false, "Such user does not exist");
+            }
+
+            var administrators = await this.GetUsersInRoleAsync(role);
+            if (administrators.Contains(user.Id))
+            {
+                return (false, $"You can not remove yourself from role {role}!");
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
-            return result.Succeeded;
+            return (result.Succeeded, null);
         }
 
         public async Task<Result> DeleteUserAsync(AuctionUser user)
