@@ -2,8 +2,8 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Interfaces;
     using Common.Exceptions;
+    using Common.Interfaces;
     using MediatR;
 
     public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>

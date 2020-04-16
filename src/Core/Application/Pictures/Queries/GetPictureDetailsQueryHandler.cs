@@ -2,10 +2,10 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Exceptions;
-    using Application.Common.Interfaces;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Common.Exceptions;
+    using Common.Interfaces;
     using Common.Models;
     using Domain.Entities;
     using MediatR;
@@ -27,7 +27,7 @@
             var picture = await this.context
                 .Pictures
                 .ProjectTo<PictureDetailsResponseModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ToListAsync(cancellationToken);
 
             if (picture == null)
             {

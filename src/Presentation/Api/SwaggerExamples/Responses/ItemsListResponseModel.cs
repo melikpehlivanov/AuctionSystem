@@ -31,7 +31,7 @@
                         Pictures = new List<PictureResponseModel>
                         {
                             new PictureResponseModel { Id = Guid.NewGuid(), Url = "Some example url here" }
-                        },
+                        }
                     },
                     new ListItemsResponseModel
                     {
@@ -46,7 +46,7 @@
                         Pictures = new List<PictureResponseModel>
                         {
                             new PictureResponseModel { Id = Guid.NewGuid(), Url = "Some example url here 2" }
-                        },
+                        }
                     },
                     new ListItemsResponseModel
                     {

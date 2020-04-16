@@ -1,30 +1,30 @@
 ﻿namespace Application.Items.Commands.CreateItem
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Common.Exceptions;
     using Common.Interfaces;
-    using AutoMapper;
     using Common.Models;
     using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Application.Pictures.Commands.CreatePicture;
-    using System.Linq;
+    using Pictures.Commands.CreatePicture;
 
     public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Response<ItemResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
-        private readonly ICurrentUserService userService;
         private readonly IMediator mediator;
+        private readonly ICurrentUserService userService;
 
         public CreateItemCommandHandler(
             IMapper mapper,
             IAuctionSystemDbContext context,
             ICurrentUserService userService,
             IMediator mediator
-            )
+        )
         {
             this.mapper = mapper;
             this.context = context;
@@ -35,8 +35,8 @@
 
         public async Task<Response<ItemResponseModel>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
-            if (this.userService.UserId == null ||
-                !await this.context.SubCategories.AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
+            if (this.userService.UserId == null
+                || !await this.context.SubCategories.AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
             {
                 throw new BadRequestException("An error occured while creating item.");
             }

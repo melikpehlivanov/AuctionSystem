@@ -1,16 +1,16 @@
 ﻿namespace Application.Categories.Queries.List
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Interfaces;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+    using Common.Exceptions;
+    using Common.Interfaces;
     using Common.Models;
+    using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using AutoMapper.QueryableExtensions;
-    using System.Linq;
-    using Application.Common.Exceptions;
-    using Domain.Entities;
 
     public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, PagedResponse<ListCategoriesResponseModel>>
     {
@@ -29,7 +29,7 @@
                 .Categories
                 .Include(c => c.SubCategories)
                 .ProjectTo<ListCategoriesResponseModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ToListAsync(cancellationToken);
 
             if (!categories.Any())
             {

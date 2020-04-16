@@ -3,26 +3,26 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Exceptions;
     using AppSettingsModels;
     using CloudinaryDotNet;
+    using Common.Exceptions;
+    using Common.Interfaces;
     using Domain.Entities;
     using MediatR;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
     using Notifications.Models;
-    using Common.Interfaces;
-    using Microsoft.EntityFrameworkCore;
 
     public class DeletePictureCommandHandler : IRequestHandler<DeletePictureCommand>, INotificationHandler<ItemDeletedNotification>
     {
+        private readonly Cloudinary cloudinary;
         private readonly IAuctionSystemDbContext context;
         private readonly ICurrentUserService currentUserService;
         private readonly CloudinaryOptions options;
-        private readonly Cloudinary cloudinary;
 
         public DeletePictureCommandHandler(
-            IAuctionSystemDbContext context, 
-            ICurrentUserService currentUserService, 
+            IAuctionSystemDbContext context,
+            ICurrentUserService currentUserService,
             IOptions<CloudinaryOptions> options)
         {
             this.context = context;
@@ -47,14 +47,14 @@
         {
             var pictureToRemove = await this.context
                 .Pictures
-                .Include(p=> p.Item)
-                .Where(p=> p.Id == request.PictureId)
+                .Include(p => p.Item)
+                .Where(p => p.Id == request.PictureId)
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (
-                pictureToRemove == null ||
-                pictureToRemove.Item.UserId != this.currentUserService.UserId ||
-                pictureToRemove.ItemId != request.ItemId)
+                pictureToRemove == null
+                || pictureToRemove.Item.UserId != this.currentUserService.UserId
+                || pictureToRemove.ItemId != request.ItemId)
             {
                 throw new NotFoundException(nameof(Picture));
             }

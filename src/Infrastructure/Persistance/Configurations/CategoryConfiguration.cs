@@ -23,7 +23,7 @@
             builder
                 .HasMany(x => x.SubCategories)
                 .WithOne(c => c.Category)
-                .HasForeignKey(c=> c.CategoryId)
+                .HasForeignKey(c => c.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

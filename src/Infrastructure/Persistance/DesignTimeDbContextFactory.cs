@@ -22,12 +22,11 @@
 
         private TContext Create(string basePath, string environmentName)
         {
-
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.Local.json", optional: true)
-                .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
+                .AddJsonFile("appsettings.Local.json", true)
+                .AddJsonFile($"appsettings.{environmentName}.json", true)
                 .AddEnvironmentVariables()
                 .Build();
 

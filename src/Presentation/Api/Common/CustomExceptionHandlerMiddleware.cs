@@ -57,15 +57,15 @@
             }
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)code;
+            context.Response.StatusCode = (int) code;
             string result;
             if (validationErrorMessages.Count == 0)
             {
                 var errorModel = new ErrorModel
                 {
-                    Title = code.ToString(), 
-                    Status = (int)code, 
-                    TraceId = context.TraceIdentifier, 
+                    Title = code.ToString(),
+                    Status = (int) code,
+                    TraceId = context.TraceIdentifier,
                     Error = errorMsg
                 };
                 result = JsonConvert.SerializeObject(errorModel);
@@ -75,7 +75,7 @@
                 var errorModel = new ValidationErrorModel
                 {
                     Title = "One or more validation errors occured.",
-                    Status = (int)code,
+                    Status = (int) code,
                     TraceId = context.TraceIdentifier,
                     Errors = validationErrorMessages
                 };
@@ -90,8 +90,6 @@
     public static class CustomExceptionHandlerMiddlewareExtensions
     {
         public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<CustomExceptionHandlerMiddleware>();
-        }
+            => builder.UseMiddleware<CustomExceptionHandlerMiddleware>();
     }
 }

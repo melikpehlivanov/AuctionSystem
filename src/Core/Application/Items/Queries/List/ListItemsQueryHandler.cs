@@ -4,9 +4,9 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Helpers;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Common.Helpers;
     using Common.Interfaces;
     using Common.Models;
     using Domain.Entities;

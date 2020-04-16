@@ -1,8 +1,6 @@
 ﻿namespace Persistance
 {
-    using System.Reflection;
     using Application.Common.Interfaces;
-    using Application.Common.Models;
     using Common;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
@@ -18,14 +16,14 @@
                 .AddDbContext<AuctionSystemDbContext>(options =>
                     options.UseSqlServer(configuration.GetDefaultConnectionString()))
                 .AddIdentity<AuctionUser, IdentityRole>(options =>
-                    {
-                        options.Password.RequireDigit = false;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Password.RequireUppercase = false;
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
 
-                        options.SignIn.RequireConfirmedEmail = true;
-                    })
+                    options.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddEntityFrameworkStores<AuctionSystemDbContext>();
 
             services.AddScoped<IAuctionSystemDbContext>(provider => provider.GetService<AuctionSystemDbContext>());

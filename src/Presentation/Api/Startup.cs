@@ -1,25 +1,27 @@
 namespace Api
 {
-    using Common;
     using Application;
     using Application.Common.Interfaces;
     using Application.Users.Commands.CreateUser;
     using AuctionSystem.Infrastructure;
+    using Common;
     using Extensions;
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using Persistance;
     using Services;
-    using Newtonsoft.Json.Serialization;
-    using Microsoft.AspNetCore.Http;
 
     public class Startup
     {
+        public IWebHostEnvironment Environment;
+
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             this.Configuration = configuration;
@@ -27,8 +29,6 @@ namespace Api
         }
 
         public IConfiguration Configuration { get; }
-
-        public IWebHostEnvironment Environment;
 
         public void ConfigureServices(IServiceCollection services)
         {

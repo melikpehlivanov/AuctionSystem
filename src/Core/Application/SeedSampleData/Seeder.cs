@@ -35,7 +35,7 @@
             if (!await this.context.Users.AnyAsync())
             {
                 var allUsers = new List<AuctionUser>();
-                for (int i = 1; i <= 2; i++)
+                for (var i = 1; i <= 2; i++)
                 {
                     var user = new AuctionUser
                     {
@@ -102,7 +102,7 @@
                 var allItems = new List<Item>();
                 foreach (var category in dbContext.Categories.Include(c => c.SubCategories))
                 {
-                    int i = 1;
+                    var i = 1;
                     foreach (var subCategory in category.SubCategories)
                     {
                         var startTime = DateTime.UtcNow.AddDays(random.Next(0, 5)).ToUniversalTime();

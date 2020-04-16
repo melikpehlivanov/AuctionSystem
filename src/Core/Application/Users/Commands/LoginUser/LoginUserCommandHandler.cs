@@ -9,8 +9,8 @@
 
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Response<LoginUserResponseModel>>
     {
-        private readonly IUserManager userManager;
         private readonly IMediator mediator;
+        private readonly IUserManager userManager;
 
         public LoginUserCommandHandler(IUserManager userManager, IMediator mediator)
         {

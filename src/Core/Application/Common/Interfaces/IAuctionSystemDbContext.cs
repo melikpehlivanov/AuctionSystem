@@ -8,10 +8,15 @@
     public interface IAuctionSystemDbContext
     {
         DbSet<Category> Categories { get; set; }
+
         DbSet<SubCategory> SubCategories { get; set; }
+
         DbSet<Item> Items { get; set; }
+
         DbSet<Bid> Bids { get; set; }
+
         DbSet<Picture> Pictures { get; set; }
+
         DbSet<AuctionUser> Users { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

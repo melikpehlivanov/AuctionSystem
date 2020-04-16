@@ -4,8 +4,6 @@ namespace Api
     using System.Threading;
     using System.Threading.Tasks;
     using Application.SeedSampleData;
-    using AuctionSystem.Infrastructure;
-    using AuctionSystem.Infrastructure.Identity;
     using MediatR;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -34,7 +32,6 @@ namespace Api
                     var mediator = services.GetRequiredService<IMediator>();
                     await mediator.Send(new SeedSampleDataCommand(), CancellationToken.None);
                     logger.LogInformation("Seeded sample data such as items, categories and etc.");
-
                 }
                 catch (Exception ex)
                 {
@@ -47,9 +44,6 @@ namespace Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

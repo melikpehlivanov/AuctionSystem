@@ -56,13 +56,13 @@
             builder
                 .HasMany(b => b.Bids)
                 .WithOne(i => i.Item)
-                .HasForeignKey(i=> i.ItemId)
+                .HasForeignKey(i => i.ItemId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasMany(b => b.Pictures)
                 .WithOne(i => i.Item)
-                .HasForeignKey(i=> i.ItemId);
+                .HasForeignKey(i => i.ItemId);
         }
     }
 }

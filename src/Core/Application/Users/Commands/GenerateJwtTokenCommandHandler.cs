@@ -1,20 +1,17 @@
-﻿using MediatR;
-
-namespace Application.Users.Commands
+﻿namespace Application.Users.Commands
 {
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
     using System.Security.Claims;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Interfaces;
     using AppSettingsModels;
+    using Common.Interfaces;
+    using MediatR;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
-    using Newtonsoft.Json;
 
     public class GenerateJwtTokenCommandHandler : IRequestHandler<GenerateJwtTokenCommand, string>
     {

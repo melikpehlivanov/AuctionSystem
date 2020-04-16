@@ -3,14 +3,12 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Interfaces;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Common.Interfaces;
     using Common.Models;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Common.Exceptions;
-    using Domain.Entities;
 
     public class GetHighestBidDetailsQueryHandler : IRequestHandler<GetHighestBidDetailsQuery, Response<GetHighestBidDetailsResponseModel>>
     {

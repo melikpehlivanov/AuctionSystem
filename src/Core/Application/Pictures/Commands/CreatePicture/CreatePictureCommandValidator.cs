@@ -1,6 +1,5 @@
 ﻿namespace Application.Pictures.Commands.CreatePicture
 {
-    using Common.Interfaces;
     using FluentValidation;
 
     public class CreatePictureCommandValidator : AbstractValidator<CreatePictureCommand>

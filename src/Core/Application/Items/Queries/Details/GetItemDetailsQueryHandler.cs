@@ -1,11 +1,10 @@
 ﻿namespace Application.Items.Queries.Details
 {
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Exceptions;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Common.Exceptions;
     using Common.Interfaces;
     using Common.Models;
     using Domain.Entities;

@@ -45,10 +45,7 @@
             IConfiguration configuration)
         {
             services
-                .Configure<SendGridOptions>(options =>
-                {
-                    options.SendGridApiKey = configuration.GetSendGridApiKey();
-                });
+                .Configure<SendGridOptions>(options => { options.SendGridApiKey = configuration.GetSendGridApiKey(); });
 
             return services;
         }
@@ -74,7 +71,7 @@
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
-                        ValidateAudience = false,
+                        ValidateAudience = false
                     };
                 });
 
@@ -119,8 +116,7 @@
                                 },
                                 Scheme = "oauth2",
                                 Name = "Bearer",
-                                In = ParameterLocation.Header,
-
+                                In = ParameterLocation.Header
                             },
                             new List<string>()
                         }

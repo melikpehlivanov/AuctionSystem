@@ -2,9 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using Pictures;
     using Domain.Entities;
     using global::Common.AutoMapping.Interfaces;
+    using Pictures;
 
     public class ListItemsResponseModel : IMapWith<Item>
     {

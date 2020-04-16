@@ -8,7 +8,6 @@
     {
         public void Configure(EntityTypeBuilder<Picture> builder)
         {
-
             builder
                 .ToTable("Pictures");
 

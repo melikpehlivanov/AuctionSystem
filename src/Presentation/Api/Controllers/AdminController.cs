@@ -1,19 +1,17 @@
 ﻿namespace Api.Controllers
 {
-    using System;
     using System.Threading.Tasks;
-    using Api.SwaggerExamples;
     using Application;
     using Application.Admin.Commands.CreateAdmin;
     using Application.Admin.Commands.DeleteAdmin;
     using Application.Admin.Queries.List;
     using Application.Common.Models;
-    using Application.Items.Queries.List;
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models;
+    using SwaggerExamples;
     using Swashbuckle.AspNetCore.Annotations;
 
     [Authorize(Roles = AppConstants.AdministratorRole)]
@@ -35,15 +33,15 @@
             SwaggerDocumentation.AdminConstants.SuccessfulGetRequestDescriptionMessage,
             typeof(PagedResponse<ListAllUsersResponseModel>))]
         [SwaggerResponse(
-            StatusCodes.Status401Unauthorized, 
+            StatusCodes.Status401Unauthorized,
             SwaggerDocumentation.UnauthorizedDescriptionMessage)]
-        public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery, [FromQuery]UsersFilter filters)
+        public async Task<IActionResult> Get([FromQuery] PaginationQuery paginationQuery, [FromQuery] UsersFilter filters)
         {
             var paginationFilter = this.mapper.Map<PaginationFilter>(paginationQuery);
             var model = this.mapper.Map<ListAllUsersQuery>(paginationFilter);
             model.Filters = this.mapper.Map<ListAllUsersQueryFilter>(filters);
             var result = await this.Mediator.Send(model);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -62,7 +60,7 @@
         public async Task<IActionResult> Post([FromBody] CreateAdminCommand model)
         {
             await this.Mediator.Send(model);
-            return NoContent();
+            return this.NoContent();
         }
 
         /// <summary>
@@ -81,7 +79,7 @@
         public async Task<IActionResult> Delete([FromBody] DeleteAdminCommand model)
         {
             await this.Mediator.Send(model);
-            return NoContent();
+            return this.NoContent();
         }
     }
 }

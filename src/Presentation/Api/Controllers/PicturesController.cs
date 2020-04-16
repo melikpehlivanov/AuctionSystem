@@ -32,7 +32,7 @@
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await this.Mediator.Send(new GetPictureDetailsQuery(id));
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         public async Task<IActionResult> Post([FromBody] CreatePictureCommand model)
         {
             var result = await this.Mediator.Send(model);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -65,11 +65,11 @@
         {
             if (id != model.PictureId)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
             await this.Mediator.Send(model);
-            return NoContent();
+            return this.NoContent();
         }
     }
 }

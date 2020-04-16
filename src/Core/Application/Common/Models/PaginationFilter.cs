@@ -1,6 +1,6 @@
 ﻿namespace Application.Common.Models
 {
-    using Application.Admin.Queries.List;
+    using Admin.Queries.List;
     using global::Common.AutoMapping.Interfaces;
     using Items.Queries.List;
 

@@ -24,7 +24,7 @@
                 Pictures = new List<PictureResponseModel>
                 {
                     new PictureResponseModel { Id = Guid.NewGuid(), Url = "Some example url here" }
-                },
+                }
             });
     }
 }

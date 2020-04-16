@@ -1,15 +1,14 @@
 ﻿namespace Api.Controllers
 {
+    using System;
     using System.Threading.Tasks;
-    using SwaggerExamples;
     using Application.Bids.Commands.CreateBid;
+    using Application.Bids.Queries.Details;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using SwaggerExamples;
     using Swashbuckle.AspNetCore.Annotations;
-    using Application.Bids.Queries.Details;
-    using System;
-    using Application.Common.Models;
 
     [Authorize]
     public class BidsController : BaseController
@@ -28,10 +27,10 @@
             StatusCodes.Status404NotFound,
             SwaggerDocumentation.BidConstants.NotFoundOnPostRequestDescriptionMessage,
             typeof(NotFoundErrorModel))]
-        public async Task<IActionResult> Post([FromBody]CreateBidCommand model)
+        public async Task<IActionResult> Post([FromBody] CreateBidCommand model)
         {
             await this.Mediator.Send(model);
-            return NoContent();
+            return this.NoContent();
         }
 
         [HttpGet]
@@ -43,7 +42,7 @@
         public async Task<IActionResult> GetHighestBid(Guid itemId)
         {
             var result = await this.Mediator.Send(new GetHighestBidDetailsQuery(itemId));
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }

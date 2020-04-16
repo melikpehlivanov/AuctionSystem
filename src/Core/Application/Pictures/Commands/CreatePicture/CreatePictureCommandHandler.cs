@@ -2,29 +2,29 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Interfaces;
     using AppSettingsModels;
+    using AutoMapper;
     using CloudinaryDotNet;
     using CloudinaryDotNet.Actions;
+    using Common.Exceptions;
+    using Common.Interfaces;
+    using Common.Models;
     using Domain.Entities;
     using MediatR;
-    using Microsoft.Extensions.Options;
     using Microsoft.EntityFrameworkCore;
-    using AutoMapper;
-    using Common.Models;
-    using Common.Exceptions;
-    using System.Collections.Generic;
+    using Microsoft.Extensions.Options;
 
     public class CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, MultiResponse<PictureResponseModel>>
     {
+        private readonly Cloudinary cloudinary;
         private readonly IAuctionSystemDbContext context;
         private readonly ICurrentUserService currentUserService;
         private readonly IMapper mapper;
         private readonly CloudinaryOptions options;
-        private readonly Cloudinary cloudinary;
 
         public CreatePictureCommandHandler(
             IAuctionSystemDbContext context,
@@ -52,8 +52,7 @@
                 .Select(i => new
                 {
                     i.Id,
-                    i.UserId,
-
+                    i.UserId
                 })
                 .SingleOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
             if (item.UserId != this.currentUserService.UserId)
@@ -64,7 +63,7 @@
             if (!request.Pictures.Any())
             {
                 // Add default picture
-                var picture = new Picture { ItemId = request.ItemId, Url = AppConstants.DefaultPictureUrl, };
+                var picture = new Picture { ItemId = request.ItemId, Url = AppConstants.DefaultPictureUrl };
                 await this.context.Pictures.AddAsync(picture, cancellationToken);
                 await this.context.SaveChangesAsync(cancellationToken);
 
@@ -80,7 +79,7 @@
                 {
                     PublicId = Guid.NewGuid().ToString(),
                     File = new FileDescription(guid, picture.OpenReadStream()),
-                    Folder = $"{request.ItemId}",
+                    Folder = $"{request.ItemId}"
                 };
                 var uploadResult = await this.cloudinary.UploadAsync(uploadParams);
                 uploadResults.Add(uploadResult);

@@ -24,7 +24,7 @@
             }
 
             //TODO: Cleaner way to do this
-            var modifiedUri = QueryHelpers.AddQueryString(this.baseUri, "pageNumber", paginationQuery.PageNumber.ToString()); 
+            var modifiedUri = QueryHelpers.AddQueryString(this.baseUri, "pageNumber", paginationQuery.PageNumber.ToString());
             modifiedUri = QueryHelpers.AddQueryString(modifiedUri, "pageSize", paginationQuery.PageSize.ToString());
 
             return new Uri(modifiedUri);

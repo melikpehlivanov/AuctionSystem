@@ -1,12 +1,10 @@
 ﻿namespace Application.Bids.Commands.CreateBid
 {
-    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Exceptions;
     using AutoMapper;
-    using Common;
+    using Common.Exceptions;
     using Common.Interfaces;
     using Domain.Entities;
     using global::Common;
@@ -16,9 +14,9 @@
     public class CreateBidCommandHandler : IRequestHandler<CreateBidCommand>
     {
         private readonly IAuctionSystemDbContext context;
-        private readonly IMapper mapper;
         private readonly ICurrentUserService currentUserService;
         private readonly IDateTime dateTime;
+        private readonly IMapper mapper;
 
         public CreateBidCommandHandler(
             IAuctionSystemDbContext context,

@@ -1,6 +1,5 @@
 ﻿namespace Application.Items.Commands.CreateItem
 {
-    using System;
     using FluentValidation;
     using global::Common;
 
@@ -25,7 +24,7 @@
             this.RuleFor(m => new { m.StartTime, m.EndTime }).NotNull()
                 .Must(x => x.EndTime.Date.ToUniversalTime() >= x.StartTime.Date.ToUniversalTime())
                 .WithMessage("End time must be after start time")
-                .Must(x=> x.StartTime.ToUniversalTime() >= this.dateTime.Now.ToUniversalTime())
+                .Must(x => x.StartTime.ToUniversalTime() >= this.dateTime.Now.ToUniversalTime())
                 .WithMessage("The Start time must be after the current time");
 
             this.RuleFor(p => p.SubCategoryId).NotNull();

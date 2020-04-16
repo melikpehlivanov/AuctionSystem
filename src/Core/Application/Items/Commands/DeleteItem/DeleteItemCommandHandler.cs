@@ -4,9 +4,9 @@
     using System.Threading.Tasks;
     using Common.Exceptions;
     using Common.Interfaces;
-    using Notifications.Models;
     using Domain.Entities;
     using MediatR;
+    using Notifications.Models;
 
     public class DeleteItemCommandHandler : IRequestHandler<DeleteItemCommand>
     {
@@ -27,8 +27,8 @@
                 .Items
                 .FindAsync(request.Id);
 
-            if (itemToDelete == null || 
-                (itemToDelete.UserId != this.currentUserService.UserId && !this.currentUserService.IsAdmin))
+            if (itemToDelete == null
+                || itemToDelete.UserId != this.currentUserService.UserId && !this.currentUserService.IsAdmin)
             {
                 throw new NotFoundException(nameof(Item));
             }

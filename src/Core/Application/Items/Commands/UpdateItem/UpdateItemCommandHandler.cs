@@ -22,16 +22,17 @@
         {
             var item = await this.context
                 .Items
-                .SingleOrDefaultAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
+                .SingleOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
-            if (item == null || item.UserId != this.currentUserService.UserId)
+            if (item == null
+                || item.UserId != this.currentUserService.UserId)
             {
                 throw new NotFoundException(nameof(item));
             }
 
             if (!await this.context
-                    .SubCategories
-                    .AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken: cancellationToken))
+                .SubCategories
+                .AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
             {
                 throw new BadRequestException("Subcategory does not exist!");
             }

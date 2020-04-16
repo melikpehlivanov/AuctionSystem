@@ -22,7 +22,7 @@
         public async Task<IActionResult> Get()
         {
             var result = await this.Mediator.Send(new ListCategoriesQuery());
-            return Ok(result);
+            return this.Ok(result);
         }
     }
 }

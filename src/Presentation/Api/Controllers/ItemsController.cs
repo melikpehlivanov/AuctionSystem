@@ -1,21 +1,21 @@
 ﻿namespace Api.Controllers
 {
+    using System;
     using System.Threading.Tasks;
-    using SwaggerExamples;
+    using Application.Common.Models;
+    using Application.Items.Commands;
     using Application.Items.Commands.CreateItem;
+    using Application.Items.Commands.DeleteItem;
+    using Application.Items.Commands.UpdateItem;
+    using Application.Items.Queries.Details;
+    using Application.Items.Queries.List;
+    using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Swashbuckle.AspNetCore.Annotations;
-    using System;
-    using Application.Items.Queries.Details;
-    using Application.Common.Models;
-    using Application.Items.Commands;
-    using Application.Items.Commands.DeleteItem;
-    using Application.Items.Queries.List;
-    using AutoMapper;
-    using Application.Items.Commands.UpdateItem;
     using Models;
+    using SwaggerExamples;
+    using Swashbuckle.AspNetCore.Annotations;
 
     public class ItemsController : BaseController
     {
@@ -34,13 +34,13 @@
             StatusCodes.Status200OK,
             SwaggerDocumentation.ItemConstants.SuccessfulGetRequestMessage,
             typeof(PagedResponse<ListItemsResponseModel>))]
-        public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery, [FromQuery]ItemsFilter filters)
+        public async Task<IActionResult> Get([FromQuery] PaginationQuery paginationQuery, [FromQuery] ItemsFilter filters)
         {
             var paginationFilter = this.mapper.Map<PaginationFilter>(paginationQuery);
             var model = this.mapper.Map<ListItemsQuery>(paginationFilter);
             model.Filters = this.mapper.Map<ListAllItemsQueryFilter>(filters);
             var result = await this.Mediator.Send(model);
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await this.Mediator.Send(new GetItemDetailsQuery(id));
-            return Ok(result);
+            return this.Ok(result);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@
         public async Task<IActionResult> Post([FromBody] CreateItemCommand model)
         {
             var result = await this.Mediator.Send(model);
-            return CreatedAtAction(nameof(this.Post), result);
+            return this.CreatedAtAction(nameof(this.Post), result);
         }
 
         /// <summary>
@@ -108,11 +108,11 @@
         {
             if (id != model.Id)
             {
-                return BadRequest();
+                return this.BadRequest();
             }
 
             await this.Mediator.Send(model);
-            return NoContent();
+            return this.NoContent();
         }
 
         /// <summary>
@@ -134,7 +134,7 @@
         public async Task<IActionResult> Delete(Guid id)
         {
             await this.Mediator.Send(new DeleteItemCommand(id));
-            return NoContent();
+            return this.NoContent();
         }
     }
 }

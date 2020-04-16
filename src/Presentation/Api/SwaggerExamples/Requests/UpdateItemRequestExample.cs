@@ -16,7 +16,7 @@
                 MinIncrease = 500m,
                 StartTime = DateTime.UtcNow.AddDays(10),
                 EndTime = DateTime.UtcNow.AddYears(1),
-                SubCategoryId = Guid.NewGuid(),
+                SubCategoryId = Guid.NewGuid()
             };
     }
 }

@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Models;
     using Interfaces;
+    using Models;
 
     public static class PaginationHelpers
     {
@@ -19,10 +19,10 @@
             return new PagedResponse<T>
             {
                 Data = response,
-                PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : (int?)null,
-                PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null,
+                PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : (int?) null,
+                PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?) null,
                 NextPage = response.Any() ? nextPage : null,
-                PreviousPage = previousPage,
+                PreviousPage = previousPage
             };
         }
     }

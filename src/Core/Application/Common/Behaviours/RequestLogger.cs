@@ -8,8 +8,8 @@
 
     public class RequestLogger<TRequest> : IRequestPreProcessor<TRequest>
     {
-        private readonly ILogger logger;
         private readonly ICurrentUserService currentUserService;
+        private readonly ILogger logger;
 
         public RequestLogger(ILogger<TRequest> logger, ICurrentUserService currentUserService)
         {

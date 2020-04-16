@@ -12,13 +12,13 @@
 
     public class UserManagerService : IUserManager
     {
-        private readonly UserManager<AuctionUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IAuctionSystemDbContext context;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<AuctionUser> userManager;
 
         public UserManagerService(
-            UserManager<AuctionUser> userManager, 
-            RoleManager<IdentityRole> roleManager, 
+            UserManager<AuctionUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IAuctionSystemDbContext context)
         {
             this.userManager = userManager;
@@ -45,7 +45,7 @@
                 LockoutEnd = result.LockoutEnd,
                 PhoneNumber = result.PhoneNumber,
                 PhoneNumberConfirmed = result.PhoneNumberConfirmed,
-                TwoFactorEnabled = result.TwoFactorEnabled,
+                TwoFactorEnabled = result.TwoFactorEnabled
             };
 
             return user;
@@ -73,7 +73,7 @@
                 LockoutEnd = result.LockoutEnd,
                 PhoneNumber = result.PhoneNumber,
                 PhoneNumberConfirmed = result.PhoneNumberConfirmed,
-                TwoFactorEnabled = result.TwoFactorEnabled,
+                TwoFactorEnabled = result.TwoFactorEnabled
             };
 
             return user;
@@ -92,7 +92,7 @@
             {
                 UserName = userName,
                 Email = userName,
-                FullName = fullName,
+                FullName = fullName
             };
 
             var result = await this.userManager.CreateAsync(user, password);
