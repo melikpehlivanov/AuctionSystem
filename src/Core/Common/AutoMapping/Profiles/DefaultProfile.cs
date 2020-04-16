@@ -18,7 +18,7 @@
                 .CurrentDomain
                 .GetAssemblies()
                 .Where(a => a.GetName().FullName.Contains("Application") || a.GetName().FullName.Contains("Api")
-                                                                         || a.GetName().FullName.Contains("AuctionSystem"))
+                                                                         || a.GetName().FullName.Contains("MvcWeb"))
                 .SelectMany(a => a.GetTypes())
                 .ToArray();
 
