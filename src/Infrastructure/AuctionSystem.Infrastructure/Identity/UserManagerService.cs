@@ -16,7 +16,10 @@
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IAuctionSystemDbContext context;
 
-        public UserManagerService(UserManager<AuctionUser> userManager, RoleManager<IdentityRole> roleManager, IAuctionSystemDbContext context)
+        public UserManagerService(
+            UserManager<AuctionUser> userManager, 
+            RoleManager<IdentityRole> roleManager, 
+            IAuctionSystemDbContext context)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
