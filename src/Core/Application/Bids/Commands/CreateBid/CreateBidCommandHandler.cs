@@ -49,11 +49,13 @@
                 .Select(b => new
                 {
                     b.Amount,
-                    b.ItemId
+                    b.ItemId,
+                    StartingPrice = b.Item.StartingPrice,
                 })
                 .OrderByDescending(b => b.Amount)
                 .FirstOrDefaultAsync(b => b.ItemId == request.ItemId, cancellationToken);
-            if (request.Amount <= currentHighestBid?.Amount)
+            if (request.Amount <= currentHighestBid?.Amount 
+                || request.Amount <= currentHighestBid?.StartingPrice)
             {
                 throw new BadRequestException("Invalid bid amount");
             }
