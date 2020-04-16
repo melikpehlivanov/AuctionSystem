@@ -1,4 +1,4 @@
-﻿namespace Application.Users.Commands
+﻿namespace Application.Users.Commands.Jwt
 {
     using MediatR;
 

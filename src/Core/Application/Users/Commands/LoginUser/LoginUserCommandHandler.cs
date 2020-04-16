@@ -5,6 +5,7 @@
     using Common.Exceptions;
     using Common.Interfaces;
     using Common.Models;
+    using Jwt;
     using MediatR;
 
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Response<LoginUserResponseModel>>

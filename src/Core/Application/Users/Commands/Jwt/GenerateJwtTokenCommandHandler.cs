@@ -1,4 +1,4 @@
-﻿namespace Application.Users.Commands
+﻿namespace Application.Users.Commands.Jwt
 {
     using System;
     using System.Collections.Generic;
@@ -15,6 +15,8 @@
 
     public class GenerateJwtTokenCommandHandler : IRequestHandler<GenerateJwtTokenCommand, string>
     {
+        private const int TokenExpiryDateInDays = 7;
+
         private readonly AppSettings options;
         private readonly IUserManager userManager;
 
@@ -43,7 +45,7 @@
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(TokenExpiryDateInDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
