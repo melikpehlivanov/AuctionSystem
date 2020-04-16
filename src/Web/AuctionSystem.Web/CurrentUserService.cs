@@ -1,4 +1,4 @@
-﻿namespace Api.Services
+﻿namespace AuctionSystem.Web
 {
     using System.Security.Claims;
     using Application;

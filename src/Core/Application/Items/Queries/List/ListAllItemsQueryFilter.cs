@@ -14,6 +14,10 @@
 
         public DateTime? EndTime { get; set; }
 
+        public bool? GetLiveItems { get; set; }
+
         public int? MinimumPicturesCount { get; set; }
+
+        public Guid SubCategoryId { get; set; }
     }
 }

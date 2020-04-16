@@ -3,13 +3,13 @@ namespace AuctionSystem.Web.ViewModels.Item
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Application.Items.Commands.CreateItem;
     using Common;
-    using Common.AutoMapping.Interfaces;
+    using global::Common.AutoMapping.Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Services.Models.Item;
 
-    public class ItemCreateBindingModel : IMapWith<ItemCreateServiceModel>, IValidatableObject
+    public class ItemCreateBindingModel : IMapWith<CreateItemCommand>, IValidatableObject
     {
         private const string StartTimeBeforeCurrentTimeError = "The start time must be after the current time";
 
@@ -45,7 +45,7 @@ namespace AuctionSystem.Web.ViewModels.Item
         [Display(Name = "Category")]
         public string SubCategoryId { get; set; }
 
-        public ICollection<IFormFile> PictFormFiles { get; set; }
+        public ICollection<IFormFile> PictureFormFiles { get; set; }
 
         public IEnumerable<SelectListItem> SubCategories { get; set; }
 

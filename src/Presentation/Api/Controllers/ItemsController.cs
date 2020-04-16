@@ -12,7 +12,6 @@
     using Application.Common.Models;
     using Application.Items.Commands;
     using Application.Items.Commands.DeleteItem;
-    using Application.Items.Queries.Details.Models;
     using Application.Items.Queries.List;
     using AutoMapper;
     using Application.Items.Commands.UpdateItem;

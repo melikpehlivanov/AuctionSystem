@@ -1,12 +1,12 @@
 ﻿namespace AuctionSystem.Web.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using Application.Items.Queries.List;
     using AutoMapper;
     using Infrastructure.Collections.Interfaces;
     using Microsoft.AspNetCore.Mvc;
-    using Services.Interfaces;
-    using Services.Models.Item;
     using ViewModels;
     using ViewModels.Item;
 
@@ -14,22 +14,34 @@
     {
         private readonly IMapper mapper;
         private readonly ICache cache;
-        private readonly IItemsService itemsService;
 
-        public HomeController(IMapper mapper, ICache cache, IItemsService itemsService)
+        public HomeController(IMapper mapper, ICache cache)
         {
             this.mapper = mapper;
             this.cache = cache;
-            this.itemsService = itemsService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var serviceModelHottestItems = await this.itemsService.GetHottestItemsAsync<HottestItemServiceModel>();
-            var serviceLiveItems = await this.itemsService.GetAllLiveItemsAsync<LiveItemServiceModel>();
+            var hottestItemsResponse = await this.Mediator.Send(new ListItemsQuery()
+            {
+                Filters = new ListAllItemsQueryFilter
+                {
+                    StartingPrice = 10000,
+                    StartTime = DateTime.UtcNow,
+                }
+            });
+            var liveItemsResponse = await this.Mediator.Send(new ListItemsQuery
+            {
+                Filters = new ListAllItemsQueryFilter
+                {
+                    GetLiveItems = true,
+                    MinimumPicturesCount = 2,
+                }
+            });
 
-            var liveItems = serviceLiveItems.Select(this.mapper.Map<LiveItemViewModel>);
-            var hottestItems = serviceModelHottestItems.Select(this.mapper.Map<HottestItemViewModel>);
+            var liveItems = hottestItemsResponse.Data.Select(this.mapper.Map<LiveItemViewModel>);
+            var hottestItems = liveItemsResponse.Data.Select(this.mapper.Map<HottestItemViewModel>);
 
             var model = new HomeViewModel
             {
@@ -37,7 +49,7 @@
                 HottestItems = hottestItems,
                 Categories = await this.cache.GetAllCategoriesWithSubcategoriesAsync()
             };
-            
+
             return this.View(model);
         }
 

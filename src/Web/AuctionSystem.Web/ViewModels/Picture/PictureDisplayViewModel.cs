@@ -1,9 +1,9 @@
 namespace AuctionSystem.Web.ViewModels.Picture
 {
-    using Common.AutoMapping.Interfaces;
-    using Services.Models.Picture;
+    using Application.Pictures;
+    using global::Common.AutoMapping.Interfaces;
 
-    public class PictureDisplayViewModel : IMapWith<PictureDisplayServiceModel>
+    public class PictureDisplayViewModel : IMapWith<PictureResponseModel>
     {
         public string Id { get; set; }
 

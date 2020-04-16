@@ -5,69 +5,55 @@
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+    using Application.Common.Exceptions;
+    using Application.Items.Queries.Details;
+    using Application.Pictures;
+    using Application.Pictures.Commands.CreatePicture;
+    using Application.Pictures.Commands.DeletePicture;
+    using Application.Pictures.Queries;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Services.Interfaces;
-    using Services.Models.Item;
-    using Services.Models.Picture;
 
     [Authorize]
     public class PicturesController : BaseController
     {
-        private readonly IItemsService ItemsService;
-        private readonly IPictureService pictureService;
-
-        public PicturesController(IPictureService pictureService, IItemsService itemsService)
-        {
-            this.pictureService = pictureService;
-            this.ItemsService = itemsService;
-        }
-
         [HttpPost]
-        public async Task<IActionResult> UploadPictures(string id)
+        public async Task<IActionResult> UploadPictures(Guid id)
         {
             try
             {
-                var serviceItem = await this.ItemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
-                if (serviceItem == null || serviceItem.UserUserName != this.User.Identity.Name &&
-                    !this.User.IsInRole(WebConstants.AdministratorRole))
+                var item = await this.Mediator.Send(new GetItemDetailsQuery(id));
+                var response = await this.Mediator.Send(new CreatePictureCommand
                 {
-                    return this.NotFound();
-                }
+                    ItemId = item.Data.Id,
+                    Pictures = (ICollection<IFormFile>)this.Request.Form.Files
+                });
 
-                var pictureStreams = this.Request.Form.Files
-                    .Select(p => p.OpenReadStream())
-                    .ToArray();
-                
-                var uploads = await this.pictureService.Upload(pictureStreams, id);
-                var urls = uploads.Select(p => p.SecureUri.AbsoluteUri).ToList();
+                var pictures = (IEnumerable<PictureResponseModel>)response.Data;
+                var urls = pictures.Select(p => p.Url).ToList();
                 return this.Json(new { urls });
             }
-            catch (Exception)
+            catch (NotFoundException)
             {
-                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return this.NotFound();
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletePictures(string pictureId)
+        public async Task<IActionResult> DeletePictures(Guid pictureId)
         {
-            var picture = await this.pictureService.GetPictureById<PictureDeleteServiceModel>(pictureId);
-            if (picture == null)
+            try
+            {
+                var picture = await this.Mediator.Send(new GetPictureDetailsQuery(pictureId));
+                await this.Mediator.Send(new DeletePictureCommand { ItemId = picture.Data.FirstOrDefault().ItemId, PictureId = pictureId });
+                return this.Json(new object());
+            }
+            catch (NotFoundException)
             {
                 return this.NotFound();
             }
-            var serviceItem = await this.ItemsService.GetByIdAsync<ItemDetailsServiceModel>(picture.ItemId);
-            if (serviceItem == null || serviceItem.UserUserName != this.User.Identity.Name &&
-                !this.User.IsInRole(WebConstants.AdministratorRole))
-            {
-                return this.NotFound();
-            }
-            await this.pictureService.Delete(picture.ItemId, picture.Id);
-
-            return this.Json(new object());
         }
     }
 }

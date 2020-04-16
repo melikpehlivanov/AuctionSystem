@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Application.Categories.Queries.List;
+    using Application.Common.Models;
     using AutoMapper;
     using Extensions;
     using Interfaces;
+    using MediatR;
     using Microsoft.Extensions.Caching.Distributed;
     using Newtonsoft.Json;
-    using Services.Interfaces;
-    using Services.Models.Category;
     using ViewModels.Category;
 
     public class Cache : ICache
@@ -19,13 +20,13 @@
 
         private readonly IMapper mapper;
         private readonly IDistributedCache cache;
-        private readonly ICategoriesService categoriesService;
+        private readonly IMediator mediator;
 
-        public Cache(IMapper mapper, ICategoriesService categoriesService, IDistributedCache cache)
+        public Cache(IMapper mapper, IDistributedCache cache, IMediator mediator)
         {
             this.mapper = mapper;
-            this.categoriesService = categoriesService;
             this.cache = cache;
+            this.mediator = mediator;
         }
 
         public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesWithSubcategoriesAsync()
@@ -35,8 +36,9 @@
             var cacheList = await this.cache.GetStringAsync(CategoriesKey);
             if (cacheList == null)
             {
-                var serviceCategories = await this.categoriesService.GetAllCategoriesWithSubCategoriesAsync<CategoryListingServiceModel>();
-                var categories = serviceCategories
+                var categoriesResponse = await this.mediator.Send(new ListCategoriesQuery());
+                var categories = categoriesResponse
+                    .Data
                     .Select(this.mapper.Map<CategoryViewModel>)
                     .ToList();
 

@@ -1,10 +1,8 @@
 ﻿namespace AuctionSystem.Web.Areas.Admin.Models.Users
 {
     using System.Collections.Generic;
-    using Common.AutoMapping.Interfaces;
-    using Services.Models.AuctionUser;
 
-    public class UserListingViewModel : IMapWith<UserListingServiceModel>
+    public class UserListingViewModel //: IMapWith<UserListingServiceModel>
     {
         public string Id { get; set; }
 

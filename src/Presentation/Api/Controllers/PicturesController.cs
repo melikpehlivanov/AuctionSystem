@@ -6,6 +6,7 @@
     using Application.Pictures;
     using Application.Pictures.Commands.CreatePicture;
     using Application.Pictures.Commands.DeletePicture;
+    using Application.Pictures.Queries;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,26 @@
     [Authorize]
     public class PicturesController : BaseController
     {
+        [HttpGet("{id}")]
+        [SwaggerResponse(
+            StatusCodes.Status200OK,
+            SwaggerDocumentation.PictureConstants.SuccessfulGetPictureDetailsRequestDescriptionMessage,
+            typeof(MultiResponse<PictureDetailsResponseModel>))]
+        [SwaggerResponse(
+            StatusCodes.Status404NotFound,
+            SwaggerDocumentation.PictureConstants.BadRequestDescriptionMessage,
+            typeof(NotFoundErrorModel))]
+        public async Task<IActionResult> Get(Guid id, [FromBody]GetPictureDetailsQuery model)
+        {
+            if (id != model.Id)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.Mediator.Send(model);
+            return Ok(result);
+        }
+
         /// <summary>
         /// Uploads pictures
         /// </summary>
@@ -35,7 +56,7 @@
         /// </summary>
         [HttpDelete("{id}")]
         [SwaggerResponse(
-            StatusCodes.Status204NoContent, 
+            StatusCodes.Status204NoContent,
             SwaggerDocumentation.PictureConstants.SuccessfulDeleteRequestDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status404NotFound,

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using AuctionSystem.Models;
-using Microsoft.AspNetCore.Identity;
-using AuctionSystem.Common.EmailSender.Interface;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace AuctionSystem.Web.Areas.Identity.Pages.Account
+﻿namespace AuctionSystem.Web.Areas.Identity.Pages.Account
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using Application;
+    using Application.Common.Interfaces;
+    using Domain.Entities;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
 
     [AllowAnonymous]
     public class ForgotPasswordModel : PageModel
@@ -56,7 +54,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(
-                    WebConstants.AppMainEmailAddress,
+                    AppConstants.AppMainEmailAddress,
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

@@ -8,8 +8,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\AuctionSystem.Common\AuctionSystem.Common.csproj" />
-  </ItemGroup>
-
 </Project>

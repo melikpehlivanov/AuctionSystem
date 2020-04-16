@@ -1,9 +1,11 @@
+@using Application.Common.Interfaces
 @model ItemDetailsViewModel
+@inject ICurrentUserService currentUserService
 
 @{
     ViewData["Title"] = Model.Title;
-    var isOwner = Model.UserUserName == this.User.Identity.Name ||
-        this.User.IsInRole(WebConstants.AdministratorRole);
+    var isOwner = Model.UserId == this.currentUserService.UserId ||
+                  this.currentUserService.IsAdmin;
 }
 <div class="container">
     <div class="row">

@@ -1,94 +1,114 @@
 namespace AuctionSystem.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using Application.Common.Exceptions;
+    using Application.Common.Interfaces;
+    using Application.Items.Commands.CreateItem;
+    using Application.Items.Commands.DeleteItem;
+    using Application.Items.Commands.UpdateItem;
+    using Application.Items.Queries.Details;
+    using Application.Items.Queries.List;
     using AutoMapper;
     using Infrastructure.Collections.Interfaces;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Services.Interfaces;
-    using Services.Models.Item;
     using ViewModels.Item;
 
     public class ItemsController : BaseController
     {
         private readonly IMapper mapper;
         private readonly ICache cache;
-        private readonly IItemsService itemsService;
-        private readonly IUserService userService;
+        private readonly ICurrentUserService currentUserService;
 
-        public ItemsController(IMapper mapper, ICache cache, IItemsService itemsService, IUserService userService)
+        public ItemsController(
+            IMapper mapper,
+            ICache cache,
+            ICurrentUserService currentUserService)
         {
             this.mapper = mapper;
             this.cache = cache;
-            this.itemsService = itemsService;
-            this.userService = userService;
+            this.currentUserService = currentUserService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var user = await this.userService
-                .GetUserIdByUsernameAsync(this.HttpContext.User.Identity.Name);
+            var response = await this.Mediator.Send(new ListItemsQuery
+            {
+                Filters = new ListAllItemsQueryFilter
+                {
+                    UserId = this.currentUserService.UserId
 
-            var serviceItems = await this.itemsService
-                    .GetAllItemsForGivenUser<ItemIndexServiceModel>(user);
-            if (serviceItems == null)
+                }
+            });
+
+            if (response.Data == null)
             {
                 this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
                 return this.View();
             }
 
-            var items = serviceItems
+            var items = response
+                .Data
                 .Select(this.mapper.Map<ItemIndexViewModel>)
                 .ToList();
 
             return this.View(items);
         }
 
-        public async Task<IActionResult> List(string id, int pageIndex = 1)
+        public async Task<IActionResult> List(Guid id, int pageIndex = 1)
         {
-            IEnumerable<ItemListingServiceModel> serviceItems;
+            IEnumerable<ListItemsResponseModel> items;
 
-            if (id == null)
+            if (id.Equals(Guid.Empty))
             {
-                serviceItems = await this.itemsService
-                    .GetAllItemsAsync<ItemListingServiceModel>();
+                var response = await this.Mediator.Send(new ListItemsQuery());
+                items = response.Data;
             }
             else
             {
-                serviceItems = await this.itemsService
-                    .GetAllItemsInGivenCategoryByCategoryIdAsync<ItemListingServiceModel>(id);
+                var response = await this.Mediator.Send(new ListItemsQuery
+                {
+                    Filters = new ListAllItemsQueryFilter
+                    {
+                        SubCategoryId = id,
+
+                    }
+                });
+                items = response.Data;
             }
 
-            if (!serviceItems.Any())
+            if (!items.Any())
             {
                 return this.RedirectToHome();
             }
 
-            var allItems = serviceItems.Select(this.mapper.Map<ItemListingDto>)
+            var allItems = items.Select(this.mapper.Map<ItemListingDto>)
                 .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 
-            var items = new ItemListingViewModel { Items = allItems };
-            return this.View(items);
+            var vm = new ItemListingViewModel { Items = allItems };
+            return this.View(vm);
         }
 
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var serviceModel = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
+            try
+            {
+                var response = await this.Mediator.Send(new GetItemDetailsQuery(id));
+                var viewModel = this.mapper.Map<ItemDetailsViewModel>(response.Data);
 
-            if (serviceModel == null)
+                return this.View(viewModel);
+            }
+            catch (NotFoundException)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
                 return this.RedirectToHome();
             }
-
-            var viewModel = this.mapper.Map<ItemDetailsViewModel>(serviceModel);
-
-            return this.View(viewModel);
         }
 
         [Authorize]
@@ -113,52 +133,58 @@ namespace AuctionSystem.Web.Controllers
                 return this.View(model);
             }
 
-            var serviceModel = this.mapper.Map<ItemCreateServiceModel>(model);
-            serviceModel.StartTime = serviceModel.StartTime.ToUniversalTime();
-            serviceModel.EndTime = serviceModel.EndTime.ToUniversalTime();
-            serviceModel.UserName = this.User.Identity.Name;
-            serviceModel.PictureStreams = model.PictFormFiles?.Select(p => p.OpenReadStream()).ToArray()
-                ?? new Stream[0];
-
-            var id = await this.itemsService.CreateAsync(serviceModel);
-
-            if (id == null)
+            var appModel = this.mapper.Map<CreateItemCommand>(model);
+            appModel.StartTime = appModel.StartTime.ToUniversalTime();
+            appModel.EndTime = appModel.EndTime.ToUniversalTime();
+            try
             {
-                this.ShowErrorMessage(NotificationMessages.ItemCreateError);
+                var result = await this.Mediator.Send(appModel);
+                this.ShowSuccessMessage(NotificationMessages.ItemCreated);
+                return this.RedirectToAction("Details", new { result.Data.Id });
+            }
+            catch (BadRequestException ex)
+            {
+                this.ShowErrorMessage(ex.Message);
+                model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
+                return this.View(model);
+            }
+            catch (NotFoundException ex)
+            {
+                this.ShowErrorMessage(ex.Message);
+                model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
+                return this.View(model);
+            }
+        }
 
+        [Authorize]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                var response = await this.Mediator.Send(new GetItemDetailsQuery(id));
+
+                if (response.Data.UserId != this.currentUserService.UserId &&
+                    !this.currentUserService.IsAdmin)
+                {
+                    this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                    return this.RedirectToHome();
+                }
+
+                var model = this.mapper.Map<ItemEditBindingModel>(response.Data);
                 model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
 
                 return this.View(model);
             }
-
-            this.ShowSuccessMessage(NotificationMessages.ItemCreated);
-
-            return this.RedirectToAction("Details", new { id });
-        }
-
-        [Authorize]
-        public async Task<IActionResult> Edit(string id)
-        {
-            var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
-
-            if (serviceModel == null ||
-                serviceModel.UserUserName != this.User.Identity.Name &&
-                !this.User.IsInRole(WebConstants.AdministratorRole))
+            catch (NotFoundException)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
                 return this.RedirectToHome();
             }
-
-            var model = this.mapper.Map<ItemEditBindingModel>(serviceModel);
-
-            model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
-
-            return this.View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Edit(string id, ItemEditBindingModel model)
+        public async Task<IActionResult> Edit(Guid id, ItemEditBindingModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -167,86 +193,86 @@ namespace AuctionSystem.Web.Controllers
                 return this.View(model);
             }
 
-            var serviceModel = await this.itemsService.GetByIdAsync<ItemEditServiceModel>(id);
+            try
+            {
+                var itemDetails = await this.Mediator.Send(new GetItemDetailsQuery(id));
+                if (itemDetails.Data.UserId != this.currentUserService.UserId
+                    && !this.currentUserService.IsAdmin)
+                {
+                    this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                    return this.RedirectToHome();
+                }
 
-            if (serviceModel == null ||
-                serviceModel.UserUserName != this.User.Identity.Name &&
-                !this.User.IsInRole(WebConstants.AdministratorRole))
+                var appUpdateModel = this.mapper.Map<UpdateItemCommand>(model);
+                appUpdateModel.StartTime = model.StartTime.ToUniversalTime();
+                appUpdateModel.EndTime = model.EndTime.ToUniversalTime();
+
+                await this.Mediator.Send(appUpdateModel);
+
+                this.ShowSuccessMessage(NotificationMessages.ItemUpdated);
+                return this.RedirectToAction("Details", new { id });
+            }
+            catch (NotFoundException)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
                 return this.RedirectToHome();
             }
-
-            serviceModel.Title = model.Title;
-            serviceModel.Description = model.Description;
-            serviceModel.StartingPrice = model.StartingPrice;
-            serviceModel.MinIncrease = model.MinIncrease;
-            serviceModel.StartTime = model.StartTime.ToUniversalTime();
-            serviceModel.EndTime = model.EndTime.ToUniversalTime();
-            serviceModel.SubCategoryId = model.SubCategoryId;
-
-            bool success = await this.itemsService.UpdateAsync(serviceModel);
-
-            if (!success)
+            catch (BadRequestException)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemUpdateError);
-
                 model.SubCategories = await this.GetAllCategoriesWithSubCategoriesAsync();
-
                 return this.View(model);
             }
-
-            this.ShowSuccessMessage(NotificationMessages.ItemUpdated);
-
-            return this.RedirectToAction("Details", new { id });
         }
 
         [Authorize]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var serviceItem = await this.itemsService
-                .GetByIdAsync<ItemDetailsServiceModel>(id);
-            if (serviceItem == null ||
-                serviceItem.UserUserName != this.User.Identity.Name &&
-                !this.User.IsInRole(WebConstants.AdministratorRole))
+            try
+            {
+                var response = await this.Mediator.Send(new GetItemDetailsQuery(id));
+                if (response.Data.UserId != this.currentUserService.UserId
+                    && !this.currentUserService.IsAdmin)
+                {
+                    this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                    return this.RedirectToHome();
+                }
+
+                var item = this.mapper.Map<ItemDetailsViewModel>(response.Data);
+                return this.View(item);
+            }
+            catch (NotFoundException)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
-
                 return this.RedirectToHome();
             }
-
-            var item = this.mapper.Map<ItemDetailsViewModel>(serviceItem);
-
-            return this.View(item);
         }
 
         [ActionName(nameof(Delete))]
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var serviceItem = await this.itemsService
-                .GetByIdAsync<ItemDetailsServiceModel>(id);
+            try
+            {
+                var response = await this.Mediator.Send(new GetItemDetailsQuery(id));
+                if (response.Data.UserId != this.currentUserService.UserId
+                    && !this.currentUserService.IsAdmin)
+                {
+                    this.ShowErrorMessage(NotificationMessages.ItemNotFound);
+                    return this.RedirectToHome();
+                }
 
-            if (serviceItem == null ||
-                serviceItem.UserUserName != this.User.Identity.Name &&
-                !this.User.IsInRole(WebConstants.AdministratorRole))
+                await this.Mediator.Send(new DeleteItemCommand(id));
+
+                this.ShowSuccessMessage(NotificationMessages.ItemDeletedSuccessfully);
+                return this.RedirectToAction(nameof(this.Index));
+            }
+            catch (NotFoundException)
             {
                 this.ShowErrorMessage(NotificationMessages.ItemNotFound);
-
                 return this.RedirectToHome();
             }
-
-            var isDeleted = await this.itemsService
-                .DeleteAsync(id);
-            if (!isDeleted)
-            {
-                this.ShowErrorMessage(NotificationMessages.ItemDeletedError);
-                return this.RedirectToAction(nameof(this.Delete), new { id });
-            }
-
-            this.ShowSuccessMessage(NotificationMessages.ItemDeletedSuccessfully);
-            return this.RedirectToAction(nameof(this.Index));
         }
 
         public async Task<IActionResult> Search(string query, int pageIndex = 1)
@@ -260,18 +286,21 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
-            var serviceItems = (await this.itemsService
-                    .SearchByTitleAsync<ItemListingServiceModel>(query))
-                .ToArray();
+            var appModel = await this.Mediator.Send(new ListItemsQuery
+            {
+                Filters = new ListAllItemsQueryFilter
+                {
+                    Title = query,
+                }
+            });
 
-            if (!serviceItems.Any())
+            if (!appModel.Data.Any())
             {
                 this.ShowErrorMessage(NotificationMessages.SearchNoItems);
-
                 return this.RedirectToHome();
             }
 
-            var allItems = serviceItems.Select(this.mapper.Map<ItemListingDto>)
+            var allItems = appModel.Data.Select(this.mapper.Map<ItemListingDto>)
                 .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 
             var items = new ItemSearchViewModel
@@ -281,7 +310,6 @@ namespace AuctionSystem.Web.Controllers
             };
 
             this.ViewData[WebConstants.SearchViewDataKey] = query;
-
             return this.View(items);
         }
 
@@ -299,7 +327,7 @@ namespace AuctionSystem.Web.Controllers
                     var item = new SelectListItem
                     {
                         Text = subCategory.Name,
-                        Value = subCategory.Id,
+                        Value = subCategory.Id.ToString(),
                         Group = group
                     };
 

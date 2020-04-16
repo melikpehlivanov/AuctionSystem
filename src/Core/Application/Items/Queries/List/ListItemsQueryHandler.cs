@@ -1,5 +1,6 @@
 ﻿namespace Application.Items.Queries.List
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -32,6 +33,15 @@
             var skipCount = (request.PageNumber - 1) * request.PageSize;
             var queryable = this.context.Items.AsQueryable();
 
+            if (request?.Filters == null)
+            {
+                return PaginationHelpers.CreatePaginatedResponse(this.uriService, request, await queryable
+                    .Skip(skipCount)
+                    .Take(request.PageSize)
+                    .ProjectTo<ListItemsResponseModel>(this.mapper.ConfigurationProvider)
+                    .ToListAsync(cancellationToken));
+            }
+
             queryable = AddFiltersOnQuery(request.Filters, queryable);
             var items = await queryable
                 .Skip(skipCount)
@@ -55,6 +65,11 @@
                 queryable = queryable.Where(i => i.UserId == filters.UserId);
             }
 
+            if (filters?.GetLiveItems != null)
+            {
+                queryable = queryable.Where(i => i.StartTime < DateTime.UtcNow && i.EndTime > DateTime.UtcNow);
+            }
+
             if (filters?.StartingPrice != null)
             {
                 queryable = queryable.Where(i => i.StartingPrice >= filters.StartingPrice);
@@ -73,6 +88,11 @@
             if (filters?.MinimumPicturesCount != null)
             {
                 queryable = queryable.Where(i => i.Pictures.Count >= filters.MinimumPicturesCount);
+            }
+
+            if (filters?.SubCategoryId != Guid.Empty)
+            {
+                queryable = queryable.Where(i => i.SubCategoryId == filters.SubCategoryId);
             }
 
             return queryable;

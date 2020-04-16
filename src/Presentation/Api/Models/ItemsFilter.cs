@@ -20,6 +20,9 @@
         [Range(typeof(decimal), "0.01", DecimalMaxValue)]
         public decimal? StartingPrice { get; set; }
 
+        [FromQuery(Name = "getLiveItems")]
+        public bool? GetLiveItems { get; set; }
+
         [FromQuery(Name = "startTime")]
         public DateTime? StartTime { get; set; }
 
@@ -29,5 +32,8 @@
         [FromQuery(Name = "minimumPicturesCount")]
         [Range(1, int.MaxValue)]
         public int? MinimumPicturesCount { get; set; }
+
+        [FromQuery(Name = "subCategoryId")]
+        public Guid SubCategoryId { get; set; }
     }
 }

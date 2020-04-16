@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using AuctionSystem.Models;
-using Microsoft.AspNetCore.Identity;
-using AuctionSystem.Common.EmailSender.Interface;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
+﻿namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using Application;
+    using Application.Common.Interfaces;
+    using Domain.Entities;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
 
     public partial class IndexModel : PageModel
     {
@@ -138,7 +136,7 @@ namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
-                WebConstants.AppMainEmailAddress,
+                AppConstants.AppMainEmailAddress,
                 email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

@@ -3,7 +3,7 @@
     using Common.Models;
     using MediatR;
 
-    public class ListCategoriesQuery : IRequest<Response<ListCategoriesResponseModel>>
+    public class ListCategoriesQuery : IRequest<PagedResponse<ListCategoriesResponseModel>>
     {
     }
 }

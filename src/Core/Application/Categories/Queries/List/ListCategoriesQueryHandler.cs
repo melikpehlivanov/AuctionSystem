@@ -12,7 +12,7 @@
     using Application.Common.Exceptions;
     using Domain.Entities;
 
-    public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, Response<ListCategoriesResponseModel>>
+    public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, PagedResponse<ListCategoriesResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -23,7 +23,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<Response<ListCategoriesResponseModel>> Handle(ListCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<ListCategoriesResponseModel>> Handle(ListCategoriesQuery request, CancellationToken cancellationToken)
         {
             var categories = await this.context
                 .Categories
@@ -36,7 +36,7 @@
                 throw new NotFoundException(nameof(Category));
             }
 
-            return new Response<ListCategoriesResponseModel>(categories);
+            return new PagedResponse<ListCategoriesResponseModel>(categories);
         }
     }
 }

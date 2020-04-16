@@ -15,9 +15,10 @@
     using Microsoft.EntityFrameworkCore;
     using AutoMapper;
     using Common.Models;
-    using Application.Common.Exceptions;
+    using Common.Exceptions;
+    using System.Collections.Generic;
 
-    public class CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, Response<PictureResponseModel>>
+    public class CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, MultiResponse<PictureResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly ICurrentUserService currentUserService;
@@ -44,7 +45,7 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public async Task<Response<PictureResponseModel>> Handle(CreatePictureCommand request, CancellationToken cancellationToken)
+        public async Task<MultiResponse<PictureResponseModel>> Handle(CreatePictureCommand request, CancellationToken cancellationToken)
         {
             var item = await this.context
                 .Items
@@ -55,9 +56,20 @@
 
                 })
                 .SingleOrDefaultAsync(i => i.Id == request.ItemId, cancellationToken);
-            if (!request.Pictures.Any() || item.UserId != this.currentUserService.UserId)
+            if (item.UserId != this.currentUserService.UserId)
             {
-                throw new NotFoundException(nameof(Picture));
+                throw new NotFoundException(nameof(Item));
+            }
+
+            if (!request.Pictures.Any())
+            {
+                // Add default picture
+                var picture = new Picture { ItemId = request.ItemId, Url = AppConstants.DefaultPictureUrl, };
+                await this.context.Pictures.AddAsync(picture, cancellationToken);
+                await this.context.SaveChangesAsync(cancellationToken);
+
+                return new MultiResponse<PictureResponseModel>(new List<PictureResponseModel>
+                    { this.mapper.Map<PictureResponseModel>(picture) });
             }
 
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
@@ -84,7 +96,7 @@
             await this.context.Pictures.AddRangeAsync(picturesToAdd, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            var result = new Response<PictureResponseModel>(picturesToAdd.Select(p => this.mapper.Map<PictureResponseModel>(p)).ToList());
+            var result = new MultiResponse<PictureResponseModel>(picturesToAdd.Select(p => this.mapper.Map<PictureResponseModel>(p)).ToList());
             return result;
         }
     }

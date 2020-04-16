@@ -26,7 +26,7 @@
 
             if (item == null || item.UserId != this.currentUserService.UserId)
             {
-                throw new NotFoundException(nameof(item), request.Id);
+                throw new NotFoundException(nameof(item));
             }
 
             if (!await this.context
@@ -40,8 +40,8 @@
             item.Description = request.Description;
             item.StartingPrice = request.StartingPrice;
             item.MinIncrease = request.MinIncrease;
-            item.StartTime = request.StartTime;
-            item.EndTime = request.EndTime;
+            item.StartTime = request.StartTime.ToUniversalTime();
+            item.EndTime = request.EndTime.ToUniversalTime();
             item.SubCategoryId = request.SubCategoryId;
 
             this.context.Items.Update(item);

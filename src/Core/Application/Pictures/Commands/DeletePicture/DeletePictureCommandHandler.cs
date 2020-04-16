@@ -1,5 +1,6 @@
 ﻿namespace Application.Pictures.Commands.DeletePicture
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Exceptions;
@@ -46,11 +47,16 @@
         {
             var pictureToRemove = await this.context
                 .Pictures
-                .FindAsync(request.PictureId);
+                .Include(p=> p.Item)
+                .Where(p=> p.Id == request.PictureId)
+                .SingleOrDefaultAsync(cancellationToken);
 
-            if (pictureToRemove == null || pictureToRemove.CreatedBy != this.currentUserService.UserId)
+            if (
+                pictureToRemove == null ||
+                pictureToRemove.Item.UserId != this.currentUserService.UserId ||
+                pictureToRemove.ItemId != request.ItemId)
             {
-                throw new NotFoundException(nameof(Picture), request.PictureId);
+                throw new NotFoundException(nameof(Picture));
             }
 
             await this.cloudinary.DeleteResourcesByPrefixAsync($"{request.ItemId}/{request.PictureId}");

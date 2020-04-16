@@ -24,6 +24,6 @@
 
         public Guid SubCategoryId { get; set; }
 
-        public ICollection<IFormFile> Pictures { get; set; } = new HashSet<IFormFile>();
+        public ICollection<IFormFile> PictureFormFiles { get; set; } = new HashSet<IFormFile>();
     }
 }

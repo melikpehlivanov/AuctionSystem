@@ -3,13 +3,14 @@ namespace AuctionSystem.Web.ViewModels.Item
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Application.Items.Commands.UpdateItem;
+    using Application.Items.Queries.Details;
     using Common;
-    using Common.AutoMapping.Interfaces;
+    using global::Common.AutoMapping.Interfaces;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Picture;
-    using Services.Models.Item;
 
-    public class ItemEditBindingModel : IMapWith<ItemEditServiceModel>, IValidatableObject
+    public class ItemEditBindingModel : IMapWith<ItemDetailsResponseModel>, IMapWith<UpdateItemCommand>, IValidatableObject
     {
         private const string EndTimeBeforeStartTimeError = "The end time must be after the start time";
 

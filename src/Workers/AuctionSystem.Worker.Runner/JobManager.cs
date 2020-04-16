@@ -4,11 +4,11 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.EmailSender.Interface;
-    using Data;
+    using Application.Common.Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using Models;
+    using Persistance;
 
     public class JobManager
     {

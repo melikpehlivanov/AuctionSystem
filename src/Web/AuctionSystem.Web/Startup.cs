@@ -1,19 +1,26 @@
 ﻿namespace AuctionSystem.Web
 {
+    using System.Security.Claims;
+    using Application;
+    using Application.Common.Interfaces;
+    using AuctionSystem.Infrastructure;
+    using Infrastructure.Collections.Interfaces;
     using AutoMapper;
-    using Common.AutoMapping.Profiles;
-    using Data;
+    using global::Common.AutoMapping.Profiles;
+    using Infrastructure.Collections;
     using Infrastructure.Extensions;
     using Infrastructure.Middleware;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Routing;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Persistance;
     using SignalRHubs;
+    using Microsoft.AspNetCore.Identity;
 
     public class Startup
     {
@@ -27,20 +34,27 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddDbContext<AuctionSystemDbContext>(options => options
-                    .UseSqlServer(this.Configuration.GetDefaultConnectionString()))
-                .AddIdentity()
+                .AddPersistence(this.Configuration)
+                .AddInfrastructure(this.Configuration)
+                .AddApplication()
+                .AddAutoMapper(typeof(DefaultProfile))
+                .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddScoped<IEmailSender, EmailSender>()
+                .AddScoped<ICache, Cache>()
+                .AddScoped<IUriService>(provider =>
+                {
+                    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+                    var request = accessor.HttpContext.Request;
+                    var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent(), request.Path);
+                    return new UriService(absoluteUri);
+                })
+                .AddTransient<ICurrentUserService, CurrentUserService>()
                 .AddAppSettings(this.Configuration)
                 .ConfigureCookies()
                 .ConfigureSecurityStampValidator()
                 .Configure<RouteOptions>(options => options.LowercaseUrls = true)
                 .AddResponseCompression(options => options.EnableForHttps = true)
-                .AddAutoMapper(typeof(DefaultProfile))
-                .AddDistributedMemoryCache()
-                .AddDomainServices()
-                .AddApplicationServices()
-                .AddCommonProjectServices()
-                .AddAuthentication();
+                .AddDistributedMemoryCache();
 
             services.AddControllersWithViews(options => { options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>(); });
             services.AddRazorPages();
@@ -84,8 +98,7 @@
                         "Items/{action}/{id}/{slug:required}",
                         new { controller = "Items", action = "Details" });
                     endpoints.MapRazorPages();
-                })
-                .SeedData();
+                });
         }
     }
 }

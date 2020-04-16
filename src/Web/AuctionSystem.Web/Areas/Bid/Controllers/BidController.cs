@@ -1,47 +1,53 @@
 ﻿namespace AuctionSystem.Web.Areas.Bid.Controllers
 {
+    using System;
     using System.Threading.Tasks;
+    using Application.Bids.Queries.Details;
+    using Application.Common.Exceptions;
+    using Application.Common.Interfaces;
+    using Application.Items.Queries.Details;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using Models;
-    using Services.Interfaces;
-    using Services.Models.Item;
     using Web.Controllers;
 
     [Area("Bid")]
     public class BidController : BaseController
     {
         private readonly IMapper mapper;
-        private readonly IBidService bidService;
-        private readonly IItemsService itemsService;
-        private readonly IUserService userService;
+        private readonly ICurrentUserService currentUserService;
 
-        public BidController(IMapper mapper, IBidService bidService, IItemsService itemsService, IUserService userService)
+        public BidController(IMapper mapper, ICurrentUserService currentUserService)
         {
             this.mapper = mapper;
-            this.bidService = bidService;
-            this.itemsService = itemsService;
-            this.userService = userService;
+            this.currentUserService = currentUserService;
         }
 
         [Route("/bid/{id}")]
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
             {
                 this.ShowErrorMessage(NotificationMessages.BidNotFound);
                 return this.RedirectToHome();
             }
 
-            var serviceModel = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(id);
-            var highestBid = await this.bidService.GetHighestBidAmountForGivenItemAsync(id);
+            try
+            {
+                var itemDetailResponse = await this.Mediator.Send(new GetItemDetailsQuery(id));
+                var highestBidForItemResponse = await this.Mediator.Send(new GetHighestBidDetailsQuery(id));
+                var viewModel = this.mapper.Map<BidDetailsViewModel>(itemDetailResponse.Data);
+                viewModel.UserId = this.currentUserService.UserId;
+                viewModel.ReturnUrl = this.HttpContext.Request.Path.ToString();
+                viewModel.HighestBid = highestBidForItemResponse?.Data?.Amount ?? 0;
 
-            var viewModel = this.mapper.Map<BidDetailsViewModel>(serviceModel);
-            viewModel.UserId = await this.userService.GetUserIdByUsernameAsync(this.User.Identity.Name);
-            viewModel.ReturnUrl = this.HttpContext.Request.Path.ToString();
-            viewModel.HighestBid = highestBid ?? 0;
-
-            return this.View(viewModel);
+                return this.View(viewModel);
+            }
+            catch (NotFoundException)
+            {
+                this.ShowErrorMessage(NotificationMessages.BidNotFound);
+                return this.RedirectToHome();
+            }
         }
     }
 }

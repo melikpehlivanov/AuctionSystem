@@ -1,10 +1,10 @@
 ﻿namespace AuctionSystem.Web.ViewModels.Category
 {
     using System.Collections.Generic;
-    using Common.AutoMapping.Interfaces;
-    using Services.Models.Category;
+    using Application.Categories.Queries.List;
+    using global::Common.AutoMapping.Interfaces;
 
-    public class CategoryViewModel : IMapWith<CategoryListingServiceModel>
+    public class CategoryViewModel : IMapWith<ListCategoriesResponseModel>
     {
         public string Name { get; set; }
 

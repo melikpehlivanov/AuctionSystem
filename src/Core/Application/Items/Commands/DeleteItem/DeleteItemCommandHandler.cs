@@ -30,7 +30,7 @@
             if (itemToDelete == null || 
                 (itemToDelete.UserId != this.currentUserService.UserId && !this.currentUserService.IsAdmin))
             {
-                throw new NotFoundException(nameof(Item), request.Id);
+                throw new NotFoundException(nameof(Item));
             }
 
             this.context.Items.Remove(itemToDelete);

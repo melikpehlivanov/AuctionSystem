@@ -11,7 +11,6 @@
     using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Models;
 
     public class GetItemDetailsQueryHandler : IRequestHandler<GetItemDetailsQuery, Response<ItemDetailsResponseModel>>
     {
@@ -28,15 +27,15 @@
         {
             var item = await this.context
                 .Items
-                .ProjectTo<ItemDetailsDto>(this.mapper.ConfigurationProvider)
+                .ProjectTo<ItemDetailsResponseModel>(this.mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (item == null)
             {
-                throw new NotFoundException(nameof(Item), request.Id);
+                throw new NotFoundException(nameof(Item));
             }
 
-            return new Response<ItemDetailsResponseModel>(this.mapper.Map<ItemDetailsResponseModel>(item));
+            return new Response<ItemDetailsResponseModel>(item);
         }
     }
 }

@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Application.Items.Queries.List;
     using Common;
-    using Common.AutoMapping.Interfaces;
+    using global::Common.AutoMapping.Interfaces;
     using Picture;
-    using Services.Models.Item;
 
-    public class ItemIndexViewModel : IMapWith<ItemIndexServiceModel>
+    public class ItemIndexViewModel : IMapWith<ListItemsResponseModel>
     {
         public string Id { get; set; }
 

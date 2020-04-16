@@ -1,11 +1,11 @@
 ﻿namespace AuctionSystem.Web.ViewModels.Item
 {
     using System.Collections.Generic;
-    using Common.AutoMapping.Interfaces;
+    using Application.Items.Queries.List;
+    using global::Common.AutoMapping.Interfaces;
     using Picture;
-    using Services.Models.Item;
 
-    public class LiveItemViewModel : IMapWith<LiveItemServiceModel>
+    public class LiveItemViewModel : IMapWith<ListItemsResponseModel>
     {
         public string Id { get; set; }
 

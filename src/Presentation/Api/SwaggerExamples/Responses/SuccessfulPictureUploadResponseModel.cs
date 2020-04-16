@@ -6,10 +6,10 @@
     using Application.Pictures;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class SuccessfulPictureUploadResponseModel : IExamplesProvider<Response<PictureResponseModel>>
+    public class SuccessfulPictureUploadResponseModel : IExamplesProvider<MultiResponse<PictureResponseModel>>
     {
-        public Response<PictureResponseModel> GetExamples()
-            => new Response<PictureResponseModel>(new HashSet<PictureResponseModel>
+        public MultiResponse<PictureResponseModel> GetExamples()
+            => new MultiResponse<PictureResponseModel>(new HashSet<PictureResponseModel>
             {
                 new PictureResponseModel
                 {

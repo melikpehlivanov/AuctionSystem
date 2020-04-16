@@ -6,7 +6,7 @@
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    public class CreatePictureCommand : IRequest<Response<PictureResponseModel>>
+    public class CreatePictureCommand : IRequest<MultiResponse<PictureResponseModel>>
     {
         public Guid ItemId { get; set; }
 

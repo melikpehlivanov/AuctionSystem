@@ -1,7 +1,8 @@
 ﻿namespace AuctionSystem.Web.Controllers
 {
     using System.Threading.Tasks;
-    using Common.EmailSender.Interface;
+    using Application;
+    using Application.Common.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Contact;
 
@@ -23,7 +24,7 @@
                 return this.PartialView("_ContactUsPartial", model);
             }
 
-            await this.emailSender.SendEmailAsync(model.Email, WebConstants.AppMainEmailAddress, model.Subject,
+            await this.emailSender.SendEmailAsync(model.Email, AppConstants.AppMainEmailAddress, model.Subject,
                 model.Message);
 
             this.ShowSuccessMessage(NotificationMessages.EmailSentSuccessfully);

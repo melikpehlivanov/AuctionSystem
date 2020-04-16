@@ -1,4 +1,4 @@
-﻿namespace Application.Items.Queries.Details.Models
+﻿namespace Application.Items.Queries.Details
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using global::Common.AutoMapping.Interfaces;
     using Pictures;
 
-    public class ItemDetailsDto : IMapWith<Item>
+    public class ItemDetailsResponseModel : IMapWith<Item>
     {
         public Guid Id { get; set; }
 
@@ -22,9 +22,13 @@
 
         public DateTime EndTime { get; set; }
 
-        public ICollection<PictureResponseModel> Pictures { get; set; }
+        public string UserId { get; set; }
 
         public string UserFullName { get; set; }
+
+        public ICollection<PictureResponseModel> Pictures { get; set; }
+
+        public Guid SubCategoryId { get; set; }
 
         public string SubCategoryName { get; set; }
     }

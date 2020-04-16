@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AuctionSystem.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
-namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
+﻿namespace AuctionSystem.Web.Areas.Identity.Pages.Account.Manage
 {
+    using System;
+    using System.Threading.Tasks;
+    using Domain.Entities;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+
     public class Disable2faModel : PageModel
     {
         private readonly UserManager<AuctionUser> _userManager;

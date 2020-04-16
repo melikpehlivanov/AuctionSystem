@@ -3,7 +3,6 @@
     using System;
     using Common.Models;
     using MediatR;
-    using Models;
 
     public class GetItemDetailsQuery : IRequest<Response<ItemDetailsResponseModel>>
     {

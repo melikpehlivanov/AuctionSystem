@@ -3,11 +3,12 @@ namespace AuctionSystem.Web.ViewModels.Item
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Common.AutoMapping.Interfaces;
+    using Application;
+    using Application.Items.Queries.Details;
+    using global::Common.AutoMapping.Interfaces;
     using Picture;
-    using Services.Models.Item;
 
-    public class ItemDetailsViewModel : IMapWith<ItemDetailsServiceModel>
+    public class ItemDetailsViewModel : IMapWith<ItemDetailsResponseModel>
     {
         public string Id { get; set; }
 
@@ -23,9 +24,9 @@ namespace AuctionSystem.Web.ViewModels.Item
 
         public DateTime EndTime { get; set; }
 
-        public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
+        public TimeSpan RemainingTime { get; set; }
 
-        public string UserUserName { get; set; }
+        public string UserId { get; set; }
 
         public ICollection<PictureDisplayViewModel> Pictures { get; set; }
 
@@ -37,7 +38,7 @@ namespace AuctionSystem.Web.ViewModels.Item
         {
             if (!pictures.Any())
             {
-                return WebConstants.DefaultPictureUrl;
+                return AppConstants.DefaultPictureUrl;
             }
             var firstPic = pictures.First();
 

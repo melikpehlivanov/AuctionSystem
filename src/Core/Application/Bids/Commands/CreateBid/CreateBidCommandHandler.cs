@@ -55,7 +55,7 @@
                 })
                 .OrderByDescending(b => b.Amount)
                 .FirstOrDefaultAsync(b => b.ItemId == request.ItemId, cancellationToken);
-            if (request.Amount <= currentHighestBid.Amount)
+            if (request.Amount <= currentHighestBid?.Amount)
             {
                 throw new BadRequestException("Invalid bid amount");
             }
@@ -70,7 +70,7 @@
 
             if (item == null)
             {
-                throw new NotFoundException(nameof(Item), request.ItemId);
+                throw new NotFoundException(nameof(Item));
             }
 
             if (request.UserId != this.currentUserService.UserId)

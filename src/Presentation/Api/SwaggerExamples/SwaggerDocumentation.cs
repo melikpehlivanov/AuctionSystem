@@ -25,6 +25,8 @@
                 "Pictures were uploaded successfully and their corresponding data will be returned";
 
             public const string SuccessfulDeleteRequestDescriptionMessage = "Picture is deleted successfully";
+
+            public const string SuccessfulGetPictureDetailsRequestDescriptionMessage = "Pictures were retrieved successfully and returned";
         }
 
         public static class CategoriesConstants

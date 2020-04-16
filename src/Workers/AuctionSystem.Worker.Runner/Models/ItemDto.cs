@@ -1,8 +1,10 @@
 ﻿namespace AuctionSystem.Worker.Runner.Models
 {
+    using System;
+
     public class ItemDto
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Title { get; set; }
 

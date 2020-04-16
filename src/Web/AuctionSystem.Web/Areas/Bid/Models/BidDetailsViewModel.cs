@@ -3,11 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Common.AutoMapping.Interfaces;
-    using Services.Models.Item;
+    using Application.Items.Queries.Details;
+    using global::Common.AutoMapping.Interfaces;
     using ViewModels.Picture;
 
-    public class BidDetailsViewModel : IMapWith<ItemDetailsServiceModel>
+    public class BidDetailsViewModel : IMapWith<ItemDetailsResponseModel>
     {
         public string Id { get; set; }
 
@@ -23,7 +23,7 @@
 
         public DateTime EndTime { get; set; }
 
-        public TimeSpan RemainingTime => this.EndTime - DateTime.UtcNow;
+        public TimeSpan RemainingTime => this.StartTime - this.EndTime;
 
         public string UserId { get; set; }
 

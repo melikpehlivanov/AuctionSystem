@@ -1,4 +1,5 @@
-﻿@model ContactUsViewModel
+﻿@using Application
+@model ContactUsViewModel
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Contact Us";
@@ -25,7 +26,7 @@
                 <i class="far fa-envelope"></i>
                 E-mail:
                 <div>
-                    <a class="text-dark" href="mailto:@WebConstants.AppMainEmailAddress">@WebConstants.AppMainEmailAddress</a>
+                    <a class="text-dark" href="mailto:@AppConstants.AppMainEmailAddress">@AppConstants.AppMainEmailAddress</a>
                 </div>
             </div>
             <div>

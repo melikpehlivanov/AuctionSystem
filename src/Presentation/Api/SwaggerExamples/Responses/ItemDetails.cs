@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Application.Common.Models;
-    using Application.Items.Queries.Details.Models;
+    using Application.Items.Queries.Details;
     using Application.Pictures;
     using Swashbuckle.AspNetCore.Filters;
 

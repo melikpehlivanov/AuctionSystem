@@ -5,7 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\AuctionSystem.Common\AuctionSystem.Common.csproj" />
       <ProjectReference Include="..\..\Data\AuctionSystem.Models\AuctionSystem.Models.csproj" />
     </ItemGroup>
 

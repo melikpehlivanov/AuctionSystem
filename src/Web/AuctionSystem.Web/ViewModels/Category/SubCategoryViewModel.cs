@@ -1,11 +1,12 @@
 ﻿namespace AuctionSystem.Web.ViewModels.Category
 {
-    using Common.AutoMapping.Interfaces;
-    using Services.Models.SubCategory;
+    using System;
+    using Application.Categories.Queries.List;
+    using global::Common.AutoMapping.Interfaces;
 
-    public class SubCategoryViewModel : IMapWith<SubCategoryListingServiceModel>
+    public class SubCategoryViewModel : IMapWith<SubCategoriesDto>
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
     }

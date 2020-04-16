@@ -2,21 +2,22 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Application.Bids.Commands.CreateBid;
+    using Application.Common.Exceptions;
+    using Application.Common.Interfaces;
+    using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
-    using Services.Interfaces;
-    using Services.Models.Bid;
-    using Services.Models.Item;
 
     public class BidHub : Hub
     {
-        private readonly IBidService bidService;
-        private readonly IItemsService itemsService;
+        private readonly IMediator mediator;
+        private readonly ICurrentUserService currentUserService;
 
-        public BidHub(IBidService bidService, IItemsService itemsService)
+        public BidHub(IMediator mediator, ICurrentUserService currentUserService)
         {
-            this.bidService = bidService;
-            this.itemsService = itemsService;
+            this.mediator = mediator;
+            this.currentUserService = currentUserService;
         }
 
         public async Task Setup(string consoleId)
@@ -30,50 +31,38 @@
         }
 
         [Authorize]
-        public async Task CreateBidAsync(string bidAmount, string consoleId)
+        public async Task CreateBidAsync(string bidAmount, Guid itemId)
         {
-            if (bidAmount == null || consoleId == null)
+            if (bidAmount == null || itemId == Guid.Empty)
             {
                 return;
             }
 
             var isParsed = decimal.TryParse(bidAmount, out var parsedBidAmount);
-            
+
             if (!isParsed)
             {
                 return;
             }
 
-            var item = await this.itemsService.GetByIdAsync<ItemDetailsServiceModel>(consoleId);
-
-            if (item == null)
+            try
             {
-                return;
+                var userId = this.currentUserService.UserId;
+                await this.mediator.Send(new CreateBidCommand
+                {
+                    Amount = parsedBidAmount,
+                    ItemId = itemId,
+                    UserId = userId
+                });
+
+                await this.Clients.Groups(itemId.ToString()).SendAsync("ReceivedMessage", parsedBidAmount, userId);
             }
-            var canBid = this.bidService.CanBid(item);
-
-            if (!canBid || item.StartingPrice > parsedBidAmount)
+            catch (NotFoundException)
             {
-                return;
             }
-
-            var userId = this.Context.UserIdentifier;
-            var serviceModel = new BidCreateServiceModel
+            catch (BadRequestException)
             {
-                Amount = parsedBidAmount,
-                MadeOn = DateTime.UtcNow,
-                ItemId = item.Id,
-                UserId = userId
-            };
-
-            var isSucceeded = await this.bidService.CreateBidAsync(serviceModel);
-
-            if (!isSucceeded)
-            {
-                return;
             }
-
-            await this.Clients.Groups(consoleId).SendAsync("ReceivedMessage", parsedBidAmount, userId);
         }
     }
 }
