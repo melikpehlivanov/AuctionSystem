@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Admin\Commands\" />
-  </ItemGroup>
-
 </Project>

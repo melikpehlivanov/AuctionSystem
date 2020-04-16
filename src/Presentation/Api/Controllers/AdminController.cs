@@ -1,8 +1,10 @@
 ﻿namespace Api.Controllers
 {
+    using System;
     using System.Threading.Tasks;
     using Api.SwaggerExamples;
     using Application;
+    using Application.Admin.Commands.AddToRole;
     using Application.Admin.Queries.List;
     using Application.Common.Models;
     using Application.Items.Queries.List;
@@ -24,18 +26,30 @@
         }
 
         [HttpGet]
-        [Route("getAllUsers")]
         [SwaggerResponse(
-            StatusCodes.Status200OK, 
+            StatusCodes.Status200OK,
             SwaggerDocumentation.AdminConstants.SuccessfulGetRequestDescriptionMessage,
             typeof(PagedResponse<ListAllUsersResponseModel>))]
-        public async Task<IActionResult> GetAllUsers([FromQuery]PaginationQuery paginationQuery, [FromQuery]UsersFilter filters)
+        public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery, [FromQuery]UsersFilter filters)
         {
             var paginationFilter = this.mapper.Map<PaginationFilter>(paginationQuery);
             var model = this.mapper.Map<ListAllUsersQuery>(paginationFilter);
             model.Filters = this.mapper.Map<ListAllUsersQueryFilter>(filters);
             var result = await this.Mediator.Send(model);
             return Ok(result);
+        }
+
+        [HttpPost]
+        [SwaggerResponse(
+            StatusCodes.Status204NoContent,
+            SwaggerDocumentation.AdminConstants.SuccessfulPostRequestDescriptionMessage)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest,
+            SwaggerDocumentation.AdminConstants.BadRequestOnPostRequestDescriptionMessage,
+            typeof(BadRequestErrorModel))]
+        public async Task<IActionResult> Post([FromBody] AddUserToRoleCommand model)
+        {
+            await this.Mediator.Send(model);
+            return NoContent();
         }
     }
 }

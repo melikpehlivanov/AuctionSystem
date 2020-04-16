@@ -48,6 +48,9 @@
             return user;
         }
 
+        public async Task<AuctionUser> GetDomainUserByUsernameAsync(string username)
+            => await this.userManager.FindByNameAsync(username);
+
         public async Task<User> GetUserByIdAsync(string id)
         {
             var result = await this.userManager.FindByIdAsync(id);
@@ -137,6 +140,18 @@
 
         public async Task AddToRoleAsync(AuctionUser user, string role)
             => await this.userManager.AddToRoleAsync(user, role);
+
+        public async Task<bool> AddToRoleAsync(string username, string role)
+        {
+            var user = await this.userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await this.userManager.AddToRoleAsync(user, role);
+            return result.Succeeded;
+        }
 
         public async Task<IList<string>> GetUserRolesAsync(string userId)
         {

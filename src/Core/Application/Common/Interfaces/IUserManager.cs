@@ -8,11 +8,13 @@
 
     public interface IUserManager
     {
+        Task<AuctionUser> GetDomainUserByUsernameAsync(string username);
+
         Task<User> GetUserByUsernameAsync(string id);
 
         Task<User> GetUserByIdAsync(string id);
 
-        Task<string> GetUserUsernameByIdAsync(string id);
+        Task<string> GetUserUsernameByIdAsync(string username);
 
         Task<Result> CreateUserAsync(string userName, string password, string fullName);
 
@@ -25,6 +27,8 @@
         Task CreateRoleAsync(IdentityRole role);
 
         Task AddToRoleAsync(AuctionUser user, string role);
+
+        Task<bool> AddToRoleAsync(string username, string role);
 
         Task<IList<string>> GetUserRolesAsync(string userId);
 

@@ -1,8 +1,11 @@
 ﻿namespace AuctionSystem.Web.Areas.Admin.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using Application.Admin.Commands.AddToRole;
     using Application.Admin.Queries.List;
+    using Application.Common.Exceptions;
     using AutoMapper;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
@@ -33,73 +36,35 @@
         [HttpPost]
         public async Task<IActionResult> AddToRole(string userEmail, string role)
         {
-            if (string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(userEmail))
+            try
             {
-                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            var user = await this.userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                this.ShowErrorMessage(NotificationMessages.UserNotFound);
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            var identityResult = await this.userManager.AddToRoleAsync(user, role);
-
-            var success = identityResult.Succeeded;
-            if (success)
-            {
+                await this.Mediator.Send(new AddUserToRoleCommand { Email = userEmail, Role = role });
                 this.ShowSuccessMessage(
                     string.Format(NotificationMessages.UserAddedToRole, userEmail, role));
+                return this.RedirectToAction(nameof(this.Index));
             }
-            else
+            catch (BadRequestException ex)
             {
-                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
+                this.ShowErrorMessage(ex.Message);
+                return this.RedirectToAction(nameof(this.Index));
             }
-
-            return this.RedirectToAction(nameof(this.Index));
         }
 
         [HttpPost]
         public async Task<IActionResult> RemoveFromRole(string userEmail, string role)
         {
-            if (string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(userEmail))
+            try
             {
-                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            var user = await this.userManager.FindByEmailAsync(userEmail);
-            if (user == null)
-            {
-                this.ShowErrorMessage(NotificationMessages.UserNotFound);
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            var currentLoggedUser = await this.userManager.GetUserAsync(this.User);
-
-            if (user.Email == currentLoggedUser.Email)
-            {
-                this.ShowErrorMessage(string.Format(NotificationMessages.UnableToRemoveSelf, role));
-                return this.RedirectToAction(nameof(this.Index));
-            }
-
-            var identityResult = await this.userManager.RemoveFromRoleAsync(user, role);
-
-            var success = identityResult.Succeeded;
-            if (success)
-            {
+                //await this.Mediator.Send(new AddUserToRoleCommand { Email = userEmail, Role = role });
                 this.ShowSuccessMessage(
                     string.Format(NotificationMessages.UserRemovedFromRole, userEmail, role));
+                return this.RedirectToAction(nameof(this.Index));
             }
-            else
+            catch (BadRequestException ex)
             {
-                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
+                this.ShowErrorMessage(ex.Message);
+                return this.RedirectToAction(nameof(this.Index));
             }
-
-            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }
