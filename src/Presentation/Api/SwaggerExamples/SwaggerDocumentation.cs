@@ -59,7 +59,9 @@
             public const string SuccessfulGetRequestDescriptionMessage = "Retrieves all users and returns them as a collection";
             public const string SuccessfulPostRequestDescriptionMessage = "Indicates that user is successfully added to the given role";
 
-            public const string BadRequestOnPostRequestDescriptionMessage = "Indicates that either the role or user data is invalid";
+            public const string BadRequestDescriptionMessage = "Indicates that either the role or user data is invalid";
+
+            public const string SuccessfulDeleteRequestDescriptionMessage = "Indicates that user is no longer administrator";
         }
     }
 }

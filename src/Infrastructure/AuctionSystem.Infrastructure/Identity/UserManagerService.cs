@@ -179,6 +179,18 @@
             return users.Select(r => r.Id).ToList();
         }
 
+        public async Task<bool> RemoveFromRoleAsync(string username, string role)
+        {
+            var user = await this.userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var result = await this.userManager.RemoveFromRoleAsync(user, role);
+            return result.Succeeded;
+        }
+
         public async Task<Result> DeleteUserAsync(AuctionUser user)
         {
             var result = await this.userManager.DeleteAsync(user);

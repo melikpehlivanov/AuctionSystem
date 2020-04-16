@@ -37,5 +37,7 @@
         Task<string> GetUserIdByUsernameAsync(string username);
 
         Task<IEnumerable<string>> GetUsersInRoleAsync(string role);
+
+        Task<bool> RemoveFromRoleAsync(string username, string role);
     }
 }

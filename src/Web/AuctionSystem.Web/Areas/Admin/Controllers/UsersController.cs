@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Application.Admin.Commands.CreateAdmin;
+    using Application.Admin.Commands.DeleteAdmin;
     using Application.Admin.Queries.List;
     using Application.Common.Exceptions;
     using AutoMapper;
@@ -15,12 +16,10 @@
     public class UsersController : AdminController
     {
         private readonly IMapper mapper;
-        private readonly UserManager<AuctionUser> userManager;
 
-        public UsersController(IMapper mapper, UserManager<AuctionUser> userManager)
+        public UsersController(IMapper mapper)
         {
             this.mapper = mapper;
-            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -55,7 +54,7 @@
         {
             try
             {
-                //await this.Mediator.Send(new AddUserToRoleCommand { Email = userEmail, Role = role });
+                await this.Mediator.Send(new DeleteAdminCommand { Email = userEmail, Role = role });
                 this.ShowSuccessMessage(
                     string.Format(NotificationMessages.UserRemovedFromRole, userEmail, role));
                 return this.RedirectToAction(nameof(this.Index));

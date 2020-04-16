@@ -5,6 +5,7 @@
     using Api.SwaggerExamples;
     using Application;
     using Application.Admin.Commands.CreateAdmin;
+    using Application.Admin.Commands.DeleteAdmin;
     using Application.Admin.Queries.List;
     using Application.Common.Models;
     using Application.Items.Queries.List;
@@ -25,6 +26,9 @@
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Lists all users with roles
+        /// </summary>
         [HttpGet]
         [SwaggerResponse(
             StatusCodes.Status200OK,
@@ -39,14 +43,33 @@
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates a new administrator
+        /// </summary>
         [HttpPost]
         [SwaggerResponse(
             StatusCodes.Status204NoContent,
             SwaggerDocumentation.AdminConstants.SuccessfulPostRequestDescriptionMessage)]
         [SwaggerResponse(StatusCodes.Status400BadRequest,
-            SwaggerDocumentation.AdminConstants.BadRequestOnPostRequestDescriptionMessage,
+            SwaggerDocumentation.AdminConstants.BadRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Post([FromBody] CreateAdminCommand model)
+        {
+            await this.Mediator.Send(model);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Deletes administrator
+        /// </summary>
+        [HttpDelete]
+        [SwaggerResponse(
+            StatusCodes.Status204NoContent,
+            SwaggerDocumentation.AdminConstants.SuccessfulDeleteRequestDescriptionMessage)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest,
+            SwaggerDocumentation.AdminConstants.BadRequestDescriptionMessage,
+            typeof(BadRequestErrorModel))]
+        public async Task<IActionResult> Delete([FromBody] DeleteAdminCommand model)
         {
             await this.Mediator.Send(model);
             return NoContent();
