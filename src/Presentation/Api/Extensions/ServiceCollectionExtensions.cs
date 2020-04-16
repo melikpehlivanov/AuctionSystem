@@ -6,11 +6,15 @@
     using System.Reflection;
     using System.Text;
     using Application.AppSettingsModels;
+    using Application.Common.Interfaces;
+    using AuctionSystem.Infrastructure;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+    using Services;
     using Swashbuckle.AspNetCore.Filters;
     using Swashbuckle.AspNetCore.Swagger;
 
@@ -77,6 +81,17 @@
 
             return services;
         }
+
+        public static IServiceCollection AddRequiredServices(this IServiceCollection services)
+            => services
+                .AddScoped<ICurrentUserService, CurrentUserService>()
+                .AddScoped<IUriService>(provider =>
+                {
+                    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+                    var request = accessor.HttpContext.Request;
+                    var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent(), request.Path);
+                    return new UriService(absoluteUri);
+                });
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
             => services

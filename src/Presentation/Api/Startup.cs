@@ -1,7 +1,6 @@
 namespace Api
 {
     using Application;
-    using Application.Common.Interfaces;
     using Application.Users.Commands.CreateUser;
     using AuctionSystem.Infrastructure;
     using Common;
@@ -9,14 +8,12 @@ namespace Api
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Persistance;
-    using Services;
 
     public class Startup
     {
@@ -44,14 +41,7 @@ namespace Api
                 .AddCloudinarySettings(this.Configuration)
                 .AddSendGridSettings(this.Configuration)
                 .AddJwtAuthentication(services.AddJwtSecret(this.Configuration))
-                .AddScoped<ICurrentUserService, CurrentUserService>()
-                .AddScoped<IUriService>(provider =>
-                {
-                    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
-                    var request = accessor.HttpContext.Request;
-                    var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent(), request.Path);
-                    return new UriService(absoluteUri);
-                })
+                .AddRequiredServices()
                 .AddSwagger()
                 .AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
@@ -72,7 +62,7 @@ namespace Api
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseSwaggerUi()
-                //Allow anything for now
+                //TODO: Allow only client app when it's implemented
                 .UseCors(options => options
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
