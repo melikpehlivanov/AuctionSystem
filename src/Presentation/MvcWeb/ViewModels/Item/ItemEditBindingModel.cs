@@ -5,6 +5,7 @@ namespace MvcWeb.ViewModels.Item
     using System.ComponentModel.DataAnnotations;
     using Application.Items.Commands.UpdateItem;
     using Application.Items.Queries.Details;
+    using Common;
     using Common.AutoMapping.Interfaces;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Picture;
@@ -26,12 +27,12 @@ namespace MvcWeb.ViewModels.Item
 
         [Required]
         [Display(Name = "Starting price")]
-        [Range(typeof(decimal), ModelConstants.Item.MinStartingPrice, ModelConstants.Item.MaxStartingPrice)]
+        [Range(typeof(decimal), ModelConstants.Item.MinStartingPriceAsString, ModelConstants.Item.MaxStartingPriceAsString)]
         public decimal StartingPrice { get; set; }
 
         [Required]
         [Display(Name = "Minimal price increase allowed")]
-        [Range(typeof(decimal), ModelConstants.Item.MinMinIncrease, ModelConstants.Item.MaxMinIncrease)]
+        [Range(typeof(decimal), ModelConstants.Item.MinMinIncreaseAsString, ModelConstants.Item.MaxMinIncreaseAsString)]
         public decimal MinIncrease { get; set; }
 
         [Required]
