@@ -7,9 +7,9 @@
     {
         public CreateUserCommandValidator()
         {
-            this.RuleFor(p => p.Email).NotNull().Matches(ModelConstants.User.EmailRegex);
-            this.RuleFor(p => p.FullName).NotNull().MaximumLength(ModelConstants.User.FullNameMaxLength);
-            this.RuleFor(p => p.Password).NotNull();
+            this.RuleFor(p => p.Email).NotEmpty().Matches(ModelConstants.User.EmailRegex);
+            this.RuleFor(p => p.FullName).NotEmpty().MaximumLength(ModelConstants.User.FullNameMaxLength);
+            this.RuleFor(p => p.Password).NotEmpty();
         }
     }
 }

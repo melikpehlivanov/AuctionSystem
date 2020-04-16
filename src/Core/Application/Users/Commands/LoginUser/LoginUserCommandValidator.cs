@@ -7,8 +7,8 @@
     {
         public LoginUserCommandValidator()
         {
-            this.RuleFor(p => p.Email).NotNull().Matches(ModelConstants.User.EmailRegex);
-            this.RuleFor(p => p.Password).NotNull();
+            this.RuleFor(p => p.Email).NotEmpty().Matches(ModelConstants.User.EmailRegex);
+            this.RuleFor(p => p.Password).NotEmpty();
         }
     }
 }
