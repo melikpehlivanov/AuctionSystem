@@ -1,9 +1,10 @@
-﻿@model MvcWeb.Areas.Bid.Models.BidDetailsViewModel
+﻿@model BidDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Title;    
+    ViewData["Title"] = Model.Title;
     var mainImage = Model.Pictures.Select(p => p.Url).FirstOrDefault();
-    var tenPercentHigherThanTheBiggestBid = (Model.HighestBid + Model.HighestBid * (decimal)0.1) != 0 ? (Model.HighestBid + Model.HighestBid * (decimal)0.1).ToString("f2") : (Model.StartingPrice + Model.StartingPrice * (decimal)0.1).ToString("F2");
+    var suggestedBid = (Model.HighestBid == 0 ? Model.StartingPrice : Model.HighestBid + Model.MinIncrease)
+        .ToString("F2");
 }
 
 <div class="container">
@@ -94,7 +95,7 @@
                     {
                         if (Model.EndTime > DateTime.UtcNow)
                         {
-                            <h1 class="text-center">Highest bid atm</h1>
+                            <h1 class="text-center">Highest bid</h1>
                         }
                         else
                         {
@@ -125,16 +126,16 @@
                         <div class="form-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">€</span>
-                                <input id="bid-amount" maxlength="12" required type="number" name="bidAmount" class="form-control" placeholder="Amount (minimum - @Model.StartingPrice)"
+                                <input id="bid-amount" type="number" class="form-control" placeholder="Amount to bid"
                                        min="@Model.StartingPrice.ToString("F2")">
                             </div>
-                            <button class="btn btn-danger btn-lg btn-block mt-1" type="submit" id="button-addon2">Bid</button>
+                            <button class="btn btn-danger btn-lg btn-block mt-1" type="button" id="button-bid">Bid</button>
                         </div>
                         <div class="text-center mb-2">
 
                             <div>
-                                <button id="bid-10-percent-higher-button" class="btn btn-primary btn-lg d-inline-block" type="submit">
-                                    Bid: 10% higher (@tenPercentHigherThanTheBiggestBid)
+                                <button id="suggested-bid-button" class="btn btn-primary btn-lg d-inline-block" type="button">
+                                    Bid €@suggestedBid
                                 </button>
                             </div>
                         </div>
@@ -157,10 +158,12 @@
 </div>
 
 <input type="hidden" id="currentUserId" value="@Model.UserId" />
-<input type="hidden" id="consoleId" value="@Model.Id" />
+<input type="hidden" id="itemId" value="@Model.Id" />
 <input type="hidden" id="highestBid" value="@Model.HighestBid" />
+<input type="hidden" id="startingPrice" value="@Model.StartingPrice" />
+<input type="hidden" id="minIncrease" value="@Model.MinIncrease" />
 
-@* It's necessary id to be exactly like down below or js won't work *@
+@* It's necessary for id to be exactly like down below or js won't work *@
 <input type="hidden" id="end-time-id-for-calculator" value="@Model.EndTime.ToString("O")" />
 <input type="hidden" id="start-time-id-for-calculator" value="@Model.StartTime.ToString("O")" />
 

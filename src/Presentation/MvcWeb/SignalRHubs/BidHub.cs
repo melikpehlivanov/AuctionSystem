@@ -20,27 +20,20 @@
             this.currentUserService = currentUserService;
         }
 
-        public async Task Setup(string consoleId)
+        public async Task Setup(string itemId)
         {
-            if (consoleId == null)
+            if (itemId == null)
             {
                 return;
             }
 
-            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, consoleId);
+            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, itemId);
         }
 
         [Authorize]
-        public async Task CreateBidAsync(string bidAmount, Guid itemId)
+        public async Task CreateBidAsync(decimal bidAmount, string itemId)
         {
-            if (bidAmount == null || itemId == Guid.Empty)
-            {
-                return;
-            }
-
-            var isParsed = decimal.TryParse(bidAmount, out var parsedBidAmount);
-
-            if (!isParsed)
+            if (itemId == null)
             {
                 return;
             }
@@ -50,12 +43,12 @@
                 var userId = this.currentUserService.UserId;
                 await this.mediator.Send(new CreateBidCommand
                 {
-                    Amount = parsedBidAmount,
-                    ItemId = itemId,
-                    UserId = userId
+                    Amount = bidAmount,
+                    ItemId = Guid.Parse(itemId),
+                    UserId = userId,
                 });
 
-                await this.Clients.Groups(itemId.ToString()).SendAsync("ReceivedMessage", parsedBidAmount, userId);
+                await this.Clients.Groups(itemId).SendAsync("ReceivedMessage", bidAmount, userId);
             }
             catch (NotFoundException)
             {

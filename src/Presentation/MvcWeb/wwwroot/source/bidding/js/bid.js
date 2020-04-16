@@ -1,10 +1,15 @@
 ﻿(function () {
     const euroSign = '€';
+    const enterKey = 13;
     const currentUserId = $('#currentUserId').val();
-    const consoleId = $('#consoleId').val();
+    const itemId = $('#itemId').val();
 
-    const bidInput = document.getElementById('bid-amount');
+    const startingPrice = parseFloat($('#startingPrice').val());
+    const minIncrease = parseFloat($('#minIncrease').val());
+
+    const bidInput = $('#bid-amount');
     const highestBidInput = $('#highestBid');
+    const bidButton = $('#button-bid');
 
     (function () {
         let connection =
@@ -14,7 +19,7 @@
 
         connection.start()
             .then(function () {
-                connection.invoke('Setup', consoleId);
+                connection.invoke('Setup', itemId);
             })
             .catch(function (err) {
                 return console.error(err.toString());
@@ -23,12 +28,12 @@
         connection.on('ReceivedMessage',
             function (bidAmount, userId) {
                 let highestBid = parseFloat(highestBidInput.val());
+
                 if (bidAmount > highestBid) {
-                    let nextValue = (bidAmount + (bidAmount * 0.1)).toFixed(2);
-                    changeCurrentBidValueOnTenPercentHigherBidButton(nextValue);
+                    changeCurrentPriceStatus(bidAmount);
+                    updateSuggestedBid();
                 }
 
-                changeCurrentPriceStatus(bidAmount);
 
                 let li;
                 if (currentUserId === userId) {
@@ -45,34 +50,21 @@
 
                 let messageArea = $('#chat-messages');
 
-                messageArea.append(li).fadeIn(350);
+                li.hide().appendTo(messageArea).fadeIn(350);
 
                 let chat = document.getElementsByClassName('chat');
                 chat[0].scrollTop = chat[0].scrollHeight;
             });
 
         function changeCurrentPriceStatus(currentBidAmount) {
-            let highestBid = highestBidInput.val();
 
-            if (currentBidAmount < highestBid) {
-                return;
-            }
-            if (highestBid < currentBidAmount) {
-                highestBidInput.attr('value', currentBidAmount);
-            }
+            highestBidInput.attr('value', currentBidAmount);
 
-            let digits = currentBidAmount.toFixed(2).toString().split('');
+            let digits = (euroSign + currentBidAmount.toFixed(2)).split('');
 
             let priceStorage = $('#price-storage');
             priceStorage.empty();
 
-            let currencySign = $('<div>')
-                .addClass('custom-price-card')
-                .append($('<span>')
-                    .addClass('text-white')
-                    .text(euroSign));
-
-            priceStorage.append(currencySign);
             digits.forEach(digit => {
                 let div = $('<div>')
                     .addClass('custom-price-card')
@@ -84,43 +76,46 @@
             });
         }
 
-        function changeCurrentBidValueOnTenPercentHigherBidButton(amount) {
-            $('#bid-10-percent-higher-button').text(`Bid: 10% higher (${amount})`);
+        function updateSuggestedBid() {
+            $('#suggested-bid-button').text(`Bid ${euroSign}${getMinBid().toFixed(2)}`);
         }
 
-        document.getElementById('button-addon2').addEventListener('click', function () {
-            let bidAmount = bidInput.value;
-            let bidMinAttribute = bidInput.min;
-            let parsedBidInput = parseFloat(highestBidInput.val());
+        function getMinBid() {
+            let highestBid = parseFloat(highestBidInput.val());
+            return highestBid === 0 ? startingPrice : highestBid + minIncrease;
+        }
 
-            let bidAmountId = '#bid-amount';
-            if (!bidAmount) {
-                $(bidAmountId).notify('Please enter some value in order to bid');
-                return;
-            }
-            if (parsedBidInput === 0 && bidAmount < bidMinAttribute) {
-                $(bidAmountId).notify(`Minimum bid amount ${bidMinAttribute}`);
-                return;
-            }
-            if (bidMinAttribute > bidAmount || bidAmount < parsedBidInput) {
-                $(bidAmountId).notify('You cannot bid lower amount than the current highest bid');
-                return;
-            }
+        bidButton.click(submitBid);
 
-            connection.invoke('CreateBidAsync', bidAmount, consoleId);
+        bidInput.on('keypress', function (e) {
+            if (e.which === enterKey) {
+                submitBid();
+            }
         });
 
-        document.getElementById('bid-10-percent-higher-button').addEventListener('click', function () {
-            let highestBid = parseFloat(highestBidInput.val());
-            let bidMinAttribute = parseFloat(bidInput.min);
-            let amount;
-            if (highestBid === 0) {
-                amount = bidMinAttribute + bidMinAttribute * 0.1;
-            } else {
-                amount = highestBid + highestBid * 0.1;
+        function submitBid() {
+            let enteredBid = bidInput.val();
+            if (!enteredBid) {
+                $(bidInput).notify('Please enter bidding amount');
+                return;
             }
 
-            connection.invoke('CreateBidAsync', amount, consoleId);
+            let bidAmount = parseFloat(enteredBid);
+
+            let minBid = getMinBid();
+
+            if (bidAmount < minBid) {
+                $(bidInput).notify(`You have to bid at least ${euroSign}${minBid.toFixed(2)}`);
+                return;
+            }
+
+            bidInput.val('');
+
+            connection.invoke('CreateBidAsync', bidAmount, itemId);
+        }
+
+        $('#suggested-bid-button').click(function () {
+            connection.invoke('CreateBidAsync', getMinBid(), itemId);
         });
     })();
 

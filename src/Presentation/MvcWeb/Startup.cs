@@ -37,8 +37,6 @@
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
-                .AddAutoMapper(typeof(DefaultProfile))
-                .AddScoped<ICurrentUserService, CurrentUserService>()
                 .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<ICache, Cache>()
                 .AddScoped<IUriService>(provider =>
