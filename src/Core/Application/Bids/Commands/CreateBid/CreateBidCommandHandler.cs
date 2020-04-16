@@ -57,7 +57,7 @@
             if (request.Amount <= currentHighestBid?.Amount 
                 || request.Amount <= currentHighestBid?.StartingPrice)
             {
-                throw new BadRequestException("Invalid bid amount");
+                throw new BadRequestException(ExceptionMessages.Bid.InvalidBidAmount);
             }
         }
 
@@ -81,13 +81,15 @@
             if (item.StartTime >= this.dateTime.UtcNow)
             {
                 //Bid hasn't started yet.
-                throw new BadRequestException($"Biding for item {request.ItemId} hasn't started yet");
+                throw new BadRequestException(
+                    string.Format(ExceptionMessages.Bid.BiddingNotStartedYet, request.ItemId));
             }
 
             if (item.EndTime <= this.dateTime.UtcNow)
             {
-                //Bidding has ended
-                throw new BadRequestException($"Bidding for item {request.ItemId} have ended.");
+                // Bidding has ended
+                throw new BadRequestException(
+                    string.Format(ExceptionMessages.Bid.BiddingHasEnded, request.ItemId));
             }
         }
     }

@@ -20,7 +20,7 @@
             var result = await this.userManager.CreateUserAsync(request.Email, request.Password, request.FullName);
             if (!result.Succeeded)
             {
-                throw new BadRequestException("User was not created successfully");
+                throw new BadRequestException(ExceptionMessages.User.UserNotCreatedSuccessfully);
             }
 
             return Unit.Value;

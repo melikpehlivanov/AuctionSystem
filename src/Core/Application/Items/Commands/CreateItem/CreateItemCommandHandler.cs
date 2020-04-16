@@ -38,7 +38,7 @@
             if (this.userService.UserId == null
                 || !await this.context.SubCategories.AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
             {
-                throw new BadRequestException("An error occured while creating item.");
+                throw new BadRequestException(ExceptionMessages.Item.CreateItemErrorMessage);
             }
 
             var item = this.mapper.Map<Item>(request);

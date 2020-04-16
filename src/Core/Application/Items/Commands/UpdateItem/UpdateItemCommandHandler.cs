@@ -34,7 +34,7 @@
                 .SubCategories
                 .AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
             {
-                throw new BadRequestException("Subcategory does not exist!");
+                throw new BadRequestException(ExceptionMessages.Item.SubCategoryDoesNotExist);
             }
 
             item.Title = request.Title;

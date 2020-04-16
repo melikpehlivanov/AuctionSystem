@@ -20,13 +20,14 @@
             //TODO: Add User as default role in db
             if (!request.Role.Equals(AppConstants.AdministratorRole))
             {
-                throw new BadRequestException("Invalid role");
+                throw new BadRequestException(ExceptionMessages.Admin.InvalidRole);
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(request.Email, request.Role);
             if (!result)
             {
-                throw new BadRequestException($"Something went wrong while removing user from {request.Role} role");
+                throw new BadRequestException(string.Format(
+                    ExceptionMessages.Admin.UserNotRemovedSuccessfullyFromRole, request.Role));
             }
 
             return Unit.Value;

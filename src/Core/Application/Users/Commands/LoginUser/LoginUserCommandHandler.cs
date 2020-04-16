@@ -24,7 +24,7 @@
             var (result, userId) = await this.userManager.CheckCredentials(request.Email, request.Password);
             if (!result.Succeeded)
             {
-                throw new BadRequestException("Invalid credentials");
+                throw new BadRequestException(ExceptionMessages.User.InvalidCredentials);
             }
 
             var jwtToken = await this.mediator
