@@ -1,5 +1,6 @@
 ﻿namespace Application.Pictures.Queries
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -11,7 +12,7 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetPictureDetailsQueryHandler : IRequestHandler<GetPictureDetailsQuery, MultiResponse<PictureDetailsResponseModel>>
+    public class GetPictureDetailsQueryHandler : IRequestHandler<GetPictureDetailsQuery, Response<PictureDetailsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -22,19 +23,20 @@
             this.mapper = mapper;
         }
 
-        public async Task<MultiResponse<PictureDetailsResponseModel>> Handle(GetPictureDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<PictureDetailsResponseModel>> Handle(GetPictureDetailsQuery request, CancellationToken cancellationToken)
         {
             var picture = await this.context
                 .Pictures
+                .Where(p => p.Id == request.Id)
                 .ProjectTo<PictureDetailsResponseModel>(this.mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (picture == null)
             {
                 throw new NotFoundException(nameof(Picture));
             }
 
-            return new MultiResponse<PictureDetailsResponseModel>(picture);
+            return new Response<PictureDetailsResponseModel>(picture);
         }
     }
 }

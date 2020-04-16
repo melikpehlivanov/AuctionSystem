@@ -52,11 +52,12 @@
             try
             {
                 var picture = await this.Mediator.Send(new GetPictureDetailsQuery(pictureId));
-                await this.Mediator.Send(new DeletePictureCommand { ItemId = picture.Data.FirstOrDefault().ItemId, PictureId = pictureId });
+                await this.Mediator.Send(new DeletePictureCommand { ItemId = picture.Data.ItemId, PictureId = pictureId });
                 return this.Json(new object());
             }
             catch (NotFoundException)
             {
+                this.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return this.NotFound();
             }
             catch (ValidationException)

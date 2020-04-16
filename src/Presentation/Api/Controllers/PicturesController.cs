@@ -24,7 +24,7 @@
         [SwaggerResponse(
             StatusCodes.Status200OK,
             SwaggerDocumentation.PictureConstants.SuccessfulGetPictureDetailsRequestDescriptionMessage,
-            typeof(MultiResponse<PictureDetailsResponseModel>))]
+            typeof(Response<PictureDetailsResponseModel>))]
         [SwaggerResponse(
             StatusCodes.Status404NotFound,
             SwaggerDocumentation.PictureConstants.BadRequestDescriptionMessage,

@@ -4,7 +4,7 @@
     using Common.Models;
     using MediatR;
 
-    public class GetPictureDetailsQuery : IRequest<MultiResponse<PictureDetailsResponseModel>>
+    public class GetPictureDetailsQuery : IRequest<Response<PictureDetailsResponseModel>>
     {
         public GetPictureDetailsQuery(Guid id)
         {
