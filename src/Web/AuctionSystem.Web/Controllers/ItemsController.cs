@@ -88,6 +88,7 @@ namespace AuctionSystem.Web.Controllers
                 return this.RedirectToHome();
             }
 
+            //TODO: Could use the returned pagination
             var allItems = items.Select(this.mapper.Map<ItemListingDto>)
                 .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
 

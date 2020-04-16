@@ -23,7 +23,7 @@
             typeof(BadRequestErrorModel))]
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
-            SwaggerDocumentation.BidConstants.UnauthorizedOnPostRequestDescriptionMessage)]
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status404NotFound,
             SwaggerDocumentation.BidConstants.NotFoundOnPostRequestDescriptionMessage,

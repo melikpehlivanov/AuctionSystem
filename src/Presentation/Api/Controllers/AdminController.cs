@@ -16,7 +16,7 @@
     using Models;
     using Swashbuckle.AspNetCore.Annotations;
 
-    [Authorize(AppConstants.AdministratorRole)]
+    [Authorize(Roles = AppConstants.AdministratorRole)]
     public class AdminController : BaseController
     {
         private readonly IMapper mapper;
@@ -34,6 +34,9 @@
             StatusCodes.Status200OK,
             SwaggerDocumentation.AdminConstants.SuccessfulGetRequestDescriptionMessage,
             typeof(PagedResponse<ListAllUsersResponseModel>))]
+        [SwaggerResponse(
+            StatusCodes.Status401Unauthorized, 
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Get([FromQuery]PaginationQuery paginationQuery, [FromQuery]UsersFilter filters)
         {
             var paginationFilter = this.mapper.Map<PaginationFilter>(paginationQuery);
@@ -53,6 +56,9 @@
         [SwaggerResponse(StatusCodes.Status400BadRequest,
             SwaggerDocumentation.AdminConstants.BadRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status401Unauthorized,
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Post([FromBody] CreateAdminCommand model)
         {
             await this.Mediator.Send(model);
@@ -69,6 +75,9 @@
         [SwaggerResponse(StatusCodes.Status400BadRequest,
             SwaggerDocumentation.AdminConstants.BadRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status401Unauthorized,
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Delete([FromBody] DeleteAdminCommand model)
         {
             await this.Mediator.Send(model);

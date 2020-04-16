@@ -2,11 +2,12 @@
 {
     public static class SwaggerDocumentation
     {
+        public const string UnauthorizedDescriptionMessage = "Indicates that users need to be authorized in order to access it";
+
         public static class ItemConstants
         {
             public const string NotFoundDescriptionMessage = "Indicates that item does not exist";
             public const string BadRequestDescriptionMessage = "Indicates that the provided data is invalid or something else went wrong";
-            public const string UnauthorizedDescriptionMessage = "Indicates that authorization is required";
 
             public const string SuccessfulGetRequestMessage = "Returns all items";
             public const string SuccessfulGetRequestWithIdDescriptionMessage = "Successfully found item and returns it";
@@ -48,7 +49,6 @@
         {
             public const string SuccessfulPostRequestDescriptionMessage = "Indicates that bid is created successfully";
             public const string BadRequestOnPostRequestDescriptionMessage = "Indicates that the data is invalid";
-            public const string UnauthorizedOnPostRequestDescriptionMessage = "Indicates that users need to be authorized in order to access it";
             public const string NotFoundOnPostRequestDescriptionMessage = "Indicates that such item does not exist";
 
             public const string GetHighestBidDescriptionMessage = "Retrieves the highest bid otherwise returns null";

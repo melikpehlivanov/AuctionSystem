@@ -76,7 +76,7 @@
             typeof(BadRequestErrorModel))]
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
-            SwaggerDocumentation.ItemConstants.UnauthorizedDescriptionMessage)]
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Post([FromBody] CreateItemCommand model)
         {
             var result = await this.Mediator.Send(model);
@@ -103,7 +103,7 @@
             typeof(NotFoundErrorModel))]
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
-            SwaggerDocumentation.ItemConstants.UnauthorizedDescriptionMessage)]
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Put(Guid id, [FromBody] UpdateItemCommand model)
         {
             if (id != model.Id)
@@ -130,7 +130,7 @@
             typeof(NotFoundErrorModel))]
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
-            SwaggerDocumentation.ItemConstants.UnauthorizedDescriptionMessage)]
+            SwaggerDocumentation.UnauthorizedDescriptionMessage)]
         public async Task<IActionResult> Delete(Guid id)
         {
             await this.Mediator.Send(new DeleteItemCommand(id));
