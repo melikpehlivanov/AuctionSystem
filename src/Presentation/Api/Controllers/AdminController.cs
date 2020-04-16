@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using Api.SwaggerExamples;
     using Application;
-    using Application.Admin.Commands.AddToRole;
+    using Application.Admin.Commands.CreateAdmin;
     using Application.Admin.Queries.List;
     using Application.Common.Models;
     using Application.Items.Queries.List;
@@ -46,7 +46,7 @@
         [SwaggerResponse(StatusCodes.Status400BadRequest,
             SwaggerDocumentation.AdminConstants.BadRequestOnPostRequestDescriptionMessage,
             typeof(BadRequestErrorModel))]
-        public async Task<IActionResult> Post([FromBody] AddUserToRoleCommand model)
+        public async Task<IActionResult> Post([FromBody] CreateAdminCommand model)
         {
             await this.Mediator.Send(model);
             return NoContent();

@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using Application.Admin.Commands.AddToRole;
+    using Application.Admin.Commands.CreateAdmin;
     using Application.Admin.Queries.List;
     using Application.Common.Exceptions;
     using AutoMapper;
@@ -38,7 +38,7 @@
         {
             try
             {
-                await this.Mediator.Send(new AddUserToRoleCommand { Email = userEmail, Role = role });
+                await this.Mediator.Send(new CreateAdminCommand { Email = userEmail, Role = role });
                 this.ShowSuccessMessage(
                     string.Format(NotificationMessages.UserAddedToRole, userEmail, role));
                 return this.RedirectToAction(nameof(this.Index));
