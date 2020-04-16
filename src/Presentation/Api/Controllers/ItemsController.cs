@@ -91,7 +91,7 @@
         [Authorize]
         [HttpPut("{id}")]
         [SwaggerResponse(
-            StatusCodes.Status204NoContent, 
+            StatusCodes.Status204NoContent,
             SwaggerDocumentation.ItemConstants.SuccessfulPutRequestDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
@@ -122,7 +122,7 @@
         [Authorize]
         [HttpDelete("{id}")]
         [SwaggerResponse(
-            StatusCodes.Status204NoContent, 
+            StatusCodes.Status204NoContent,
             SwaggerDocumentation.ItemConstants.SuccessfulDeleteRequestDescriptionMessage)]
         [SwaggerResponse(
             StatusCodes.Status404NotFound,

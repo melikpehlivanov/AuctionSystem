@@ -50,6 +50,8 @@
             public const string BadRequestOnPostRequestDescriptionMessage = "Indicates that the data is invalid";
             public const string UnauthorizedOnPostRequestDescriptionMessage = "Indicates that users need to be authorized in order to access it";
             public const string NotFoundOnPostRequestDescriptionMessage = "Indicates that such item does not exist";
+
+            public const string GetHighestBidDescriptionMessage = "Retrieves the highest bid otherwise returns null";
         }
     }
 }

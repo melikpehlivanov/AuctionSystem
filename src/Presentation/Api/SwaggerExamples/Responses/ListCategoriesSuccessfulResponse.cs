@@ -6,10 +6,10 @@
     using Application.Common.Models;
     using Swashbuckle.AspNetCore.Filters;
 
-    public class ListCategoriesSuccessfulResponse : IExamplesProvider<Response<ListCategoriesResponseModel>>
+    public class ListCategoriesSuccessfulResponse : IExamplesProvider<MultiResponse<ListCategoriesResponseModel>>
     {
-        public Response<ListCategoriesResponseModel> GetExamples()
-            => new Response<ListCategoriesResponseModel>(
+        public MultiResponse<ListCategoriesResponseModel> GetExamples()
+            => new MultiResponse<ListCategoriesResponseModel>(
                 new List<ListCategoriesResponseModel>()
                 {
                     new ListCategoriesResponseModel

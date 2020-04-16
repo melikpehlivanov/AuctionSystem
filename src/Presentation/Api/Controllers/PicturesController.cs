@@ -16,6 +16,10 @@
     [Authorize]
     public class PicturesController : BaseController
     {
+        /// <summary>
+        /// Get details for given picture
+        /// </summary>
+        /// <returns>Returns the corresponding picture</returns>
         [HttpGet("{id}")]
         [SwaggerResponse(
             StatusCodes.Status200OK,
@@ -25,14 +29,9 @@
             StatusCodes.Status404NotFound,
             SwaggerDocumentation.PictureConstants.BadRequestDescriptionMessage,
             typeof(NotFoundErrorModel))]
-        public async Task<IActionResult> Get(Guid id, [FromBody]GetPictureDetailsQuery model)
+        public async Task<IActionResult> Get(Guid id)
         {
-            if (id != model.Id)
-            {
-                return BadRequest();
-            }
-
-            var result = await this.Mediator.Send(model);
+            var result = await this.Mediator.Send(new GetPictureDetailsQuery(id));
             return Ok(result);
         }
 
@@ -44,7 +43,7 @@
         [SwaggerResponse(
             StatusCodes.Status200OK,
             SwaggerDocumentation.PictureConstants.SuccessfulGetRequestDescriptionMessage,
-            typeof(Response<PictureResponseModel>))]
+            typeof(MultiResponse<PictureResponseModel>))]
         public async Task<IActionResult> Post([FromBody] CreatePictureCommand model)
         {
             var result = await this.Mediator.Send(model);
