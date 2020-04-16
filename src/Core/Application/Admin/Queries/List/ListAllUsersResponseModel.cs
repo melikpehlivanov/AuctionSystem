@@ -1,14 +1,16 @@
-﻿namespace AuctionSystem.Web.Areas.Admin.Models.Users
+﻿namespace Application.Admin.Queries.List
 {
     using System.Collections.Generic;
-    using Application.Admin.Queries.List;
+    using Domain.Entities;
     using global::Common.AutoMapping.Interfaces;
 
-    public class UserListingViewModel : IMapWith<ListAllUsersResponseModel>
+    public class ListAllUsersResponseModel : IMapWith<AuctionUser>
     {
         public string Id { get; set; }
 
         public string Email { get; set; }
+
+        public string FullName { get; set; }
 
         public ICollection<string> CurrentRoles { get; set; }
 

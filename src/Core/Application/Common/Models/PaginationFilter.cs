@@ -1,9 +1,10 @@
 ﻿namespace Application.Common.Models
 {
+    using Application.Admin.Queries.List;
     using global::Common.AutoMapping.Interfaces;
     using Items.Queries.List;
 
-    public class PaginationFilter : IMapWith<ListItemsQuery>
+    public class PaginationFilter : IMapWith<ListItemsQuery>, IMapWith<ListAllUsersQuery>
     {
         private const int DefaultPageNumber = 1;
 

@@ -158,6 +158,12 @@
             return user?.Id;
         }
 
+        public async Task<IEnumerable<string>> GetUsersInRoleAsync(string role)
+        {
+            var users = await this.userManager.GetUsersInRoleAsync(role);
+            return users.Select(r => r.Id).ToList();
+        }
+
         public async Task<Result> DeleteUserAsync(AuctionUser user)
         {
             var result = await this.userManager.DeleteAsync(user);

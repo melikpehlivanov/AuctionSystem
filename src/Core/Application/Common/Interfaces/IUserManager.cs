@@ -31,5 +31,7 @@
         Task<string> GetFirstUserId();
 
         Task<string> GetUserIdByUsernameAsync(string username);
+
+        Task<IEnumerable<string>> GetUsersInRoleAsync(string role);
     }
 }

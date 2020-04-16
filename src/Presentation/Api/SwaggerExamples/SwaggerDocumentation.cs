@@ -53,5 +53,10 @@
 
             public const string GetHighestBidDescriptionMessage = "Retrieves the highest bid otherwise returns null";
         }
+
+        public static class AdminConstants
+        {
+            public const string SuccessfulGetRequestDescriptionMessage = "Retrieves all users and returns them as a collection";
+        }
     }
 }
