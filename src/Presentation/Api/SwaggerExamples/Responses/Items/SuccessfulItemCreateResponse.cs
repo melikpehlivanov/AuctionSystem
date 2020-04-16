@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Responses
+﻿namespace Api.SwaggerExamples.Responses.Items
 {
     using System;
     using Application.Common.Models;

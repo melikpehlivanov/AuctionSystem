@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Requests
+﻿namespace Api.SwaggerExamples.Requests.Pictures
 {
     using System;
     using Application.Pictures.Commands.DeletePicture;

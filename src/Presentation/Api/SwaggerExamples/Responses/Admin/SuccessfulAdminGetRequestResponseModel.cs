@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Responses
+﻿namespace Api.SwaggerExamples.Responses.Admin
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Responses
+﻿namespace Api.SwaggerExamples.Responses.Pictures
 {
     using System;
     using System.Collections.Generic;

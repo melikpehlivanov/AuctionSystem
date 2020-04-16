@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Responses
+﻿namespace Api.SwaggerExamples.Responses.Users
 {
     using Application.Common.Models;
     using Application.Users.Commands.LoginUser;

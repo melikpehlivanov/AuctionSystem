@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Requests
+﻿namespace Api.SwaggerExamples.Requests.Admin
 {
     using Application.Admin.Commands.CreateAdmin;
     using Swashbuckle.AspNetCore.Filters;

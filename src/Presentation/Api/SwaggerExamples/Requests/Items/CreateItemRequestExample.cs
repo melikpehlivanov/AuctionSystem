@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Requests
+﻿namespace Api.SwaggerExamples.Requests.Items
 {
     using System;
     using Application.Items.Commands.CreateItem;

@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Requests
+﻿namespace Api.SwaggerExamples.Requests.Admin
 {
     using Application.Admin.Commands.DeleteAdmin;
     using Swashbuckle.AspNetCore.Filters;

@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Requests
+﻿namespace Api.SwaggerExamples.Requests.Bids
 {
     using System;
     using Application.Bids.Commands.CreateBid;

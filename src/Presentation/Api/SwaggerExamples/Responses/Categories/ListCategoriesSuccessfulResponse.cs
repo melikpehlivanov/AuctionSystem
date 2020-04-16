@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Responses
+﻿namespace Api.SwaggerExamples.Responses.Categories
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Api.SwaggerExamples.Requests
+﻿namespace Api.SwaggerExamples.Requests.Users
 {
     using Application.Users.Commands.CreateUser;
     using Swashbuckle.AspNetCore.Filters;
