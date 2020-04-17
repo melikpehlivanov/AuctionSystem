@@ -2,7 +2,7 @@
 {
     using System;
 
-    public static class Constants
+    public static class DataConstants
     {
         public static readonly string SampleUserId = "8490931b-67b9-4784-a231-99c898636ee6";
         public static readonly string SampleAdminUserId = "0ef2317e-326e-4457-8cf9-7ee57ea4385f";

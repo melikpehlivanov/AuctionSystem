@@ -16,7 +16,7 @@ namespace Application.UnitTests.Setup
         public static AuctionSystemDbContext Create()
         {
             var currentUserServiceMock = new Mock<ICurrentUserService>();
-            currentUserServiceMock.Setup(m => m.UserId).Returns(Constants.SampleUserId);
+            currentUserServiceMock.Setup(m => m.UserId).Returns(DataConstants.SampleUserId);
 
             var options = new DbContextOptionsBuilder<AuctionSystemDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -43,13 +43,13 @@ namespace Application.UnitTests.Setup
         {
             var item = new Item
             {
-                Id = Constants.SampleItemId,
-                Title = Constants.SampleItemTitle,
-                Description = Constants.SampleItemDescription,
-                StartingPrice = Constants.SampleItemStartingPrice,
-                MinIncrease = Constants.SampleItemMinIncrease,
+                Id = DataConstants.SampleItemId,
+                Title = DataConstants.SampleItemTitle,
+                Description = DataConstants.SampleItemDescription,
+                StartingPrice = DataConstants.SampleItemStartingPrice,
+                MinIncrease = DataConstants.SampleItemMinIncrease,
                 StartTime = DateTime.UtcNow,
-                EndTime = Constants.SampleItemEndTime,
+                EndTime = DataConstants.SampleItemEndTime,
                 UserId = context.Users.FirstOrDefault().Id,
                 SubCategoryId = context.SubCategories.FirstOrDefault().Id,
             };
@@ -63,7 +63,7 @@ namespace Application.UnitTests.Setup
             context.Users.AddRange(
                 new AuctionUser
                 {
-                    Id = Constants.SampleUserId,
+                    Id = DataConstants.SampleUserId,
                     Email = "test@test.com",
                     FullName = "Test Testov",
                     UserName = "test@test.com",
@@ -71,7 +71,7 @@ namespace Application.UnitTests.Setup
                 },
                 new AuctionUser
                 {
-                    Id = Constants.SampleAdminUserId,
+                    Id = DataConstants.SampleAdminUserId,
                     Email = "admin@admin.com",
                     FullName = "Admin admin",
                     UserName = "admin@admin.com",
@@ -84,13 +84,13 @@ namespace Application.UnitTests.Setup
 
         private static void SeedCategory(AuctionSystemDbContext context)
         {
-            context.Categories.Add(new Category { Id = Constants.SampleCategoryId });
+            context.Categories.Add(new Category { Id = DataConstants.SampleCategoryId });
             context.SaveChanges();
         }
 
         private static void SeedSubCategory(AuctionSystemDbContext context)
         {
-            context.SubCategories.AddAsync(new SubCategory { Id = Constants.SampleSubCategoryId });
+            context.SubCategories.AddAsync(new SubCategory { Id = DataConstants.SampleSubCategoryId });
             context.SaveChangesAsync();
         }
     }

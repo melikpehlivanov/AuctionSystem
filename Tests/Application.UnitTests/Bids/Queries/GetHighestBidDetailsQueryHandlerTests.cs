@@ -28,8 +28,8 @@
         [Fact]
         public async Task GetHighestBidDetails_Should_Return_CorrectEntityAndModel()
         {
-            var expectedModel = new Bid { Id = Guid.NewGuid(), Amount = 1000, ItemId = Constants.SampleItemId };
-            await this.context.Bids.AddAsync(new Bid { Id = Guid.NewGuid(), Amount = 5, ItemId = Constants.SampleItemId });
+            var expectedModel = new Bid { Id = Guid.NewGuid(), Amount = 1000, ItemId = DataConstants.SampleItemId };
+            await this.context.Bids.AddAsync(new Bid { Id = Guid.NewGuid(), Amount = 5, ItemId = DataConstants.SampleItemId });
             await this.context.Bids.AddAsync(expectedModel);
             await this.context.SaveChangesAsync(CancellationToken.None);
 
