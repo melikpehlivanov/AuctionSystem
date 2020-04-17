@@ -21,6 +21,7 @@
     using Microsoft.EntityFrameworkCore;
     using FluentAssertions;
     using Application.Common.Exceptions;
+    using Application.Items.Commands;
 
     public class CreateItemCommandHandlerTests : CommandTestBase
     {
@@ -76,6 +77,27 @@
             newCount
                 .Should()
                 .Be(oldCount + 1);
+        }
+
+        [Fact]
+        public async Task Handle_GivenValidModel_Should_Not_ThrowException_AndReturnCorrectModel()
+        {
+            var command = new CreateItemCommand
+            {
+                Title = DataConstants.SampleItemTitle,
+                Description = DataConstants.SampleItemDescription,
+                StartingPrice = DataConstants.SampleItemStartingPrice,
+                MinIncrease = DataConstants.SampleItemMinIncrease,
+                StartTime = DateTime.UtcNow,
+                EndTime = DataConstants.SampleItemEndTime,
+                SubCategoryId = DataConstants.SampleSubCategoryId,
+            };
+
+            var result = await this.handler.Handle(command, CancellationToken.None);
+            result
+                .Data
+                .Should()
+                .BeAssignableTo<ItemResponseModel>();
         }
 
         [Fact]
