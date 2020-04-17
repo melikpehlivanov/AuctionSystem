@@ -27,8 +27,4 @@
     <ProjectReference Include="..\..\src\Infrastructure\Persistance\Persistance.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Admin\Queries\" />
-  </ItemGroup>
-
 </Project>
