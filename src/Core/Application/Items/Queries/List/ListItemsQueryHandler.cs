@@ -43,11 +43,14 @@
             }
 
             queryable = AddFiltersOnQuery(request.Filters, queryable);
-            var items = await queryable
+            var itemsList = await queryable
                 .Skip(skipCount)
                 .Take(request.PageSize)
-                .ProjectTo<ListItemsResponseModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
+
+            var items = itemsList
+                .Select(this.mapper.Map<ListItemsResponseModel>)
+                .ToList();
 
             var result = PaginationHelpers.CreatePaginatedResponse(this.uriService, request, items);
             return result;
@@ -57,7 +60,7 @@
         {
             if (!string.IsNullOrEmpty(filters?.Title))
             {
-                queryable = queryable.Where(i => i.Title.Contains(filters.Title));
+                queryable = queryable.Where(i => i.Title.ToLower().Contains(filters.Title.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(filters?.UserId))
