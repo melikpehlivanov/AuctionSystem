@@ -1,17 +1,16 @@
 ﻿namespace Application.UnitTests.Mappings
 {
-    using System;
-    using Items.Commands.CreateItem;
     using AutoMapper;
     using Domain.Entities;
     using FluentAssertions;
-    using Items.Queries.Details;
-    using Items.Queries.List;
     using Xunit;
     using Application.Admin.Queries.List;
     using Application.Bids.Commands.CreateBid;
     using Application.Bids.Queries.Details;
     using Application.Categories.Queries.List;
+    using Application.Items.Commands.CreateItem;
+    using Application.Items.Queries.Details;
+    using Application.Items.Queries.List;
     using Pictures;
     using Pictures.Queries;
 
