@@ -2,8 +2,6 @@
 {
     using System;
     using Items.Commands.CreateItem;
-    using Items.Commands.DeleteItem;
-    using Items.Commands.UpdateItem;
     using AutoMapper;
     using Domain.Entities;
     using FluentAssertions;
@@ -11,8 +9,8 @@
     using Items.Queries.List;
     using Xunit;
     using Application.Admin.Queries.List;
+    using Application.Bids.Commands.CreateBid;
     using Application.Bids.Queries.Details;
-    using Bids.Commands.CreateBid;
     using Categories.Queries.List;
     using Pictures;
     using Pictures.Queries;

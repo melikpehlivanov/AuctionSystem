@@ -2,7 +2,6 @@ namespace Application.UnitTests.Setup
 {
     using System;
     using AutoMapper;
-    using global::Common.AutoMapping.Profiles;
     using Persistance;
     using Xunit;
 
@@ -15,12 +14,7 @@ namespace Application.UnitTests.Setup
         {
             this.Context = AuctionSystemContextFactory.Create();
 
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DefaultProfile>();
-            });
-
-            this.Mapper = configurationProvider.CreateMapper();
+            this.Mapper = TestSetup.InitializeMapper();
         }
 
         public void Dispose()

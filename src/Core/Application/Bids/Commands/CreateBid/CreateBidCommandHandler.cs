@@ -33,7 +33,6 @@
         public async Task<Unit> Handle(CreateBidCommand request, CancellationToken cancellationToken)
         {
             await this.CheckWhetherItemIsEligibleForBidding(request, cancellationToken);
-            await this.CheckWhetherBidIsValid(request, cancellationToken);
 
             var bid = this.mapper.Map<Bid>(request);
             await this.context.Bids.AddAsync(bid, cancellationToken);
@@ -42,29 +41,21 @@
             return Unit.Value;
         }
 
-        private async Task CheckWhetherBidIsValid(CreateBidCommand request, CancellationToken cancellationToken)
-        {
-            var currentHighestBid = await this.context
-                .Bids
-                .Select(b => new
-                {
-                    b.Amount,
-                    b.ItemId,
-                    StartingPrice = b.Item.StartingPrice,
-                })
-                .OrderByDescending(b => b.Amount)
-                .FirstOrDefaultAsync(b => b.ItemId == request.ItemId, cancellationToken);
-            if (request.Amount <= currentHighestBid?.Amount 
-                || request.Amount <= currentHighestBid?.StartingPrice)
-            {
-                throw new BadRequestException(ExceptionMessages.Bid.InvalidBidAmount);
-            }
-        }
-
         private async Task CheckWhetherItemIsEligibleForBidding(CreateBidCommand request, CancellationToken cancellationToken)
         {
             var item = await this.context
                 .Items
+                .Select(i => new
+                {
+                    i.Id,
+                    i.StartingPrice,
+                    i.StartTime,
+                    i.EndTime,
+                    HighestBidAmount = i.Bids
+                        .Select(b=> b.Amount)
+                        .OrderByDescending(amount => amount)
+                        .FirstOrDefault()
+                })
                 .Where(i => i.Id == request.ItemId)
                 .SingleOrDefaultAsync(cancellationToken);
 
@@ -90,6 +81,12 @@
                 // Bidding has ended
                 throw new BadRequestException(
                     string.Format(ExceptionMessages.Bid.BiddingHasEnded, request.ItemId));
+            }
+
+            if (request.Amount <= item.HighestBidAmount
+                || request.Amount <= item.StartingPrice)
+            {
+                throw new BadRequestException(ExceptionMessages.Bid.InvalidBidAmount);
             }
         }
     }

@@ -11,7 +11,7 @@
     using FluentAssertions;
     using Moq;
     using Setup;
-    using Application.Common.Models;
+    using Common.Models;
     using Microsoft.EntityFrameworkCore;
     using AuctionSystem.Infrastructure;
     using AuctionSystem.Infrastructure.Identity;
