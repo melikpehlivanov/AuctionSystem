@@ -1,7 +1,9 @@
 ﻿namespace AuctionSystem.Infrastructure.Identity
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Application;
     using Application.Common.Interfaces;
@@ -28,7 +30,10 @@
 
         public async Task<User> GetUserByUsernameAsync(string username)
         {
-            var result = await this.userManager.FindByNameAsync(username);
+            var result = await this.context
+                .Users
+                .Where(u => u.UserName == username)
+                .SingleOrDefaultAsync();
             if (result == null)
             {
                 return null;
@@ -52,11 +57,15 @@
         }
 
         public async Task<AuctionUser> GetDomainUserByUsernameAsync(string username)
-            => await this.userManager.FindByNameAsync(username);
+            => await this.context.Users.Where(u => u.UserName == username).SingleOrDefaultAsync();
 
         public async Task<User> GetUserByIdAsync(string id)
         {
-            var result = await this.userManager.FindByIdAsync(id);
+            var result = await this.context
+                .Users
+                .Where(u => u.Id == id)
+                .SingleOrDefaultAsync();
+
             if (result == null)
             {
                 return null;
@@ -81,9 +90,13 @@
 
         public async Task<string> GetUserUsernameByIdAsync(string id)
         {
-            var result = await this.userManager.FindByIdAsync(id);
+            var user = await this.context
+                .Users
+                .Select(u => new { u.Id, u.UserName })
+                .Where(u => u.Id == id)
+                .SingleOrDefaultAsync();
 
-            return result.UserName;
+            return user.UserName;
         }
 
         public async Task<Result> CreateUserAsync(string userName, string password, string fullName)
@@ -107,19 +120,27 @@
 
         public async Task<Result> DeleteUserAsync(string userId)
         {
-            var user = this.userManager.Users.SingleOrDefault(u => u.Id == userId);
+            var user = await this.context
+                .Users
+                .Where(u => u.Id == userId)
+                .SingleOrDefaultAsync();
 
-            if (user != null)
+            if (user == null)
             {
-                return await this.DeleteUserAsync(user);
+                return Result.Success();
             }
 
+            var result = await this.DeleteUserAsync(user);
             return Result.Success();
         }
 
         public async Task<(Result Result, string UserId)> CheckCredentials(string email, string password)
         {
-            var user = await this.userManager.FindByNameAsync(email);
+            var user = await this.context
+                .Users
+                .Where(u => u.Email == email)
+                .SingleOrDefaultAsync();
+
             if (user == null)
             {
                 return (Result.Failure(new List<string> { "User not found" }), null);
@@ -144,29 +165,36 @@
         public async Task AddToRoleAsync(AuctionUser user, string role)
             => await this.userManager.AddToRoleAsync(user, role);
 
-        public async Task<bool> AddToRoleAsync(string username, string role)
+        public async Task<IdentityResult> AddToRoleAsync(string username, string role)
         {
-            var user = await this.userManager.FindByNameAsync(username);
+            var user = await this.context
+                .Users
+                .Where(u => u.UserName == username)
+                .SingleOrDefaultAsync();
+
             if (user == null)
             {
-                return false;
+                return IdentityResult.Failed();
             }
 
             var result = await this.userManager.AddToRoleAsync(user, role);
-            return result.Succeeded;
+            return result;
         }
 
         public async Task<IList<string>> GetUserRolesAsync(string userId)
         {
-            var user = await this.userManager.FindByIdAsync(userId);
-            var userRoles = await this.userManager.GetRolesAsync(user);
+            var user = await this.context
+                .Users
+                .Where(u => u.Id == userId)
+                .SingleOrDefaultAsync();
 
+            var userRoles = await this.userManager.GetRolesAsync(user);
             return userRoles;
         }
 
         public async Task<string> GetFirstUserId()
         {
-            var user = await this.userManager.Users.FirstAsync();
+            var user = await this.context.Users.FirstAsync();
             return user.Id;
         }
 
@@ -184,7 +212,11 @@
 
         public async Task<(bool isSuccess, string errorMessage)> RemoveFromRoleAsync(string username, string role)
         {
-            var user = await this.userManager.FindByNameAsync(username);
+            var user = await this.context
+                .Users
+                .Where(u => u.UserName == username)
+                .SingleOrDefaultAsync();
+
             if (user == null)
             {
                 return (false, "Such user does not exist");
@@ -200,11 +232,23 @@
             return (result.Succeeded, null);
         }
 
-        public async Task<Result> DeleteUserAsync(AuctionUser user)
+        public async Task<bool> DeleteUserAsync(AuctionUser user)
         {
-            var result = await this.userManager.DeleteAsync(user);
+            if (user == null)
+            {
+                return false;
+            }
 
-            return result.ToApplicationResult();
+            try
+            {
+                this.context.Users.Remove(user);
+                await this.context.SaveChangesAsync(CancellationToken.None);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

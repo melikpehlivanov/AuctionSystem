@@ -24,7 +24,7 @@
             }
 
             var result = await this.userManager.AddToRoleAsync(request.Email, request.Role);
-            if (!result)
+            if (!result.Succeeded)
             {
                 throw new BadRequestException(string.Format(
                     ExceptionMessages.Admin.UserNotAddedSuccessfullyToRole, request.Role));

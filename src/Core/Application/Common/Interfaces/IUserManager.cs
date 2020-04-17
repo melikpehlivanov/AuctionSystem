@@ -28,7 +28,7 @@
 
         Task AddToRoleAsync(AuctionUser user, string role);
 
-        Task<bool> AddToRoleAsync(string username, string role);
+        Task<IdentityResult> AddToRoleAsync(string username, string role);
 
         Task<IList<string>> GetUserRolesAsync(string userId);
 
