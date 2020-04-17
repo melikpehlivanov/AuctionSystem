@@ -81,7 +81,6 @@
         [Fact]
         public async Task Handle_GivenInvalidModel_Should__Throw_BadRequestException()
         {
-            var oldCount = await this.Context.Items.CountAsync();
             var command = new CreateItemCommand
             {
                 Title = DataConstants.SampleItemTitle,
