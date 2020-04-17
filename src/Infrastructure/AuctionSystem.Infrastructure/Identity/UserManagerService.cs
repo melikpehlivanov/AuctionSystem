@@ -210,7 +210,7 @@
             return users.Select(r => r.Id).ToList();
         }
 
-        public async Task<(bool isSuccess, string errorMessage)> RemoveFromRoleAsync(string username, string role)
+        public async Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(string username, string role)
         {
             var user = await this.context
                 .Users
@@ -219,17 +219,17 @@
 
             if (user == null)
             {
-                return (false, "Such user does not exist");
+                return (IdentityResult.Failed(), "Such user does not exist");
             }
 
             var administrators = await this.GetUsersInRoleAsync(role);
             if (administrators.Contains(user.Id))
             {
-                return (false, $"You can not remove yourself from role {role}!");
+                return (IdentityResult.Failed(), $"You can not remove yourself from role {role}!");
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
-            return (result.Succeeded, null);
+            return (result, null);
         }
 
         public async Task<bool> DeleteUserAsync(AuctionUser user)

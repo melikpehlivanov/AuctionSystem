@@ -24,7 +24,7 @@
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(request.Email, request.Role);
-            if (!result.isSuccess)
+            if (!result.identityResult.Succeeded)
             {
                 throw new BadRequestException(result.errorMessage);
             }

@@ -28,6 +28,7 @@ namespace Application.UnitTests.Setup
                 },
                 new AuctionUser
                 {
+                    Id = Constants.AdminUserId,
                     Email = "admin@admin.com",
                     FullName = "Admin admin",
                     UserName = "admin@admin.com",
