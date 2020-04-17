@@ -11,7 +11,7 @@
     using Application.Admin.Queries.List;
     using Application.Bids.Commands.CreateBid;
     using Application.Bids.Queries.Details;
-    using Categories.Queries.List;
+    using Application.Categories.Queries.List;
     using Pictures;
     using Pictures.Queries;
 

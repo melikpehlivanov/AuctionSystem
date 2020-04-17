@@ -1,13 +1,10 @@
 namespace Application.UnitTests.Setup
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using AuctionSystem.Infrastructure;
-    using Common;
     using Common.Interfaces;
     using Domain.Entities;
-    using global::Common;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -87,7 +84,7 @@ namespace Application.UnitTests.Setup
 
         private static void SeedCategory(AuctionSystemDbContext context)
         {
-            context.SubCategories.Add(new SubCategory { Id = Constants.SampleCategoryId });
+            context.Categories.Add(new Category { Id = Constants.SampleCategoryId });
             context.SaveChanges();
         }
 
