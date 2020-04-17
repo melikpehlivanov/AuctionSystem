@@ -8,6 +8,7 @@
     using Application.Common.Exceptions;
     using AuctionSystem.Infrastructure;
     using Common.Interfaces;
+    using Domain.Entities;
     using global::Common;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -36,7 +37,22 @@
         [Fact]
         public async Task Handle_GivenValidModel_Should_Not_ThrowException()
         {
-            var command = new CreateBidCommand { Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId };
+            var itemId = Guid.NewGuid();
+            await this.Context.Items.AddAsync(new Item
+            {
+                Id = itemId,
+                Title = DataConstants.SampleItemTitle,
+                Description = DataConstants.SampleItemDescription,
+                StartingPrice = DataConstants.SampleItemStartingPrice,
+                MinIncrease = DataConstants.SampleItemMinIncrease,
+                StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(10)),
+                EndTime = DataConstants.SampleItemEndTime,
+                SubCategoryId = DataConstants.SampleSubCategoryId,
+                UserId = DataConstants.SampleUserId,
+            });
+            await this.Context.SaveChangesAsync(CancellationToken.None);
+
+            var command = new CreateBidCommand { Amount = 1000, ItemId = itemId, UserId = DataConstants.SampleUserId };
             await this.handler.Handle(command, CancellationToken.None);
         }
 

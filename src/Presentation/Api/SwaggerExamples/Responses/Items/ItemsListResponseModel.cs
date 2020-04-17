@@ -27,6 +27,7 @@
                         MinIncrease = 10m,
                         StartTime = DateTime.UtcNow.AddDays(20),
                         EndTime = DateTime.UtcNow.AddDays(21),
+                        UserId = Guid.NewGuid().ToString(),
                         UserFullName = "test@test.com",
                         Pictures = new List<PictureResponseModel>
                         {
@@ -42,6 +43,7 @@
                         MinIncrease = 10m,
                         StartTime = DateTime.UtcNow.AddDays(50),
                         EndTime = DateTime.UtcNow.AddDays(55),
+                        UserId = Guid.NewGuid().ToString(),
                         UserFullName = "test1@test.com",
                         Pictures = new List<PictureResponseModel>
                         {
@@ -57,6 +59,7 @@
                         MinIncrease = 10m,
                         StartTime = DateTime.UtcNow.AddDays(100),
                         EndTime = DateTime.UtcNow.AddDays(110),
+                        UserId = Guid.NewGuid().ToString(),
                         UserFullName = "test2@test.com"
                     }
                 }

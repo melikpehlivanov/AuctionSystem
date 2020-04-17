@@ -22,7 +22,11 @@
 
         public DateTime EndTime { get; set; }
 
+        public string UserId { get; set; }
+
         public string UserFullName { get; set; }
+
+        public Guid SubCategoryId { get; set; }
 
         public ICollection<PictureResponseModel> Pictures { get; set; }
     }

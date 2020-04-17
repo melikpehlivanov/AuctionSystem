@@ -48,7 +48,7 @@ namespace Application.UnitTests.Setup
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = DateTime.UtcNow.AddDays(10),
                 EndTime = DataConstants.SampleItemEndTime,
                 UserId = context.Users.FirstOrDefault().Id,
                 SubCategoryId = context.SubCategories.FirstOrDefault().Id,
