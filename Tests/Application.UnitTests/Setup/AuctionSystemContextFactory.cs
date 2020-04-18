@@ -2,6 +2,7 @@ namespace Application.UnitTests.Setup
 {
     using System;
     using System.Linq;
+    using System.Threading;
     using AuctionSystem.Infrastructure;
     using Common.Interfaces;
     using Domain.Entities;
@@ -29,6 +30,7 @@ namespace Application.UnitTests.Setup
             SeedCategory(context);
             SeedSubCategory(context);
             SeedItems(context);
+            SeedPictures(context);
 
             return context;
         }
@@ -92,6 +94,11 @@ namespace Application.UnitTests.Setup
         {
             context.SubCategories.AddAsync(new SubCategory { Id = DataConstants.SampleSubCategoryId });
             context.SaveChangesAsync();
+        }
+        private static void SeedPictures(AuctionSystemDbContext context)
+        {
+            context.Pictures.AddAsync(new Picture { Id = DataConstants.SamplePictureId, ItemId = DataConstants.SampleItemId });
+            context.SaveChangesAsync(CancellationToken.None);
         }
     }
 }

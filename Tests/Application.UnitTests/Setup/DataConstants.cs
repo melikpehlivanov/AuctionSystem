@@ -19,5 +19,7 @@
 
         public static readonly Guid SampleSubCategoryId = Guid.Parse("386c2db8-5b8a-4744-8f60-7fcd3b1c7653");
         public static readonly Guid SampleCategoryId = Guid.Parse("fe712d64-226e-4007-8bf2-76c0ebb12e96");
+
+        public static readonly Guid SamplePictureId = Guid.Parse("73716e91-4989-488e-8f77-dcf46b126c3b");
     }
 }
