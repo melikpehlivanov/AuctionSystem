@@ -29,9 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcWeb", "Presentation\MvcW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7777D241-47F1-4935-B69B-1B43244A7E84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistance.IntegrationTests", "..\Tests\Persistance.IntegrationTests\Persistance.IntegrationTests.csproj", "{824331AF-7F14-49AE-B7EA-E76FDDD8884A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistance.IntegrationTests", "..\Tests\Persistance.IntegrationTests\Persistance.IntegrationTests.csproj", "{824331AF-7F14-49AE-B7EA-E76FDDD8884A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "..\Tests\Application.UnitTests\Application.UnitTests.csproj", "{CBC874E5-F86A-47EF-AC3A-E754D560BE95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "..\Tests\Application.UnitTests\Application.UnitTests.csproj", "{CBC874E5-F86A-47EF-AC3A-E754D560BE95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.IntegrationTests", "..\Tests\Api.IntegrationTests\Api.IntegrationTests.csproj", "{D39B97B8-617C-4B5D-B4D1-3578DEC91FF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{CBC874E5-F86A-47EF-AC3A-E754D560BE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBC874E5-F86A-47EF-AC3A-E754D560BE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBC874E5-F86A-47EF-AC3A-E754D560BE95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D39B97B8-617C-4B5D-B4D1-3578DEC91FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D39B97B8-617C-4B5D-B4D1-3578DEC91FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D39B97B8-617C-4B5D-B4D1-3578DEC91FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D39B97B8-617C-4B5D-B4D1-3578DEC91FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{53476561-3C30-49D1-BA63-CFAEB3C740EA} = {352ED3EF-4CE4-4A24-A9FC-9D2B51ABF298}
 		{824331AF-7F14-49AE-B7EA-E76FDDD8884A} = {7777D241-47F1-4935-B69B-1B43244A7E84}
 		{CBC874E5-F86A-47EF-AC3A-E754D560BE95} = {7777D241-47F1-4935-B69B-1B43244A7E84}
+		{D39B97B8-617C-4B5D-B4D1-3578DEC91FF5} = {7777D241-47F1-4935-B69B-1B43244A7E84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {33975802-C020-4095-964C-7BA121AFED57}
