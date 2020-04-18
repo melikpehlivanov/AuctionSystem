@@ -24,7 +24,8 @@
 
                     options.SignIn.RequireConfirmedEmail = true;
                 })
-                .AddEntityFrameworkStores<AuctionSystemDbContext>();
+                .AddEntityFrameworkStores<AuctionSystemDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped<IAuctionSystemDbContext>(provider => provider.GetService<AuctionSystemDbContext>());
             return services;
