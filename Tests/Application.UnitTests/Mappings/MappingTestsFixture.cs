@@ -7,10 +7,7 @@
     {
         public MappingTestsFixture()
         {
-            this.ConfigurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DefaultProfile>();
-            });
+            this.ConfigurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<DefaultProfile>(); });
 
             this.Mapper = this.ConfigurationProvider.CreateMapper();
         }

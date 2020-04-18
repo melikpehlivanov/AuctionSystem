@@ -15,7 +15,6 @@
     public class UpdateItemCommandHandlerTests : CommandTestBase
     {
         private readonly Mock<ICurrentUserService> currentUserServiceMock;
-
         private readonly UpdateItemCommandHandler handler;
 
         public UpdateItemCommandHandlerTests()
@@ -27,33 +26,6 @@
 
             this.handler =
                 new UpdateItemCommandHandler(this.Context, this.currentUserServiceMock.Object);
-        }
-
-        [Fact]
-        public async Task Handle_Given_ValidModel_Should_Not_ThrowException_And_Should_UpdateItem()
-        {
-            const string newTitle = "Updated title";
-            var command = new UpdateItemCommand
-            {
-                Id = DataConstants.SampleItemId,
-                Title = newTitle,
-                Description = DataConstants.SampleItemDescription,
-                StartingPrice = DataConstants.SampleItemStartingPrice,
-                MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
-                EndTime = DataConstants.SampleItemEndTime,
-                SubCategoryId = DataConstants.SampleSubCategoryId,
-            };
-
-            await this.handler.Handle(command, CancellationToken.None);
-            var result = await this.Context
-                .Items
-                .SingleOrDefaultAsync(i => i.Id == DataConstants.SampleItemId);
-
-            result
-                .Title
-                .Should()
-                .Be(newTitle);
         }
 
         [Theory]
@@ -74,6 +46,33 @@
         {
             var command = new UpdateItemCommand { Id = DataConstants.SampleItemId, SubCategoryId = Guid.Parse(subcategoryId) };
             await Assert.ThrowsAsync<BadRequestException>(() => this.handler.Handle(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Handle_Given_ValidModel_Should_Not_ThrowException_And_Should_UpdateItem()
+        {
+            const string newTitle = "Updated title";
+            var command = new UpdateItemCommand
+            {
+                Id = DataConstants.SampleItemId,
+                Title = newTitle,
+                Description = DataConstants.SampleItemDescription,
+                StartingPrice = DataConstants.SampleItemStartingPrice,
+                MinIncrease = DataConstants.SampleItemMinIncrease,
+                StartTime = DateTime.UtcNow,
+                EndTime = DataConstants.SampleItemEndTime,
+                SubCategoryId = DataConstants.SampleSubCategoryId
+            };
+
+            await this.handler.Handle(command, CancellationToken.None);
+            var result = await this.Context
+                .Items
+                .SingleOrDefaultAsync(i => i.Id == DataConstants.SampleItemId);
+
+            result
+                .Title
+                .Should()
+                .Be(newTitle);
         }
     }
 }

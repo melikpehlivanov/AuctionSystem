@@ -7,9 +7,6 @@ namespace Application.UnitTests.Setup
 
     public class QueryTestFixture : IDisposable
     {
-        public AuctionSystemDbContext Context { get; }
-        public IMapper Mapper { get; }
-
         public QueryTestFixture()
         {
             this.Context = AuctionSystemContextFactory.Create();
@@ -17,12 +14,16 @@ namespace Application.UnitTests.Setup
             this.Mapper = TestSetup.InitializeMapper();
         }
 
+        public AuctionSystemDbContext Context { get; }
+
+        public IMapper Mapper { get; }
+
         public void Dispose()
-        {
-            AuctionSystemContextFactory.Destroy(this.Context);
-        }
+            => AuctionSystemContextFactory.Destroy(this.Context);
     }
 
     [CollectionDefinition("QueryCollection")]
-    public class QueryCollection : ICollectionFixture<QueryTestFixture> { }
+    public class QueryCollection : ICollectionFixture<QueryTestFixture>
+    {
+    }
 }

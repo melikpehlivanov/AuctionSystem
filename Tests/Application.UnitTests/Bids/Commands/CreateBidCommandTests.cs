@@ -5,11 +5,10 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Bids.Commands.CreateBid;
-    using Application.Common.Exceptions;
     using AuctionSystem.Infrastructure;
+    using Common.Exceptions;
     using Common.Interfaces;
     using Domain.Entities;
-    using global::Common;
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using Setup;
@@ -34,8 +33,26 @@
                 new MachineDateTime());
         }
 
+        [Theory]
+        [InlineData("asdasfhgj")]
+        [InlineData("some invalid user ID")]
+        [InlineData("      ")]
+        [InlineData("     asdf@$%45rtygf ")]
+        public async Task Handle_Given_Model_With_WrongUserId_Should_Throw_NotFoundException(string userId)
+        {
+            var command = new CreateBidCommand { Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = userId };
+            await Assert.ThrowsAsync<NotFoundException>(() => this.handler.Handle(command, CancellationToken.None));
+        }
+
         [Fact]
-        public async Task Handle_GivenValidModel_Should_Not_ThrowException()
+        public async Task Handle_Given_Model_With_WrongItemId_Should_Throw_NotFoundException()
+        {
+            var command = new CreateBidCommand { Amount = 1000, ItemId = Guid.Empty, UserId = DataConstants.SampleUserId };
+            await Assert.ThrowsAsync<NotFoundException>(() => this.handler.Handle(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task Handle_Given_ValidModel_Should_Not_ThrowException()
         {
             var itemId = Guid.NewGuid();
             await this.Context.Items.AddAsync(new Item
@@ -48,7 +65,7 @@
                 StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(10)),
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
-                UserId = DataConstants.SampleUserId,
+                UserId = DataConstants.SampleUserId
             });
             await this.Context.SaveChangesAsync(CancellationToken.None);
 
@@ -56,24 +73,6 @@
             await this.handler.Handle(command, CancellationToken.None);
         }
 
-        [Fact]
-        public async Task Handle_GivenModel_With_WrongItemId_Should_Throw_NotFoundException()
-        {
-            var command = new CreateBidCommand { Amount = 1000, ItemId = Guid.Empty, UserId = DataConstants.SampleUserId };
-            await Assert.ThrowsAsync<NotFoundException>(() => this.handler.Handle(command, CancellationToken.None));
-        }
-
-        [Theory]
-        [InlineData("asdasfhgj")]
-        [InlineData("some invalid user ID")]
-        [InlineData("      ")]
-        [InlineData("     asdf@$%45rtygf ")]
-        public async Task Handle_GivenModel_With_WrongUserId_Should_Throw_NotFoundException(string userId)
-        {
-            var command = new CreateBidCommand { Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = userId };
-            await Assert.ThrowsAsync<NotFoundException>(() => this.handler.Handle(command, CancellationToken.None));
-        }
-        
         [Fact]
         public async Task Handle_Should_ThrowBadRequestException_InCase_Bidding_DidNotStartYet()
         {
@@ -109,7 +108,8 @@
         [Fact]
         public async Task Handle_Should_ThrowBadRequestException_InCase_BiddingAmount_IsLower_Than_TheCurrentHighestBid()
         {
-            var command = new CreateBidCommand { Amount = DataConstants.SampleItemStartingPrice - 1, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId };
+            var command = new CreateBidCommand
+                { Amount = DataConstants.SampleItemStartingPrice - 1, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId };
             await Assert.ThrowsAsync<BadRequestException>(() => this.handler.Handle(command, CancellationToken.None));
         }
     }

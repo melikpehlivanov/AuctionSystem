@@ -13,7 +13,6 @@ namespace Application.UnitTests.Setup
 
     public class AuctionSystemContextFactory
     {
-
         public static AuctionSystemDbContext Create()
         {
             var currentUserServiceMock = new Mock<ICurrentUserService>();
@@ -53,7 +52,7 @@ namespace Application.UnitTests.Setup
                 StartTime = DateTime.UtcNow.AddDays(10),
                 EndTime = DataConstants.SampleItemEndTime,
                 UserId = context.Users.FirstOrDefault().Id,
-                SubCategoryId = context.SubCategories.FirstOrDefault().Id,
+                SubCategoryId = context.SubCategories.FirstOrDefault().Id
             };
 
             context.Items.Add(item);
@@ -95,6 +94,7 @@ namespace Application.UnitTests.Setup
             context.SubCategories.AddAsync(new SubCategory { Id = DataConstants.SampleSubCategoryId });
             context.SaveChangesAsync();
         }
+
         private static void SeedPictures(AuctionSystemDbContext context)
         {
             context.Pictures.AddAsync(new Picture { Id = DataConstants.SamplePictureId, ItemId = DataConstants.SampleItemId });

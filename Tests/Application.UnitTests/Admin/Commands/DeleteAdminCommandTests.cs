@@ -33,7 +33,16 @@
         }
 
         [Fact]
-        public async Task Handle_GivenValidModel_Should_Not_ThrowException()
+        public async Task Handle_Given_InvalidRole_Should_Throw_BadRequestException()
+            => await Assert.ThrowsAsync<BadRequestException>(() =>
+                this.handler.Handle(new DeleteAdminCommand
+                {
+                    Email = "some random email",
+                    Role = "invalid role"
+                }, CancellationToken.None));
+
+        [Fact]
+        public async Task Handle_Given_ValidModel_Should_Not_ThrowException()
         {
             this.mockedUserManager
                 .Setup(x => x.RemoveFromRoleAsync(It.IsAny<AuctionUser>(), AppConstants.AdministratorRole))
@@ -48,15 +57,6 @@
         }
 
         [Fact]
-        public async Task Handle_GivenInvalidRole_Should_Throw_BadRequestException()
-            => await Assert.ThrowsAsync<BadRequestException>(() =>
-                this.handler.Handle(new DeleteAdminCommand()
-                {
-                    Email = "some random email",
-                    Role = "invalid role"
-                }, CancellationToken.None));
-
-        [Fact]
         public async Task Handle_InCaseOfRemoveUserFromRoleFailure_Should_Throw_BadRequestException()
         {
             this.mockedUserManager
@@ -64,7 +64,8 @@
                 .ReturnsAsync(IdentityResult.Success);
             this.mockedUserManager
                 .Setup(x => x.GetUsersInRoleAsync(AppConstants.AdministratorRole))
-                .ReturnsAsync(new List<AuctionUser>() { new AuctionUser { Id = DataConstants.SampleAdminUserId } });
+                .ReturnsAsync(new List<AuctionUser>
+                    { new AuctionUser { Id = DataConstants.SampleAdminUserId } });
 
             var command = new DeleteAdminCommand { Email = "admin@admin.com", Role = "Administrator" };
 

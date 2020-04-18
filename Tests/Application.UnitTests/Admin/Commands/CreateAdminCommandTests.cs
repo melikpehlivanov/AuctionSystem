@@ -3,9 +3,9 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Admin.Commands.CreateAdmin;
+    using AuctionSystem.Infrastructure.Identity;
     using Common.Exceptions;
     using Common.Interfaces;
-    using AuctionSystem.Infrastructure.Identity;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
     using Moq;
@@ -31,7 +31,15 @@
         }
 
         [Fact]
-        public async Task Handle_GivenValidModel_Should_Not_ThrowException()
+        public async Task Handle_Given_InvalidRole_Should_Throw_BadRequestException()
+            => await Assert.ThrowsAsync<BadRequestException>(() =>
+                this.handler.Handle(new CreateAdminCommand
+                {
+                    Email = "some random email", Role = "invalid role"
+                }, CancellationToken.None));
+
+        [Fact]
+        public async Task Handle_Given_ValidModel_Should_Not_ThrowException()
         {
             this.mockedUserManager
                 .Setup(x => x.AddToRoleAsync(It.IsAny<AuctionUser>(), AppConstants.AdministratorRole))
@@ -41,14 +49,6 @@
 
             await this.handler.Handle(command, CancellationToken.None);
         }
-
-        [Fact]
-        public async Task Handle_GivenInvalidRole_Should_Throw_BadRequestException()
-            => await Assert.ThrowsAsync<BadRequestException>(() =>
-                this.handler.Handle(new CreateAdminCommand()
-                {
-                    Email = "some random email", Role = "invalid role"
-                }, CancellationToken.None));
 
         [Fact]
         public async Task Handle_InCaseOfAddUserFailure_Should_Throw_BadRequestException()

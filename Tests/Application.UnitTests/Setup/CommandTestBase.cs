@@ -6,10 +6,6 @@ namespace Application.UnitTests.Setup
 
     public class CommandTestBase : IDisposable
     {
-        protected AuctionSystemDbContext Context { get; }
-
-        protected IMapper Mapper { get; }
-
         public CommandTestBase()
         {
             this.Context = AuctionSystemContextFactory.Create();
@@ -17,9 +13,11 @@ namespace Application.UnitTests.Setup
             this.Mapper = TestSetup.InitializeMapper();
         }
 
+        protected AuctionSystemDbContext Context { get; }
+
+        protected IMapper Mapper { get; }
+
         public void Dispose()
-        {
-            AuctionSystemContextFactory.Destroy(this.Context);
-        }
+            => AuctionSystemContextFactory.Destroy(this.Context);
     }
 }

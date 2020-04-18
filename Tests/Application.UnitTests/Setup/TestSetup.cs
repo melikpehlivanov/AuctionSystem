@@ -7,7 +7,7 @@
     {
         private static IMapper mapper;
         private static readonly object Sync = new object();
-        private static bool mapperInitialized = false;
+        private static bool mapperInitialized;
 
         public static IMapper InitializeMapper()
         {

@@ -1,9 +1,5 @@
 ﻿namespace Application.UnitTests.Mappings
 {
-    using AutoMapper;
-    using Domain.Entities;
-    using FluentAssertions;
-    using Xunit;
     using Application.Admin.Queries.List;
     using Application.Bids.Commands.CreateBid;
     using Application.Bids.Queries.Details;
@@ -13,14 +9,18 @@
     using Application.Items.Queries.List;
     using Application.Pictures;
     using Application.Pictures.Queries;
+    using AutoMapper;
+    using Domain.Entities;
+    using FluentAssertions;
+    using Xunit;
 
     public class MappingTests : IClassFixture<MappingTestsFixture>
     {
-        private readonly IMapper _mapper;
+        private readonly IMapper mapper;
 
         public MappingTests(MappingTestsFixture fixture)
         {
-            this._mapper = fixture.Mapper;
+            this.mapper = fixture.Mapper;
         }
 
         [Fact]
@@ -28,7 +28,7 @@
         {
             var entity = new AuctionUser();
 
-            var result = this._mapper.Map<ListAllUsersResponseModel>(entity);
+            var result = this.mapper.Map<ListAllUsersResponseModel>(entity);
 
             result.Should().NotBeNull();
             result.Should().BeOfType<ListAllUsersResponseModel>();
@@ -39,21 +39,10 @@
         {
             var entity = new Bid();
 
-            var result = this._mapper.Map<GetHighestBidDetailsResponseModel>(entity);
+            var result = this.mapper.Map<GetHighestBidDetailsResponseModel>(entity);
 
             result.Should().NotBeNull();
             result.Should().BeOfType<GetHighestBidDetailsResponseModel>();
-        }
-
-        [Fact]
-        public void ShouldMap_CreateBidCommand_To_Bid()
-        {
-            var entity = new CreateBidCommand();
-
-            var result = this._mapper.Map<Bid>(entity);
-
-            result.Should().NotBeNull();
-            result.Should().BeOfType<Bid>();
         }
 
         [Fact]
@@ -61,43 +50,21 @@
         {
             var entity = new Category();
 
-            var result = this._mapper.Map<ListCategoriesResponseModel>(entity);
+            var result = this.mapper.Map<ListCategoriesResponseModel>(entity);
 
             result.Should().NotBeNull();
             result.Should().BeOfType<ListCategoriesResponseModel>();
         }
 
         [Fact]
-        public void ShouldMap_SubCategory_To_SubCategoriesDto()
+        public void ShouldMap_CreateBidCommand_To_Bid()
         {
-            var entity = new SubCategory();
+            var entity = new CreateBidCommand();
 
-            var result = this._mapper.Map<SubCategoriesDto>(entity);
+            var result = this.mapper.Map<Bid>(entity);
 
             result.Should().NotBeNull();
-            result.Should().BeOfType<SubCategoriesDto>();
-        }
-
-        [Fact]
-        public void ShouldMap_Item_To_ListItemsResponseModel()
-        {
-            var entity = new Item();
-
-            var result = this._mapper.Map<ListItemsResponseModel>(entity);
-
-            result.Should().NotBeNull();
-            result.Should().BeOfType<ListItemsResponseModel>();
-        }
-
-        [Fact]
-        public void ShouldMap_Item_To_ListItemDetailsResponseModel()
-        {
-            var entity = new Item();
-
-            var result = this._mapper.Map<ItemDetailsResponseModel>(entity);
-
-            result.Should().NotBeNull();
-            result.Should().BeOfType<ItemDetailsResponseModel>();
+            result.Should().BeOfType<Bid>();
         }
 
         [Fact]
@@ -105,10 +72,32 @@
         {
             var entity = new CreateItemCommand();
 
-            var result = this._mapper.Map<Item>(entity);
+            var result = this.mapper.Map<Item>(entity);
 
             result.Should().NotBeNull();
             result.Should().BeOfType<Item>();
+        }
+
+        [Fact]
+        public void ShouldMap_Item_To_ListItemDetailsResponseModel()
+        {
+            var entity = new Item();
+
+            var result = this.mapper.Map<ItemDetailsResponseModel>(entity);
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ItemDetailsResponseModel>();
+        }
+
+        [Fact]
+        public void ShouldMap_Item_To_ListItemsResponseModel()
+        {
+            var entity = new Item();
+
+            var result = this.mapper.Map<ListItemsResponseModel>(entity);
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<ListItemsResponseModel>();
         }
 
         [Fact]
@@ -116,7 +105,7 @@
         {
             var entity = new Picture();
 
-            var result = this._mapper.Map<PictureDetailsResponseModel>(entity);
+            var result = this.mapper.Map<PictureDetailsResponseModel>(entity);
 
             result.Should().NotBeNull();
             result.Should().BeOfType<PictureDetailsResponseModel>();
@@ -127,10 +116,21 @@
         {
             var entity = new Picture();
 
-            var result = this._mapper.Map<PictureResponseModel>(entity);
+            var result = this.mapper.Map<PictureResponseModel>(entity);
 
             result.Should().NotBeNull();
             result.Should().BeOfType<PictureResponseModel>();
+        }
+
+        [Fact]
+        public void ShouldMap_SubCategory_To_SubCategoriesDto()
+        {
+            var entity = new SubCategory();
+
+            var result = this.mapper.Map<SubCategoriesDto>(entity);
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<SubCategoriesDto>();
         }
     }
 }

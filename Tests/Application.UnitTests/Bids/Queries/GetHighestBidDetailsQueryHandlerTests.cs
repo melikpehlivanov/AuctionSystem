@@ -1,17 +1,16 @@
 ﻿namespace Application.UnitTests.Bids.Queries
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Interfaces;
+    using Application.Bids.Queries.Details;
     using AutoMapper;
+    using Common.Interfaces;
+    using Common.Models;
+    using Domain.Entities;
+    using FluentAssertions;
     using Setup;
     using Xunit;
-    using Domain.Entities;
-    using System;
-    using Application.Bids.Queries.Details;
-    using Common.Models;
-    using FluentAssertions;
-    using SendGrid;
 
     [Collection("QueryCollection")]
     public class GetHighestBidDetailsQueryHandlerTests

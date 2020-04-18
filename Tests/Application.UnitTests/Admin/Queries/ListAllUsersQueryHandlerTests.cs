@@ -4,19 +4,19 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using Common.Interfaces;
-    using AutoMapper;
-    using Xunit;
     using Application.Admin.Queries.List;
-    using FluentAssertions;
-    using Moq;
-    using Setup;
-    using Common.Models;
-    using Microsoft.EntityFrameworkCore;
     using AuctionSystem.Infrastructure;
     using AuctionSystem.Infrastructure.Identity;
+    using AutoMapper;
+    using Common.Interfaces;
+    using Common.Models;
     using Domain.Entities;
+    using FluentAssertions;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Moq;
+    using Setup;
+    using Xunit;
 
     [Collection("QueryCollection")]
     public class ListAllUsersQueryHandlerTests
@@ -31,7 +31,7 @@
         {
             this.context = fixture.Context;
             this.mapper = fixture.Mapper;
-            this.uriService = new Mock<UriService>("https://localhost:40000/api/items?id=5");
+            this.uriService = new Mock<UriService>("https://localhost:40000/api/users");
             this.mockedUserManager = IdentityMocker.GetMockedUserManager();
 
             this.userManagerService = new UserManagerService(
