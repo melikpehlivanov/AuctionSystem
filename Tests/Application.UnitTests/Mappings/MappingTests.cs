@@ -11,8 +11,8 @@
     using Application.Items.Commands.CreateItem;
     using Application.Items.Queries.Details;
     using Application.Items.Queries.List;
-    using Pictures;
-    using Pictures.Queries;
+    using Application.Pictures;
+    using Application.Pictures.Queries;
 
     public class MappingTests : IClassFixture<MappingTestsFixture>
     {

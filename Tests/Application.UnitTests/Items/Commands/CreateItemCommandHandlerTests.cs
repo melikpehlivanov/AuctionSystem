@@ -15,13 +15,14 @@
     using MediatR;
     using Microsoft.AspNetCore.Identity;
     using Moq;
-    using Pictures.Commands.CreatePicture;
     using Setup;
     using Xunit;
     using Microsoft.EntityFrameworkCore;
     using FluentAssertions;
     using Application.Common.Exceptions;
     using Application.Items.Commands;
+    using Application.Pictures;
+    using Application.Pictures.Commands.CreatePicture;
 
     public class CreateItemCommandHandlerTests : CommandTestBase
     {
