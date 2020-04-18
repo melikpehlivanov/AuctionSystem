@@ -48,9 +48,9 @@
         }
 
         [Theory]
-        [InlineData("asd !!")]
-        [InlineData("id which does not exist")]
-        [InlineData("some random other id")]
+        [InlineData("16488cbf-0e07-4390-9eb5-9627796ffa29")]
+        [InlineData("159ae2cf-7f5a-4a90-9a78-59ffe738f1a6")]
+        [InlineData("a00004c9-a289-44c1-b425-71988da7d9f5")]
         [InlineData("f4b5269c-e284-4448-9013-ea62c4e9379f")]
         public async Task GetPictureDetails_Given_InvalidId_Should_Throw_NotFoundException(string id)
         {
