@@ -17,13 +17,11 @@
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
-        private readonly IUriService uriService;
 
-        public ListItemsQueryHandler(IAuctionSystemDbContext context, IMapper mapper, IUriService uriService)
+        public ListItemsQueryHandler(IAuctionSystemDbContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
-            this.uriService = uriService;
         }
 
         public async Task<PagedResponse<ListItemsResponseModel>> Handle(
@@ -33,13 +31,14 @@
             var skipCount = (request.PageNumber - 1) * request.PageSize;
             var queryable = this.context.Items.AsQueryable();
 
+            var totalItemsCount = await this.context.Items.CountAsync(cancellationToken);
             if (request?.Filters == null)
             {
-                return PaginationHelpers.CreatePaginatedResponse(this.uriService, request, await queryable
+                return PaginationHelpers.CreatePaginatedResponse(request, await queryable
                     .Skip(skipCount)
                     .Take(request.PageSize)
                     .ProjectTo<ListItemsResponseModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken));
+                    .ToListAsync(cancellationToken), totalItemsCount);
             }
 
             queryable = AddFiltersOnQuery(request.Filters, queryable);
@@ -52,7 +51,7 @@
                 .Select(this.mapper.Map<ListItemsResponseModel>)
                 .ToList();
 
-            var result = PaginationHelpers.CreatePaginatedResponse(this.uriService, request, items);
+            var result = PaginationHelpers.CreatePaginatedResponse(request, items, totalItemsCount);
             return result;
         }
 

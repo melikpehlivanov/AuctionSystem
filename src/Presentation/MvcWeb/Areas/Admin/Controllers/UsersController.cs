@@ -22,6 +22,7 @@
 
         public async Task<IActionResult> Index()
         {
+            //TODO: add pagination
             var response = await this.Mediator.Send(new ListAllUsersQuery());
             var users = response.Data
                 .Select(this.mapper.Map<UserListingViewModel>)

@@ -39,13 +39,6 @@
                 .AddApplication()
                 .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<ICache, Cache>()
-                .AddScoped<IUriService>(provider =>
-                {
-                    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
-                    var request = accessor.HttpContext.Request;
-                    var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent(), request.Path);
-                    return new UriService(absoluteUri);
-                })
                 .AddTransient<ICurrentUserService, CurrentUserService>()
                 .AddAppSettings(this.Configuration)
                 .ConfigureCookies()

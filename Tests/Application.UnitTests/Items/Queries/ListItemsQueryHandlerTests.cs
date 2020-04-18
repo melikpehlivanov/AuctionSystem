@@ -21,7 +21,6 @@
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
-        private readonly Mock<UriService> uriService;
 
         private readonly ListItemsQueryHandler handler;
 
@@ -29,9 +28,8 @@
         {
             this.context = fixture.Context;
             this.mapper = fixture.Mapper;
-            this.uriService = new Mock<UriService>("https://localhost:40000/api/items");
 
-            this.handler = new ListItemsQueryHandler(this.context, this.mapper, this.uriService.Object);
+            this.handler = new ListItemsQueryHandler(this.context, this.mapper);
         }
 
         private async Task SeedLiveItems(int count)

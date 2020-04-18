@@ -13,8 +13,6 @@
             => new PagedResponse<ListItemsResponseModel>
             {
                 PageNumber = 1,
-                NextPage = "https://localhost:44388/api/Items?pageNumber=2&pageSize=5",
-                PreviousPage = null,
                 PageSize = 3,
                 Data = new List<ListItemsResponseModel>
                 {

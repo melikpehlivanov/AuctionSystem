@@ -1,6 +1,6 @@
+@using Application
 @using Domain.Entities
 @using Microsoft.AspNetCore.Identity
-@using MvcWeb
 @inject SignInManager<AuctionUser> SignInManager
 @inject UserManager<AuctionUser> UserManager
 
@@ -22,7 +22,7 @@
                     @User.Identity.Name
                 </h5>
                 <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Account</a>
-                @if (User.IsInRole(WebConstants.AdministratorRole))
+                @if (User.IsInRole(AppConstants.AdministratorRole))
                 {
                     <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">All users</a>
                 }

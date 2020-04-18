@@ -2,9 +2,11 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using Application.Common.Models;
+    using Common.AutoMapping.Interfaces;
     using Interfaces;
 
-    public class PaginatedList<T> : IPaginatedList, IEnumerable<T>
+    public class PaginatedList<T> : IPaginatedList, IEnumerable<T>, IMapWith<PagedResponse<T>>
     {
         private readonly IEnumerable<T> data;
 

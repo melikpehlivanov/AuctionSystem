@@ -84,14 +84,7 @@
 
         public static IServiceCollection AddRequiredServices(this IServiceCollection services)
             => services
-                .AddScoped<ICurrentUserService, CurrentUserService>()
-                .AddScoped<IUriService>(provider =>
-                {
-                    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
-                    var request = accessor.HttpContext.Request;
-                    var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent(), request.Path);
-                    return new UriService(absoluteUri);
-                });
+                .AddScoped<ICurrentUserService, CurrentUserService>();
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
             => services

@@ -4,8 +4,10 @@ namespace MvcWeb.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Application;
     using Application.Common.Exceptions;
     using Application.Common.Interfaces;
+    using Application.Common.Models;
     using Application.Items.Commands.CreateItem;
     using Application.Items.Commands.DeleteItem;
     using Application.Items.Commands.UpdateItem;
@@ -17,6 +19,7 @@ namespace MvcWeb.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using MvcWeb.Infrastructure.Collections;
     using ViewModels.Item;
 
     public class ItemsController : BaseController
@@ -62,36 +65,29 @@ namespace MvcWeb.Controllers
 
         public async Task<IActionResult> List(Guid id, int pageIndex = 1)
         {
-            IEnumerable<ListItemsResponseModel> items;
+            PagedResponse<ListItemsResponseModel> response;
 
+            var model = this.mapper.Map<ListItemsQuery>(new PaginationFilter(pageIndex, AppConstants.PageSize));
             if (id.Equals(Guid.Empty))
             {
-                var response = await this.Mediator.Send(new ListItemsQuery());
-                items = response.Data;
+                response = await this.Mediator.Send(model);
             }
             else
             {
-                var response = await this.Mediator.Send(new ListItemsQuery
-                {
-                    Filters = new ListAllItemsQueryFilter
-                    {
-                        SubCategoryId = id,
-
-                    }
-                });
-                items = response.Data;
+                model.Filters = new ListAllItemsQueryFilter { SubCategoryId = id, };
+                response = await this.Mediator.Send(model);
             }
 
-            if (!items.Any())
+            if (!response.Data.Any())
             {
                 return this.RedirectToHome();
             }
 
             //TODO: Could use the returned pagination
-            var allItems = items.Select(this.mapper.Map<ItemListingDto>)
-                .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
+            var data = response.Data.Select(this.mapper.Map<ItemListingDto>);
+            var paginatedList = new PaginatedList<ItemListingDto>(data, response.PageNumber, response.TotalPages);
 
-            var vm = new ItemListingViewModel { Items = allItems };
+            var vm = new ItemListingViewModel { Items = paginatedList };
             return this.View(vm);
         }
 
@@ -111,7 +107,7 @@ namespace MvcWeb.Controllers
             }
             catch (ValidationException)
             {
-                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError); 
+                this.ShowErrorMessage(NotificationMessages.TryAgainLaterError);
                 return this.RedirectToHome();
             }
         }
@@ -316,26 +312,22 @@ namespace MvcWeb.Controllers
                 return this.RedirectToHome();
             }
 
-            var appModel = await this.Mediator.Send(new ListItemsQuery
-            {
-                Filters = new ListAllItemsQueryFilter
-                {
-                    Title = query,
-                }
-            });
+            var model = this.mapper.Map<ListItemsQuery>(new PaginationFilter(pageIndex, AppConstants.PageSize));
+            model.Filters = new ListAllItemsQueryFilter { Title = query, };
+            var response = await this.Mediator.Send(model);
 
-            if (!appModel.Data.Any())
+            if (!response.Data.Any())
             {
                 this.ShowErrorMessage(NotificationMessages.SearchNoItems);
                 return this.RedirectToHome();
             }
 
-            var allItems = appModel.Data.Select(this.mapper.Map<ItemListingDto>)
-                .ToPaginatedList(pageIndex, WebConstants.ItemsCountPerPage);
+            var data = response.Data.Select(this.mapper.Map<ItemListingDto>);
+            var paginatedList = new PaginatedList<ItemListingDto>(data, response.PageNumber, response.TotalPages);
 
             var items = new ItemSearchViewModel
             {
-                Items = allItems,
+                Items = paginatedList,
                 Query = query
             };
 

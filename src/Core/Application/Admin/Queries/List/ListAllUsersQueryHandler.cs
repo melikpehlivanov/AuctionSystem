@@ -17,17 +17,14 @@
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
-        private readonly IUriService uriService;
         private readonly IUserManager userManager;
 
         public ListAllUsersQueryHandler(
             IAuctionSystemDbContext context,
             IMapper mapper,
-            IUriService uriService,
             IUserManager userManager)
         {
             this.context = context;
-            this.uriService = uriService;
             this.userManager = userManager;
             this.mapper = mapper;
         }
@@ -41,11 +38,11 @@
 
             if (request?.Filters == null)
             {
-                var pagedUsers = PaginationHelpers.CreatePaginatedResponse(this.uriService, request, await queryable
+                var pagedUsers = PaginationHelpers.CreatePaginatedResponse(request, await queryable
                     .Skip(skipCount)
                     .Take(request.PageSize)
                     .ProjectTo<ListAllUsersResponseModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken));
+                    .ToListAsync(cancellationToken), await this.context.Users.CountAsync(cancellationToken));
 
                 AddUserRoles(pagedUsers.Data, adminIds);
                 return pagedUsers;
@@ -57,7 +54,7 @@
                 .Take(request.PageSize)
                 .ProjectTo<ListAllUsersResponseModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-            var result = PaginationHelpers.CreatePaginatedResponse(this.uriService, request, users);
+            var result = PaginationHelpers.CreatePaginatedResponse(request, users, await this.context.Users.CountAsync(cancellationToken));
             AddUserRoles(users, adminIds);
 
             return result;
