@@ -4,14 +4,14 @@
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using Common.EmailSender;
-    using Common.EmailSender.Implementation;
-    using Common.EmailSender.Interface;
-    using Data;
+    using Application.AppSettingsModels;
+    using Application.Common.Interfaces;
+    using Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Persistance;
 
     public class Program
     {

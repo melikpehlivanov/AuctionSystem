@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AuctionSystem.Common\AuctionSystem.Common.csproj" />
-    <ProjectReference Include="..\..\Data\AuctionSystem.Data\AuctionSystem.Data.csproj" />
-    <ProjectReference Include="..\..\Data\AuctionSystem.Models\AuctionSystem.Models.csproj" />
+    <ProjectReference Include="..\..\Core\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\AuctionSystem.Infrastructure\AuctionSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Persistance\Persistance.csproj" />
   </ItemGroup>
 
 </Project>
