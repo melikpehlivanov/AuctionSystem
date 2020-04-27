@@ -19,6 +19,8 @@
 
         DbSet<AuctionUser> Users { get; set; }
 
+        DbSet<RefreshToken> RefreshTokens { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

@@ -7,9 +7,7 @@
     using System.Text;
     using Application.AppSettingsModels;
     using Application.Common.Interfaces;
-    using AuctionSystem.Infrastructure;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
@@ -20,13 +18,13 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static AppSettings AddJwtSecret(
+        public static JwtSettings AddJwtSecret(
             this IServiceCollection services,
             IConfiguration configuration)
         {
             var applicationSettingsConfiguration = configuration.GetJwtSecretSection();
-            services.Configure<AppSettings>(applicationSettingsConfiguration);
-            return applicationSettingsConfiguration.Get<AppSettings>();
+            services.Configure<JwtSettings>(applicationSettingsConfiguration);
+            return applicationSettingsConfiguration.Get<JwtSettings>();
         }
 
         public static IServiceCollection AddCloudinarySettings(
@@ -56,9 +54,18 @@
 
         public static IServiceCollection AddJwtAuthentication(
             this IServiceCollection services,
-            AppSettings appSettings)
+            JwtSettings jwtSettings)
         {
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+            };
+            services.AddSingleton(tokenValidationParameters);
 
             services
                 .AddAuthentication(x =>
@@ -70,13 +77,7 @@
                 {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
+                    x.TokenValidationParameters = tokenValidationParameters;
                 });
 
             return services;

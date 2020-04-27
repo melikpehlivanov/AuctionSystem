@@ -8,7 +8,7 @@
             => configuration.GetConnectionString("DefaultConnection");
 
         public static IConfigurationSection GetJwtSecretSection(this IConfiguration configuration)
-            => configuration.GetSection("ApplicationSettings");
+            => configuration.GetSection("JwtSettings");
 
         public static string GetSendGridApiKey(this IConfiguration configuration)
             => configuration.GetSection("SendGrid:ApiKey").Value;
