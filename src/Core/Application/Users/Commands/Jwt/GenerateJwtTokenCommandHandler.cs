@@ -17,10 +17,10 @@
     {
         private const int TokenExpiryDateInDays = 7;
 
-        private readonly AppSettings options;
+        private readonly JwtSettings options;
         private readonly IUserManager userManager;
 
-        public GenerateJwtTokenCommandHandler(IOptions<AppSettings> options, IUserManager userManager)
+        public GenerateJwtTokenCommandHandler(IOptions<JwtSettings> options, IUserManager userManager)
         {
             this.userManager = userManager;
             this.options = options.Value;

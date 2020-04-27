@@ -20,13 +20,13 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static AppSettings AddJwtSecret(
+        public static JwtSettings AddJwtSecret(
             this IServiceCollection services,
             IConfiguration configuration)
         {
             var applicationSettingsConfiguration = configuration.GetJwtSecretSection();
-            services.Configure<AppSettings>(applicationSettingsConfiguration);
-            return applicationSettingsConfiguration.Get<AppSettings>();
+            services.Configure<JwtSettings>(applicationSettingsConfiguration);
+            return applicationSettingsConfiguration.Get<JwtSettings>();
         }
 
         public static IServiceCollection AddCloudinarySettings(
@@ -56,7 +56,7 @@
 
         public static IServiceCollection AddJwtAuthentication(
             this IServiceCollection services,
-            AppSettings appSettings)
+            JwtSettings appSettings)
         {
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
