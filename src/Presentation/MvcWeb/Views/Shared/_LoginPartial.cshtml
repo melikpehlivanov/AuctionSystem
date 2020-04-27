@@ -26,7 +26,7 @@
                 {
                     <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">All users</a>
                 }
-                <a class="dropdown-item" asp-controller="Items" asp-action="Index">My Items</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">My Items</a>
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
                     <button type="submit" class="btn btn-link text-danger dropdown-item ">Logout</button>
                 </form>
