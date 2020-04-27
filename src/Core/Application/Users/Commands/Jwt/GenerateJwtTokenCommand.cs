@@ -2,7 +2,7 @@
 {
     using MediatR;
 
-    public class GenerateJwtTokenCommand : IRequest<string>
+    public class GenerateJwtTokenCommand : IRequest<AuthSuccessResponse>
     {
         public GenerateJwtTokenCommand(string userId, string username)
         {

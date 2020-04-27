@@ -3,7 +3,7 @@
     using Common.Models;
     using MediatR;
 
-    public class LoginUserCommand : IRequest<Response<LoginUserResponseModel>>
+    public class LoginUserCommand : IRequest<Response<AuthSuccessResponse>>
     {
         public string Email { get; set; }
 

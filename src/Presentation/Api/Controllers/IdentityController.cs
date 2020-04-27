@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
     using Application.Common.Models;
+    using Application.Users.Commands;
     using Application.Users.Commands.CreateUser;
     using Application.Users.Commands.LoginUser;
     using Microsoft.AspNetCore.Http;
@@ -41,7 +42,7 @@
         [SwaggerResponse(
             StatusCodes.Status200OK,
             SwaggerDocumentation.IdentityConstants.SuccessfulLoginRequestDescriptionMessage,
-            typeof(Response<LoginUserResponseModel>))]
+            typeof(Response<AuthSuccessResponse>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             SwaggerDocumentation.IdentityConstants.BadRequestOnLoginDescriptionMessage,
