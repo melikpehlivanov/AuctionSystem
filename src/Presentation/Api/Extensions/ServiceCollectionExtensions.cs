@@ -7,9 +7,7 @@
     using System.Text;
     using Application.AppSettingsModels;
     using Application.Common.Interfaces;
-    using AuctionSystem.Infrastructure;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;

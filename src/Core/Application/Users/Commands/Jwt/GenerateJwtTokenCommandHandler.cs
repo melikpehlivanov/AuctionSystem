@@ -15,8 +15,6 @@
 
     public class GenerateJwtTokenCommandHandler : IRequestHandler<GenerateJwtTokenCommand, string>
     {
-        private const int TokenExpiryDateInDays = 7;
-
         private readonly JwtSettings options;
         private readonly IUserManager userManager;
 
@@ -45,7 +43,7 @@
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(TokenExpiryDateInDays),
+                Expires = DateTime.UtcNow.Add(this.options.TokenLifetime),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
