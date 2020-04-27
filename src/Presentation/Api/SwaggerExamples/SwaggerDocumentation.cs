@@ -43,6 +43,11 @@
 
             public const string SuccessfulLoginRequestDescriptionMessage = "Indicates that everything went ok and returns jwt token";
             public const string BadRequestOnLoginDescriptionMessage = "Indicates that the user credentials are invalid";
+
+
+            public const string SuccessfulTokenRefreshRequestDescriptionMessage = 
+                "Indicates that everything went ok and returns new jwt & refresh token";
+            public const string BadRequestOnTokenRefreshDescriptionMessage = "Indicates that the provided token is invalid";
         }
 
         public static class BidConstants

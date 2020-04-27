@@ -26,6 +26,7 @@
         {
             public const string UserNotCreatedSuccessfully = "User was not created successfully!";
             public const string InvalidCredentials = "Invalid credentials!";
+            public const string InvalidRefreshToken = "Invalid token";
         }
     }
 }

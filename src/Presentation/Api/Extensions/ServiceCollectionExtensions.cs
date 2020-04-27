@@ -54,9 +54,9 @@
 
         public static IServiceCollection AddJwtAuthentication(
             this IServiceCollection services,
-            JwtSettings appSettings)
+            JwtSettings jwtSettings)
         {
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,

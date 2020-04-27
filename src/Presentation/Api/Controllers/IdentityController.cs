@@ -4,6 +4,7 @@
     using Application.Common.Models;
     using Application.Users.Commands;
     using Application.Users.Commands.CreateUser;
+    using Application.Users.Commands.Jwt.Refresh;
     using Application.Users.Commands.LoginUser;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,6 @@
 
     public class IdentityController : BaseController
     {
-        //TODO: Implement refresh token
-
         /// <summary>
         /// Creates a new user
         /// </summary>
@@ -35,7 +34,7 @@
         }
 
         /// <summary>
-        /// Verifies user credentials and generates JWT token
+        /// Verifies user credentials and generates JWT and Refresh token
         /// </summary>
         [HttpPost]
         [Route(nameof(Login))]
@@ -48,6 +47,24 @@
             SwaggerDocumentation.IdentityConstants.BadRequestOnLoginDescriptionMessage,
             typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Login(LoginUserCommand model)
+        {
+            var result = await this.Mediator.Send(model);
+            return this.Ok(result);
+        }
+        /// <summary>
+        /// Verifies the provided token and generates new token and refresh token
+        /// </summary>
+        [HttpPost]
+        [Route(nameof(Refresh))]
+        [SwaggerResponse(
+            StatusCodes.Status200OK,
+            SwaggerDocumentation.IdentityConstants.SuccessfulTokenRefreshRequestDescriptionMessage,
+            typeof(Response<AuthSuccessResponse>))]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest,
+            SwaggerDocumentation.IdentityConstants.BadRequestOnTokenRefreshDescriptionMessage,
+            typeof(BadRequestErrorModel))]
+        public async Task<IActionResult> Refresh(JwtRefreshTokenCommand model)
         {
             var result = await this.Mediator.Send(model);
             return this.Ok(result);
