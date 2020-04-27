@@ -57,6 +57,15 @@
             JwtSettings appSettings)
         {
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+            };
+            services.AddSingleton(tokenValidationParameters);
 
             services
                 .AddAuthentication(x =>
@@ -68,13 +77,7 @@
                 {
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
+                    x.TokenValidationParameters = tokenValidationParameters;
                 });
 
             return services;
