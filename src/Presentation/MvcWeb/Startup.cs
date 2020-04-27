@@ -78,17 +78,18 @@
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapHub<BidHub>("/bidHub");
                     endpoints.MapControllerRoute(
                         "areas",
                         "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                     endpoints.MapControllerRoute(
-                        "default",
-                        "{controller=Home}/{action=Index}/{id?}");
-                    endpoints.MapControllerRoute(
                         "items",
                         "Items/{action}/{id}/{slug:required}",
                         new { controller = "Items", action = "Details" });
+                    endpoints.MapControllerRoute(
+                        "default",
+                        "{controller=Home}/{action=Index}/{id?}");
+
+                    endpoints.MapHub<BidHub>("/bidHub");
                     endpoints.MapRazorPages();
                 });
         }
