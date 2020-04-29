@@ -1,7 +1,6 @@
 ﻿namespace Persistance
 {
     using Application.Common.Interfaces;
-    using Common;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;

@@ -4,9 +4,6 @@
 
     public static class ConfigurationExtensions
     {
-        public static string GetDefaultConnectionString(this IConfiguration configuration)
-            => configuration.GetConnectionString("DefaultConnection");
-
         public static IConfigurationSection GetJwtSecretSection(this IConfiguration configuration)
             => configuration.GetSection("JwtSettings");
 
