@@ -42,6 +42,7 @@ namespace Api
                 .AddSendGridSettings(this.Configuration)
                 .AddJwtAuthentication(services.AddJwtSecret(this.Configuration))
                 .AddRequiredServices()
+                .AddRedisCache(this.Configuration)
                 .AddSwagger()
                 .AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());

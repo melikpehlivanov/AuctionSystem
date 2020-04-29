@@ -5,8 +5,10 @@
     using System.IO;
     using System.Reflection;
     using System.Text;
+    using Api.Services.Cache;
     using Application.AppSettingsModels;
     using Application.Common.Interfaces;
+    using global::Common;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -138,5 +140,25 @@
                     c.AddFluentValidationRules();
                 })
                 .AddSwaggerExamplesFromAssemblyOf<Startup>();
+
+        public static IServiceCollection AddRedisCache(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var redisCacheSettings = new RedisCacheOptions();
+            configuration.GetRedisSection().Bind(redisCacheSettings);
+            services.AddSingleton(redisCacheSettings);
+
+            if (!redisCacheSettings.Enabled)
+            {
+                return services;
+            }
+
+            services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+
+            return services;
+        }
+
     }
 }
