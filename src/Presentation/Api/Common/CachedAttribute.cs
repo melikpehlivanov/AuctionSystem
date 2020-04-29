@@ -4,8 +4,8 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Services.Cache;
     using Application.AppSettingsModels;
+    using Application.Common.Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
@@ -14,11 +14,11 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedAttribute : Attribute, IAsyncActionFilter
     {
-        private readonly int cachingTimeInSeconds;
+        private readonly int cachingTimeInMinutes;
 
-        public CachedAttribute(int cachingTime)
+        public CachedAttribute(int cachingTimeInMinutes)
         {
-            this.cachingTimeInSeconds = cachingTime;
+            this.cachingTimeInMinutes = cachingTimeInMinutes;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -35,7 +35,7 @@
             var cacheKey = GenerateCacheKey(context.HttpContext.Request);
             var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
 
-            if (!string.IsNullOrEmpty(cachedResponse))
+            if (cachedResponse != null)
             {
                 var contentResult = new ContentResult
                 {
@@ -53,7 +53,7 @@
 
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
-                await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(this.cachingTimeInSeconds));
+                await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromMinutes(this.cachingTimeInMinutes));
             }
         }
 
