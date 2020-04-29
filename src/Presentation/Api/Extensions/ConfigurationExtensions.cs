@@ -4,11 +4,11 @@
 
     public static class ConfigurationExtensions
     {
-        public static string GetDefaultConnectionString(this IConfiguration configuration)
-            => configuration.GetConnectionString("DefaultConnection");
-
         public static IConfigurationSection GetJwtSecretSection(this IConfiguration configuration)
             => configuration.GetSection("JwtSettings");
+
+        public static IConfigurationSection GetRedisSection(this IConfiguration configuration)
+            => configuration.GetSection("RedisCacheSettings");
 
         public static string GetSendGridApiKey(this IConfiguration configuration)
             => configuration.GetSection("SendGrid:ApiKey").Value;

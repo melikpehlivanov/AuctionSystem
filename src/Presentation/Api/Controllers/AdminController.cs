@@ -7,6 +7,7 @@
     using Application.Admin.Queries.List;
     using Application.Common.Models;
     using AutoMapper;
+    using Common;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,8 @@
     [Authorize(Roles = AppConstants.AdministratorRole)]
     public class AdminController : BaseController
     {
+        private const int CachingTimeInMinutes = 10;
+
         private readonly IMapper mapper;
 
         public AdminController(IMapper mapper)
@@ -28,6 +31,7 @@
         /// Lists all users with roles
         /// </summary>
         [HttpGet]
+        [Cached(CachingTimeInMinutes)]
         [SwaggerResponse(
             StatusCodes.Status200OK,
             SwaggerDocumentation.AdminConstants.SuccessfulGetRequestDescriptionMessage,

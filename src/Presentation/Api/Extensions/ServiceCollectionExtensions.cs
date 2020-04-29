@@ -138,5 +138,24 @@
                     c.AddFluentValidationRules();
                 })
                 .AddSwaggerExamplesFromAssemblyOf<Startup>();
+
+        public static IServiceCollection AddRedisCache(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var redisCacheSettings = new RedisCacheOptions();
+            configuration.GetRedisSection().Bind(redisCacheSettings);
+            services.AddSingleton(redisCacheSettings);
+
+            if (!redisCacheSettings.Enabled)
+            {
+                return services;
+            }
+
+            services.AddStackExchangeRedisCache(options => options.Configuration = redisCacheSettings.ConnectionString);
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+
+            return services;
+        }
     }
 }

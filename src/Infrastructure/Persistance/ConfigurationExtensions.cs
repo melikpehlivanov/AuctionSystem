@@ -1,4 +1,4 @@
-﻿namespace Common
+﻿namespace Persistance
 {
     using Microsoft.Extensions.Configuration;
 

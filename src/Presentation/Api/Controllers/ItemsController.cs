@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Api.Common;
     using Application.Common.Models;
     using Application.Items.Commands;
     using Application.Items.Commands.CreateItem;
@@ -19,6 +20,8 @@
 
     public class ItemsController : BaseController
     {
+        private const int CachingTimeInMinutes = 10;
+
         private readonly IMapper mapper;
 
         public ItemsController(IMapper mapper)
@@ -34,6 +37,7 @@
             StatusCodes.Status200OK,
             SwaggerDocumentation.ItemConstants.SuccessfulGetRequestMessage,
             typeof(PagedResponse<ListItemsResponseModel>))]
+        [Cached(CachingTimeInMinutes)]
         public async Task<IActionResult> Get([FromQuery] PaginationQuery paginationQuery, [FromQuery] ItemsFilter filters)
         {
             var paginationFilter = this.mapper.Map<PaginationFilter>(paginationQuery);
