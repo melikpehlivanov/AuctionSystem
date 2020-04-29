@@ -5,7 +5,6 @@
     using System.IO;
     using System.Reflection;
     using System.Text;
-    using Services.Cache;
     using Application.AppSettingsModels;
     using Application.Common.Interfaces;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -158,6 +157,5 @@
 
             return services;
         }
-
     }
 }

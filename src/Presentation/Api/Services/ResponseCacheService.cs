@@ -1,7 +1,8 @@
-﻿namespace Api.Services.Cache
+﻿namespace Api.Services
 {
     using System;
     using System.Threading.Tasks;
+    using Application.Common.Interfaces;
     using Microsoft.Extensions.Caching.Distributed;
     using Newtonsoft.Json;
 
@@ -23,7 +24,7 @@
 
             await this.distributedCache
                 .SetStringAsync(
-                    key, 
+                    key,
                     JsonConvert.SerializeObject(response),
                     new DistributedCacheEntryOptions
                     {
@@ -32,9 +33,6 @@
         }
 
         public async Task<string> GetCachedResponseAsync(string cacheKey)
-        {
-            var cachedResponse = await this.distributedCache.GetStringAsync(cacheKey);
-            return string.IsNullOrEmpty(cachedResponse) ? null : cachedResponse;
-        }
+            => await this.distributedCache.GetStringAsync(cacheKey);
     }
 }

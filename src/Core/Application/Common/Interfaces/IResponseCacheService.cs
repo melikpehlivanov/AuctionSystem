@@ -1,4 +1,4 @@
-﻿namespace Api.Services.Cache
+﻿namespace Application.Common.Interfaces
 {
     using System;
     using System.Threading.Tasks;
