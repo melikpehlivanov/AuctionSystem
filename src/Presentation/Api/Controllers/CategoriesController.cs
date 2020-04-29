@@ -1,6 +1,7 @@
 ﻿namespace Api.Controllers
 {
     using System.Threading.Tasks;
+    using Api.Common;
     using Application.Categories.Queries.List;
     using Application.Common.Models;
     using Microsoft.AspNetCore.Http;
@@ -10,7 +11,10 @@
 
     public class CategoriesController : BaseController
     {
+        private const int CachedTimeInMinutes = 3600;
+
         [HttpGet]
+        [Cached(CachedTimeInMinutes)]
         [SwaggerResponse(
             StatusCodes.Status200OK,
             SwaggerDocumentation.CategoriesConstants.SuccessfulGetRequestMessage,
