@@ -5,10 +5,9 @@
     using System.IO;
     using System.Reflection;
     using System.Text;
-    using Api.Services.Cache;
+    using Services.Cache;
     using Application.AppSettingsModels;
     using Application.Common.Interfaces;
-    using global::Common;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
