@@ -1,4 +1,4 @@
-﻿namespace Persistance
+﻿namespace Persistence
 {
     using Application.Common.Interfaces;
     using Domain.Entities;

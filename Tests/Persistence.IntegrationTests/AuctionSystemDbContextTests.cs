@@ -1,4 +1,4 @@
-﻿namespace Persistance.IntegrationTests
+﻿namespace Persistence.IntegrationTests
 {
     using System;
     using System.Collections.Generic;

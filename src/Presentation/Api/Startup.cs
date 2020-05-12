@@ -13,7 +13,7 @@ namespace Api
     using Microsoft.Extensions.Hosting;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using Persistance;
+    using Persistence;
 
     public class Startup
     {

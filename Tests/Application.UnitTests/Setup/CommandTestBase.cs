@@ -2,7 +2,7 @@ namespace Application.UnitTests.Setup
 {
     using System;
     using AutoMapper;
-    using Persistance;
+    using Persistence;
 
     public class CommandTestBase : IDisposable
     {
