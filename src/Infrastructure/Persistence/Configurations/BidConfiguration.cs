@@ -1,4 +1,4 @@
-﻿namespace Persistance.Configurations
+﻿namespace Persistence.Configurations
 {
     using Domain.Entities;
     using Microsoft.EntityFrameworkCore;

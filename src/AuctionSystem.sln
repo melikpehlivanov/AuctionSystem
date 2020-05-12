@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Core\Applica
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{1BD12E72-3EDB-49A4-995A-96170B4F9BDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistance", "Infrastructure\Persistance\Persistance.csproj", "{DBC31A0C-8C3C-43CA-8038-3CE80ECF09C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Infrastructure\Persistence\Persistence.csproj", "{DBC31A0C-8C3C-43CA-8038-3CE80ECF09C3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Infrastructure", "Infrastructure\AuctionSystem.Infrastructure\AuctionSystem.Infrastructure.csproj", "{274065FF-3CE2-4B76-AEE8-D629BA5FBE98}"
 EndProject
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcWeb", "Presentation\MvcW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7777D241-47F1-4935-B69B-1B43244A7E84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistance.IntegrationTests", "..\Tests\Persistance.IntegrationTests\Persistance.IntegrationTests.csproj", "{824331AF-7F14-49AE-B7EA-E76FDDD8884A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.IntegrationTests", "..\Tests\Persistence.IntegrationTests\Persistence.IntegrationTests.csproj", "{824331AF-7F14-49AE-B7EA-E76FDDD8884A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "..\Tests\Application.UnitTests\Application.UnitTests.csproj", "{CBC874E5-F86A-47EF-AC3A-E754D560BE95}"
 EndProject

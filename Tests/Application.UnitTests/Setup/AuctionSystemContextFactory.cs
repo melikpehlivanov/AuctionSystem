@@ -9,7 +9,7 @@ namespace Application.UnitTests.Setup
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Moq;
-    using Persistance;
+    using Persistence;
 
     public class AuctionSystemContextFactory
     {

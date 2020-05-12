@@ -19,7 +19,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Persistance;
+    using Persistence;
     using SignalRHubs;
 
     public class Startup

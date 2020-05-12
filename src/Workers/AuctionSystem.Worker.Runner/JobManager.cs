@@ -8,7 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using Models;
-    using Persistance;
+    using Persistence;
 
     public class JobManager
     {

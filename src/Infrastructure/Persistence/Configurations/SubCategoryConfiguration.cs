@@ -1,4 +1,4 @@
-﻿namespace Persistance.Configurations
+﻿namespace Persistence.Configurations
 {
     using Common;
     using Domain.Entities;

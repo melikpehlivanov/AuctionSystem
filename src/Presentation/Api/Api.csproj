@@ -27,7 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Common\Common.csproj" />
     <ProjectReference Include="..\..\Infrastructure\AuctionSystem.Infrastructure\AuctionSystem.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Persistance\Persistance.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Persistence\Persistence.csproj" />
   </ItemGroup>
 
 </Project>
