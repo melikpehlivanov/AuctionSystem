@@ -44,6 +44,8 @@
 
             var item = this.mapper.Map<Item>(request);
             item.UserId = this.userService.UserId;
+            item.StartTime = item.StartTime.ToUniversalTime();
+            item.EndTime = item.EndTime.ToUniversalTime();
 
             await this.context.Items.AddAsync(item, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
