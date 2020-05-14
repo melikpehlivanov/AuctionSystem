@@ -1,0 +1,23 @@
+.react-card-carousel-container {
+  position: relative;
+  height: 23em;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-card {
+  width: 150px;
+  text-align: center;
+  background: #52c0f5;
+  color: #fff;
+  border-radius: 10px;
+}
+
+@media only screen and (max-width: 1140px) {
+  .react-card-carousel-container {
+    height: 20em;
+  }
+}

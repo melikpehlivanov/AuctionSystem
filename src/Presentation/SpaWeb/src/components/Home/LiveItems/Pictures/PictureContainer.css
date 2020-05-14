@@ -1,0 +1,29 @@
+.picture-container {
+  height: 15rem;
+}
+
+.card-img-listing {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.primary-picture {
+  float: left;
+  overflow: hidden;
+  height: 100%;
+  max-width: calc((100% / 3) * 2);
+  text-align: center;
+  display: block;
+  border-right: 1px solid grey;
+  position: relative;
+}
+
+.secondary-picture {
+  position: relative;
+  overflow: hidden;
+  height: 50%;
+  max-width: calc(100% / 3);
+  display: inline-block;
+  border-bottom: 1px solid grey;
+}
