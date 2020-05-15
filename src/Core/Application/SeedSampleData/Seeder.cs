@@ -74,7 +74,8 @@
         {
             if (!dbContext.Categories.Any())
             {
-                var categories = await File.ReadAllTextAsync(Path.GetFullPath(AppConstants.CategoriesPath), cancellationToken);
+                var categories =
+                    await File.ReadAllTextAsync(Path.GetFullPath(AppConstants.CategoriesPath), cancellationToken);
 
                 var deserializedCategoriesWithSubCategories =
                     JsonConvert.DeserializeObject<CategoryDto[]>(categories);
@@ -94,7 +95,8 @@
             }
         }
 
-        private static async Task SeedItems(IAuctionSystemDbContext dbContext, IUserManager manager, CancellationToken cancellationToken)
+        private static async Task SeedItems(IAuctionSystemDbContext dbContext, IUserManager manager,
+            CancellationToken cancellationToken)
         {
             if (!dbContext.Items.Any())
             {
@@ -115,6 +117,8 @@
                             StartingPrice = random.Next(10, 500),
                             MinIncrease = random.Next(1, 100),
                             SubCategoryId = subCategory.Id,
+                            Pictures = new List<Picture>
+                                {new Picture {Url = AppConstants.DefaultPictureUrl, Created = DateTime.UtcNow,}},
                             UserId = await manager.GetFirstUserId()
                         };
 
