@@ -1,4 +1,6 @@
-﻿namespace Persistence
+﻿using System.Reflection;
+
+namespace Persistence
 {
     using System;
     using System.IO;
@@ -26,6 +28,7 @@
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.Local.json", true)
                 .AddJsonFile($"appsettings.{environmentName}.json", true)
+                .AddUserSecrets(Assembly.GetExecutingAssembly())
                 .AddEnvironmentVariables()
                 .Build();
 
