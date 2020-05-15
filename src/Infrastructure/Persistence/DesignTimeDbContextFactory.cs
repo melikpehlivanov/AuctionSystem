@@ -1,4 +1,6 @@
-﻿namespace Persistence
+﻿using System.Reflection;
+
+namespace Persistence
 {
     using System;
     using System.IO;
@@ -13,7 +15,7 @@
 
         public TContext CreateDbContext(string[] args)
         {
-            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}..{0}Api", Path.DirectorySeparatorChar);
+            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}../../Presentation{0}Api", Path.DirectorySeparatorChar);
             return this.Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
         }
 
@@ -26,6 +28,7 @@
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.Local.json", true)
                 .AddJsonFile($"appsettings.{environmentName}.json", true)
+                .AddUserSecrets(Assembly.GetExecutingAssembly())
                 .AddEnvironmentVariables()
                 .Build();
 

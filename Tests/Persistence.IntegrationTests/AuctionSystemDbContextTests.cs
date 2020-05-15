@@ -28,7 +28,7 @@
         {
             this.dateTime = new DateTime(3001, 1, 1);
             this.dateTimeMock = new Mock<IDateTime>();
-            this.dateTimeMock.Setup(m => m.Now).Returns(this.dateTime);
+            this.dateTimeMock.Setup(m => m.UtcNow).Returns(this.dateTime);
 
             this.currentUserServiceMock = new Mock<ICurrentUserService>();
             this.currentUserServiceMock.Setup(m => m.UserId).Returns(SampleUserId);

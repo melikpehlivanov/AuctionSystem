@@ -25,10 +25,6 @@
             builder
                 .Property(p => p.ItemId)
                 .IsRequired();
-
-            builder
-                .Property(p => p.MadeOn)
-                .IsRequired();
         }
     }
 }
