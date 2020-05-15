@@ -13,7 +13,7 @@
 
         public TContext CreateDbContext(string[] args)
         {
-            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}..{0}Api", Path.DirectorySeparatorChar);
+            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}../../Presentation{0}Api", Path.DirectorySeparatorChar);
             return this.Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
         }
 
