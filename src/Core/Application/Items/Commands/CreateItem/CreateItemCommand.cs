@@ -1,4 +1,6 @@
-﻿namespace Application.Items.Commands.CreateItem
+﻿using AutoMapper;
+
+namespace Application.Items.Commands.CreateItem
 {
     using System;
     using System.Collections.Generic;
