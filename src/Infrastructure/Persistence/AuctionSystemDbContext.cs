@@ -44,11 +44,11 @@
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedBy = this.currentUserService?.UserId;
-                        entry.Entity.Created = this.dateTime.Now;
+                        entry.Entity.Created = this.dateTime.UtcNow;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModifiedBy = this.currentUserService?.UserId;
-                        entry.Entity.LastModified = this.dateTime.Now;
+                        entry.Entity.LastModified = this.dateTime.UtcNow;
                         break;
                 }
             }
