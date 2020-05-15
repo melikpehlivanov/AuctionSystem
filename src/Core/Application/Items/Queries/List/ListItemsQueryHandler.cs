@@ -29,7 +29,10 @@
             CancellationToken cancellationToken)
         {
             var skipCount = (request.PageNumber - 1) * request.PageSize;
-            var queryable = this.context.Items.AsQueryable();
+            var queryable = this.context
+                .Items
+                .Include(i => i.Pictures)
+                .AsQueryable();
 
             var totalItemsCount = await this.context.Items.CountAsync(cancellationToken);
             if (request?.Filters == null)
@@ -79,12 +82,12 @@
 
             if (filters?.StartTime != null)
             {
-                queryable = queryable.Where(i => i.StartTime >= filters.StartTime);
+                queryable = queryable.Where(i => i.StartTime >= filters.StartTime.Value.ToUniversalTime());
             }
 
             if (filters?.EndTime != null)
             {
-                queryable = queryable.Where(i => i.EndTime <= filters.EndTime);
+                queryable = queryable.Where(i => i.EndTime <= filters.EndTime.Value.ToUniversalTime());
             }
 
             if (filters?.MinimumPicturesCount != null)
