@@ -33,7 +33,8 @@
             this.userService = userService;
         }
 
-        public async Task<Response<ItemResponseModel>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
+        public async Task<Response<ItemResponseModel>> Handle(CreateItemCommand request,
+            CancellationToken cancellationToken)
         {
             if (this.userService.UserId == null
                 || !await this.context.SubCategories.AnyAsync(c => c.Id == request.SubCategoryId, cancellationToken))
@@ -47,10 +48,8 @@
             await this.context.Items.AddAsync(item, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            if (request.PictureFormFiles.Any())
-            {
-                await this.mediator.Send(new CreatePictureCommand { ItemId = item.Id, Pictures = request.PictureFormFiles }, cancellationToken);
-            }
+            await this.mediator.Send(new CreatePictureCommand {ItemId = item.Id, Pictures = request.PictureFormFiles},
+                cancellationToken);
 
             return new Response<ItemResponseModel>(new ItemResponseModel(item.Id));
         }
