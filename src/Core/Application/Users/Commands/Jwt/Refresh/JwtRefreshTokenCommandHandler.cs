@@ -6,7 +6,7 @@
     using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Models;
+    using Common.Models;
     using AppSettingsModels;
     using Common.Exceptions;
     using Common.Interfaces;
@@ -71,8 +71,9 @@
 
             try
             {
-                this.tokenValidationParameters.ValidateLifetime = false;
-                var principal = tokenHandler.ValidateToken(token, this.tokenValidationParameters, out var validatedToken);
+                var clonedTokenValidationParameters = this.tokenValidationParameters.Clone();
+                clonedTokenValidationParameters.ValidateLifetime = false;
+                var principal = tokenHandler.ValidateToken(token, clonedTokenValidationParameters, out var validatedToken);
                 return !IsJwtWithValidSecurityAlgorithm(validatedToken) ? null : principal;
             }
             catch
