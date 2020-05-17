@@ -29,8 +29,8 @@ export const NavMenu = () => {
               <Button variant="outline-info">Search</Button>
             </Form>
             <Nav className="mr-auto">
-              <Nav.Link href="/register">Register</Nav.Link>
-              <Nav.Link href="/login">Login</Nav.Link>
+              <Nav.Link href="/sign-up">Sign up</Nav.Link>
+              <Nav.Link href="/sign-in">Login</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

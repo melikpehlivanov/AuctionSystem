@@ -6,6 +6,7 @@ import { Container } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
 import { NetworkError } from "./components/Error/NetworkError";
 import { NotFound } from "./components/Error/NotFound";
+import { Register } from "./components/Register/Register";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,12 +15,13 @@ function App() {
   return (
     <Fragment>
       <NavMenu />
-      <Container>
+      <Container className="pt-3">
         <ToastContainer />
         <Switch>
           <Route exact path={["/", "/home"]} component={Home} />
           {/* <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} /> */}
+           */}
+          <Route exact path="/sign-up" component={Register} />
           <Route exact path="/error/network" component={NetworkError} />
           <Route path="*" component={NotFound} />
         </Switch>
