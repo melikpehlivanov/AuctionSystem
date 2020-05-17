@@ -71,6 +71,7 @@
 
             try
             {
+                this.tokenValidationParameters.ValidateLifetime = false;
                 var principal = tokenHandler.ValidateToken(token, this.tokenValidationParameters, out var validatedToken);
                 return !IsJwtWithValidSecurityAlgorithm(validatedToken) ? null : principal;
             }
