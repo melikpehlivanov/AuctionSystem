@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Nav,
   Navbar,
@@ -7,8 +7,12 @@ import {
   Button,
   Container,
 } from "react-bootstrap";
+import { history } from "..";
+import { useAuth } from "../helpers/authHook";
 
 export const NavMenu = () => {
+  const auth = useAuth();
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -28,10 +32,24 @@ export const NavMenu = () => {
               />
               <Button variant="outline-info">Search</Button>
             </Form>
-            <Nav className="mr-auto">
-              <Nav.Link href="/sign-up">Sign up</Nav.Link>
-              <Nav.Link href="/sign-in">Login</Nav.Link>
-            </Nav>
+            {auth.user ? (
+              <Button
+                onClick={() => {
+                  auth.signOut();
+                  history.push("/");
+                  window.location.reload();
+                }}
+              >
+                logout
+              </Button>
+            ) : (
+              <Fragment>
+                <Nav className="mr-auto">
+                  <Nav.Link href="/sign-up">Sign up</Nav.Link>
+                  <Nav.Link href="/sign-in">Login</Nav.Link>
+                </Nav>
+              </Fragment>
+            )}
           </Navbar.Collapse>
         </Container>
       </Navbar>

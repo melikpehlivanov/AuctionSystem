@@ -7,25 +7,28 @@ import { ToastContainer } from "react-toastify";
 import { NetworkError } from "./components/Error/NetworkError";
 import { NotFound } from "./components/Error/NotFound";
 import { Register } from "./components/Register/Register";
+import { Login } from "./components/Login/Login";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import { ProvideAuth } from "./helpers/authHook";
 
 function App() {
   return (
     <Fragment>
-      <NavMenu />
-      <Container className="pt-3">
-        <ToastContainer />
-        <Switch>
-          <Route exact path={["/", "/home"]} component={Home} />
-          {/* <Route exact path="/login" component={Login} />
-           */}
-          <Route exact path="/sign-up" component={Register} />
-          <Route exact path="/error/network" component={NetworkError} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </Container>
+      <ProvideAuth>
+        <NavMenu />
+        <Container className="pt-3">
+          <ToastContainer />
+          <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/sign-in" component={Login} />
+            <Route exact path="/sign-up" component={Register} />
+            <Route exact path="/error/network" component={NetworkError} />
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Container>
+      </ProvideAuth>
     </Fragment>
   );
 }

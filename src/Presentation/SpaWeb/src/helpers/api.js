@@ -1,14 +1,23 @@
-import axios from "axios";
+import Axios from "axios";
 import { toast } from "react-toastify";
 import { history } from "..";
 
-const Axios = axios.create({
+const api = Axios.create({
   baseURL: "https://localhost:5001/api",
 });
 
-export let networkErrorMessage = "";
+const refreshTokenUrl = "/identity/refresh";
 
-Axios.interceptors.response.use(
+function getAccessToken() {
+  return JSON.parse(localStorage.getItem("user"))?.token;
+}
+
+api.interceptors.request.use((request) => {
+  request.headers["Authorization"] = `Bearer ${getAccessToken()}`;
+  return request;
+});
+
+api.interceptors.response.use(
   (response) => response,
   (error) => {
     // network error
@@ -18,24 +27,61 @@ Axios.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    let originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      // if the error is 401 and hasn't already been retried
+      return refreshToken(error, originalRequest);
+    }
+
     if (errorResponse.status) {
       // validation errors
       if (errorResponse.status === 400 && errorResponse.data.errors) {
-        Object.keys(errorResponse.data.errors).forEach(function (key) {
-          errorResponse.data.errors[key].forEach(function (value) {
-            toast.error(value, {
-              autoClose: 10000,
-            });
-          });
-        });
-
+        return handleValidationErrors(errorResponse, error);
+      } else if (errorResponse.status === 400 && errorResponse.data.error) {
+        toast.error(errorResponse.data.error);
         return Promise.reject(error);
       }
 
-      toast.error(errorResponse.data.error);
       return Promise.reject(error);
     }
   }
 );
 
-export default Axios;
+function handleValidationErrors(errorResponse, error) {
+  Object.keys(errorResponse.data.errors).forEach(function (key) {
+    errorResponse.data.errors[key].forEach(function (value) {
+      toast.error(value, {
+        autoClose: 8000,
+      });
+    });
+  });
+  return Promise.reject(error);
+}
+
+function refreshToken(error, request) {
+  request._retry = true; // now it can be retried
+  const tokens = JSON.parse(localStorage.getItem("user"));
+
+  if (tokens) {
+    return api
+      .post(refreshTokenUrl, tokens)
+      .then((tokenRefreshResponse) => {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(tokenRefreshResponse.data.data)
+        );
+
+        request.headers["Authorization"] = "Bearer " + getAccessToken(); // new header new token
+        return api(request);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
+      });
+  }
+
+  toast.error("Please login");
+  history.push("/sign-in");
+  return Promise.reject(error);
+}
+
+export default api;
