@@ -17,7 +17,7 @@ namespace Api
 
     public class Startup
     {
-        public IWebHostEnvironment Environment;
+        private IWebHostEnvironment Environment;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -25,7 +25,7 @@ namespace Api
             this.Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -60,14 +60,14 @@ namespace Api
                 .UseCustomExceptionHandler()
                 .UseRouting()
                 .UseHsts()
-                .UseAuthentication()
-                .UseAuthorization()
-                .UseSwaggerUi()
-                //TODO: Allow only client app when it's implemented
                 .UseCors(options => options
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod())
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseSwaggerUi()
+                //TODO: Allow only client app when it's implemented
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

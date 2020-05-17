@@ -64,10 +64,12 @@
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
             services.AddSingleton(tokenValidationParameters);
 
             services
+                .AddAuthorization()
                 .AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
