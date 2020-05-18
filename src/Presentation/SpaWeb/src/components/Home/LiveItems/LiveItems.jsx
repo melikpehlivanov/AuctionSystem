@@ -9,6 +9,8 @@ import { PictureContainer } from "./Pictures/PictureContainer";
 
 export const LiveItems = () => {
   const [items, setItems] = useState([]);
+  const [totalItems, setTotalItems] = useState(0);
+
   useEffect(() => {
     retrieveLiveItems();
   }, []);
@@ -16,6 +18,7 @@ export const LiveItems = () => {
   const retrieveLiveItems = () => {
     itemsService.getLiveItems().then((response) => {
       setItems(response.data.data);
+      setTotalItems(response.data.totalDataCount);
     });
   };
 
@@ -25,7 +28,7 @@ export const LiveItems = () => {
 
   return (
     <Container className="pt-3">
-      <h3>{items.length} Live Items</h3>
+      <h3>{totalItems} Live Items</h3>
       {items.length !== 0 ? (
         <div className="row">
           {items.map((item, index) => {
