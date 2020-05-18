@@ -12,6 +12,26 @@ function getAccessToken() {
   return JSON.parse(localStorage.getItem("user"))?.token;
 }
 
+let authTokenRequest;
+
+// This function makes a call to get the auth token
+// or it returns the same promise as an in-progress call to get the auth token
+function getAuthToken() {
+  if (!authTokenRequest) {
+    const tokens = JSON.parse(localStorage.getItem("user"));
+    authTokenRequest = api
+      .post(refreshTokenUrl, tokens)
+      .then((tokenRefreshResponse) => tokenRefreshResponse);
+    authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
+  }
+
+  return authTokenRequest;
+}
+
+function resetAuthTokenRequest() {
+  authTokenRequest = null;
+}
+
 api.interceptors.request.use((request) => {
   request.headers["Authorization"] = `Bearer ${getAccessToken()}`;
   return request;
@@ -27,10 +47,12 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    let originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      // if the error is 401 and hasn't already been retried
-      return refreshToken(error, originalRequest);
+    if (error.response.status === 401 && !error.config._retry) {
+      return getAuthToken().then((response) => {
+        localStorage.setItem("user", JSON.stringify(response.data.data));
+        error.response.config.__isRetryRequest = true;
+        return api(error.response.config);
+      });
     }
 
     if (errorResponse.status) {
@@ -55,32 +77,6 @@ function handleValidationErrors(errorResponse, error) {
       });
     });
   });
-  return Promise.reject(error);
-}
-
-function refreshToken(error, request) {
-  request._retry = true; // now it can be retried
-  const tokens = JSON.parse(localStorage.getItem("user"));
-
-  if (tokens) {
-    return api
-      .post(refreshTokenUrl, tokens)
-      .then((tokenRefreshResponse) => {
-        localStorage.setItem(
-          "user",
-          JSON.stringify(tokenRefreshResponse.data.data)
-        );
-
-        request.headers["Authorization"] = "Bearer " + getAccessToken(); // new header new token
-        return api(request);
-      })
-      .catch((error) => {
-        return Promise.reject(error);
-      });
-  }
-
-  toast.error("Please login");
-  history.push("/sign-in");
   return Promise.reject(error);
 }
 
