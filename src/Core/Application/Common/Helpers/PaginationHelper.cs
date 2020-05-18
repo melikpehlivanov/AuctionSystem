@@ -27,7 +27,8 @@
                 PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null,
                 NextPage = response.Any() ? nextPage : null,
                 PreviousPage = previousPage,
-                TotalPages = totalPages
+                TotalPages = totalPages,
+                TotalDataCount = totalDataCountInDatabase,
             };
         }
     }

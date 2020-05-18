@@ -28,5 +28,7 @@
         public int? PreviousPage { get; set; }
 
         public IEnumerable<T> Data { get; set; }
+        
+        public int TotalDataCount { get; set; }
     }
 }
