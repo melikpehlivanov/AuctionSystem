@@ -29,32 +29,35 @@
             this.mapper = mapper;
         }
 
-        public async Task<PagedResponse<ListAllUsersResponseModel>> Handle(ListAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<ListAllUsersResponseModel>> Handle(ListAllUsersQuery request,
+            CancellationToken cancellationToken)
         {
             var skipCount = (request.PageNumber - 1) * request.PageSize;
             var queryable = this.context.Users.AsQueryable();
+            var totalUsersCount = await this.context.Users.CountAsync(cancellationToken);
 
             var adminIds = await this.userManager.GetUsersInRoleAsync(AppConstants.AdministratorRole);
 
             if (request?.Filters == null)
             {
-                var pagedUsers = PaginationHelpers.CreatePaginatedResponse(request, await queryable
+                var pagedUsers = PaginationHelper.CreatePaginatedResponse(request, await queryable
                     .Skip(skipCount)
                     .Take(request.PageSize)
                     .ProjectTo<ListAllUsersResponseModel>(this.mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken), await this.context.Users.CountAsync(cancellationToken));
+                    .ToListAsync(cancellationToken), totalUsersCount);
 
                 AddUserRoles(pagedUsers.Data, adminIds);
                 return pagedUsers;
             }
 
             queryable = AddFiltersOnQuery(request.Filters, queryable);
+            totalUsersCount = await queryable.CountAsync(cancellationToken);
             var users = await queryable
                 .Skip(skipCount)
                 .Take(request.PageSize)
                 .ProjectTo<ListAllUsersResponseModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-            var result = PaginationHelpers.CreatePaginatedResponse(request, users, await this.context.Users.CountAsync(cancellationToken));
+            var result = PaginationHelper.CreatePaginatedResponse(request, users, totalUsersCount);
             AddUserRoles(users, adminIds);
 
             return result;
@@ -81,7 +84,8 @@
             }
         }
 
-        private static IQueryable<AuctionUser> AddFiltersOnQuery(ListAllUsersQueryFilter filters, IQueryable<AuctionUser> queryable)
+        private static IQueryable<AuctionUser> AddFiltersOnQuery(ListAllUsersQueryFilter filters,
+            IQueryable<AuctionUser> queryable)
         {
             if (!string.IsNullOrEmpty(filters?.UserId))
             {

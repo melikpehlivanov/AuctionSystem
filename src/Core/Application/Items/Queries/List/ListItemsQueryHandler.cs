@@ -37,7 +37,7 @@
             var totalItemsCount = await this.context.Items.CountAsync(cancellationToken);
             if (request?.Filters == null)
             {
-                return PaginationHelpers.CreatePaginatedResponse(request, await queryable
+                return PaginationHelper.CreatePaginatedResponse(request, await queryable
                     .Skip(skipCount)
                     .Take(request.PageSize)
                     .ProjectTo<ListItemsResponseModel>(this.mapper.ConfigurationProvider)
@@ -45,6 +45,7 @@
             }
 
             queryable = AddFiltersOnQuery(request.Filters, queryable);
+            totalItemsCount = await queryable.CountAsync(cancellationToken);
             var itemsList = await queryable
                 .Skip(skipCount)
                 .Take(request.PageSize)
@@ -54,7 +55,7 @@
                 .Select(this.mapper.Map<ListItemsResponseModel>)
                 .ToList();
 
-            var result = PaginationHelpers.CreatePaginatedResponse(request, items, totalItemsCount);
+            var result = PaginationHelper.CreatePaginatedResponse(request, items, totalItemsCount);
             return result;
         }
 
