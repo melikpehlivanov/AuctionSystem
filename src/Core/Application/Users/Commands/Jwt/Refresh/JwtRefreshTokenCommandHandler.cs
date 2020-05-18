@@ -55,8 +55,7 @@
                 throw new BadRequestException(ExceptionMessages.User.InvalidRefreshToken);
             }
 
-            storedRefreshToken.Used = true;
-            this.context.RefreshTokens.Update(storedRefreshToken);
+            this.context.RefreshTokens.Remove(storedRefreshToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
             var userId = validatedToken.Claims.Single(x => x.Type == "id").Value;
