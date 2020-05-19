@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ReactCardCarousel from "react-card-carousel";
 import itemsService from "../../../services/itemsService";
-import slugify from "react-slugify";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 import { Container, Card } from "react-bootstrap";
+import { itemDetailsSlug } from "../../../helpers/slug";
 
 import "../HottestItems/HottestItems.css";
 
@@ -42,7 +42,7 @@ export const HottestItems = () => {
                   <p className="card-text">€{item.startingPrice}</p>
                   <Link
                     className="btn btn-primary"
-                    to={`/items/${slugify(item.title)}/${item.id}`}
+                    to={itemDetailsSlug(item.title, item.id)}
                   >
                     View
                   </Link>

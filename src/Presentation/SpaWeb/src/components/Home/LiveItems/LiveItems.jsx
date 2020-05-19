@@ -1,11 +1,11 @@
 import React, { useEffect, useState, Fragment } from "react";
 import itemsService from "../../../services/itemsService";
-import slugify from "react-slugify";
 import { Container, Card, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { PictureContainer } from "./Pictures/PictureContainer";
+import { bidSlug, itemDetailsSlug } from "../../../helpers/slug";
 
 export const LiveItems = () => {
   const [items, setItems] = useState([]);
@@ -22,10 +22,6 @@ export const LiveItems = () => {
     });
   };
 
-  const generateSlug = (title, id) => {
-    return `/items/${slugify(title)}/${id}`;
-  };
-
   return (
     <Container className="pt-3">
       <h3>{totalItems} Live Items</h3>
@@ -37,7 +33,7 @@ export const LiveItems = () => {
                 <div key={index} className="col-12 col-md-6 col-lg-4 p-1">
                   <Card className="shadow m-2">
                     {item.pictures.length === 1 ? (
-                      <Link to={generateSlug(item.title, item.id)}>
+                      <Link to={itemDetailsSlug(item.title, item.id)}>
                         <Card.Img
                           height="240px"
                           variant="top"
@@ -48,16 +44,16 @@ export const LiveItems = () => {
                     ) : (
                       <PictureContainer
                         pictures={item.pictures}
-                        itemSlug={generateSlug(item.title, item.id)}
+                        itemSlug={itemDetailsSlug(item.title, item.id)}
                       />
                     )}
                     <Card.Body>
                       <Card.Title>
-                        <Link to={generateSlug(item.title, item.id)}>
+                        <Link to={itemDetailsSlug(item.title, item.id)}>
                           {item.title}
                         </Link>
                       </Card.Title>
-                      <Link to={`/bids/${slugify(item.title)}/${item.id}`}>
+                      <Link to={bidSlug(item.title, item.id)}>
                         <span className="float-right" style={{ color: "red" }}>
                           Bid now <FontAwesomeIcon icon={faCaretRight} />
                         </span>
@@ -70,7 +66,9 @@ export const LiveItems = () => {
           </div>
           {items.length === 10 ?? (
             <div className="text-center pt-3">
-              <Button primary>View more items</Button>
+              <Link className="btn btn-primary" to={"/items"}>
+                View more items
+              </Link>
             </div>
           )}
         </Fragment>
