@@ -391,7 +391,8 @@
                     StartingPrice = DataConstants.SampleItemStartingPrice,
                     MinIncrease = DataConstants.SampleItemMinIncrease,
                     StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                    EndTime = DateTime.UtcNow.AddDays(10)
+                    EndTime = DateTime.UtcNow.AddDays(10),
+                    UserId = DataConstants.SampleUserId
                 };
                 items.Add(item);
             }
