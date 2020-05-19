@@ -20,6 +20,7 @@ const getHottestUpcomingItems = () => {
 const getLiveItems = () => {
   const params = {
     getLiveItems: true,
+    pageSize: 10,
   };
   return api.get(itemsApiPath, { params }).then((response) => response);
 };
