@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import itemsService from "../../../services/itemsService";
-import { Container, Card, Button } from "react-bootstrap";
+import { Container, Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -64,12 +64,14 @@ export const LiveItems = () => {
               );
             })}
           </div>
-          {items.length === 10 ?? (
-            <div className="text-center pt-3">
+          {items.length >= 10 ? (
+            <div className="text-center pt-3 pb-4">
               <Link className="btn btn-primary" to={"/items"}>
                 View more items
               </Link>
             </div>
+          ) : (
+            ""
           )}
         </Fragment>
       ) : (
