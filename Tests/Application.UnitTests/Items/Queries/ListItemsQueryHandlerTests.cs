@@ -31,28 +31,7 @@
 
             this.handler = new ListItemsQueryHandler(this.context, this.mapper);
         }
-
-        private async Task SeedLiveItems(int count)
-        {
-            var items = new List<Item>();
-            for (var i = 1; i <= count; i++)
-            {
-                var item = new Item
-                {
-                    Title = DataConstants.SampleItemTitle,
-                    Description = DataConstants.SampleItemDescription,
-                    StartingPrice = DataConstants.SampleItemStartingPrice,
-                    MinIncrease = DataConstants.SampleItemMinIncrease,
-                    StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                    EndTime = DateTime.UtcNow.AddDays(10)
-                };
-                items.Add(item);
-            }
-
-            await this.context.Items.AddRangeAsync(items);
-            await this.context.SaveChangesAsync(CancellationToken.None);
-        }
-
+        
         [Fact]
         public async Task ListItems_Given_QueryFilter_With_EndTime_Should_Return_CorrectEntities()
         {
@@ -157,7 +136,7 @@
         }
 
         [Fact]
-        public async Task ListItems_Given_QueryFilter_With_StartingPrice_Should_Return_CorrectEntities()
+        public async Task ListItems_Given_QueryFilter_With_MinPrice_Should_Return_CorrectEntities()
         {
             const decimal expectedPrice = 500;
             await this.context.Items.AddAsync(new Item
@@ -195,6 +174,49 @@
             result
                 .Data
                 .All(x => x.As<ListItemsResponseModel>().StartingPrice >= expectedPrice)
+                .Should()
+                .BeTrue();
+        }
+        
+        [Fact]
+        public async Task ListItems_Given_QueryFilter_With_MaxPrice_Should_Return_CorrectEntities()
+        {
+            const decimal expectedPrice = 1000;
+            await this.context.Items.AddAsync(new Item
+            {
+                Title = DataConstants.SampleItemTitle,
+                Description = DataConstants.SampleItemDescription,
+                StartingPrice = expectedPrice,
+                MinIncrease = DataConstants.SampleItemMinIncrease,
+                StartTime = DateTime.UtcNow,
+                EndTime = DataConstants.SampleItemEndTime,
+                SubCategoryId = DataConstants.SampleSubCategoryId,
+                UserId = DataConstants.SampleAdminUserId
+            });
+            await this.context.Items.AddAsync(new Item
+            {
+                Title = DataConstants.SampleItemTitle,
+                Description = DataConstants.SampleItemDescription,
+                StartingPrice = expectedPrice,
+                MinIncrease = DataConstants.SampleItemMinIncrease,
+                StartTime = DateTime.UtcNow,
+                EndTime = DataConstants.SampleItemEndTime,
+                SubCategoryId = DataConstants.SampleSubCategoryId,
+                UserId = DataConstants.SampleAdminUserId
+            });
+            await this.context.SaveChangesAsync(CancellationToken.None);
+
+            var result = await this.handler.Handle(new ListItemsQuery
+            {
+                Filters = new ListAllItemsQueryFilter
+                {
+                    MinPrice = expectedPrice
+                }
+            }, CancellationToken.None);
+
+            result
+                .Data
+                .All(x => x.As<ListItemsResponseModel>().StartingPrice <= expectedPrice)
                 .Should()
                 .BeTrue();
         }
@@ -355,6 +377,27 @@
             result
                 .Should()
                 .BeOfType<PagedResponse<ListItemsResponseModel>>();
+        }
+        
+        private async Task SeedLiveItems(int count)
+        {
+            var items = new List<Item>();
+            for (var i = 1; i <= count; i++)
+            {
+                var item = new Item
+                {
+                    Title = DataConstants.SampleItemTitle,
+                    Description = DataConstants.SampleItemDescription,
+                    StartingPrice = DataConstants.SampleItemStartingPrice,
+                    MinIncrease = DataConstants.SampleItemMinIncrease,
+                    StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
+                    EndTime = DateTime.UtcNow.AddDays(10)
+                };
+                items.Add(item);
+            }
+
+            await this.context.Items.AddRangeAsync(items);
+            await this.context.SaveChangesAsync(CancellationToken.None);
         }
     }
 }

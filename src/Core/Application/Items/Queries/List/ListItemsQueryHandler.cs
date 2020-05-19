@@ -82,6 +82,11 @@
                 queryable = queryable.Where(i => i.StartingPrice >= filters.MinPrice);
             }
             
+            if (filters?.MaxPrice != null)
+            {
+                queryable = queryable.Where(i => i.StartingPrice <= filters.MaxPrice);
+            }
+            
             if (filters?.StartTime != null)
             {
                 queryable = queryable.Where(i => i.StartTime >= filters.StartTime.Value.ToUniversalTime());
