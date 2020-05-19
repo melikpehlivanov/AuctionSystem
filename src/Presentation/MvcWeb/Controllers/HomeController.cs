@@ -27,7 +27,7 @@
             {
                 Filters = new ListAllItemsQueryFilter
                 {
-                    StartingPrice = 10000,
+                    MinPrice = 10000,
                     StartTime = DateTime.UtcNow,
                 }
             });

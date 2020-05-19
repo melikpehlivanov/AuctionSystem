@@ -8,13 +8,13 @@
 
         public string UserId { get; set; }
 
-        public decimal? StartingPrice { get; set; }
+        public decimal? MinPrice { get; set; }
 
         public DateTime? StartTime { get; set; }
 
         public DateTime? EndTime { get; set; }
 
-        public bool? GetLiveItems { get; set; }
+        public bool GetLiveItems { get; set; }
 
         public int? MinimumPicturesCount { get; set; }
 

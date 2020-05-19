@@ -188,7 +188,7 @@
             {
                 Filters = new ListAllItemsQueryFilter
                 {
-                    StartingPrice = expectedPrice
+                    MinPrice = expectedPrice
                 }
             }, CancellationToken.None);
 

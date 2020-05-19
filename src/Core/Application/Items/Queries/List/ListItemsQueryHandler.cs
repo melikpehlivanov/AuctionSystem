@@ -32,6 +32,7 @@
             var queryable = this.context
                 .Items
                 .Include(i => i.Pictures)
+                .Include(u=> u.User)
                 .AsQueryable();
 
             var totalItemsCount = await this.context.Items.CountAsync(cancellationToken);
@@ -71,16 +72,16 @@
                 queryable = queryable.Where(i => i.UserId == filters.UserId);
             }
 
-            if (filters?.GetLiveItems != null)
+            if (filters?.GetLiveItems == true)
             {
                 queryable = queryable.Where(i => i.StartTime < DateTime.UtcNow && i.EndTime > DateTime.UtcNow);
             }
 
-            if (filters?.StartingPrice != null)
+            if (filters?.MinPrice != null)
             {
-                queryable = queryable.Where(i => i.StartingPrice >= filters.StartingPrice);
+                queryable = queryable.Where(i => i.StartingPrice >= filters.MinPrice);
             }
-
+            
             if (filters?.StartTime != null)
             {
                 queryable = queryable.Where(i => i.StartTime >= filters.StartTime.Value.ToUniversalTime());
