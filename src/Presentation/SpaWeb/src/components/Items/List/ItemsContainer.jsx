@@ -49,7 +49,14 @@ export const ItemsContainer = ({
                         {item.title}
                       </Link>
                     </Card.Title>
-                    <Card.Title>{item.userFullName}</Card.Title>
+                    <Card.Title>
+                      <div className="d-flex">
+                        Owner:{" "}
+                        <p style={{ color: "grey" }} className="ml-1">
+                          {item.userFullName}
+                        </p>
+                      </div>
+                    </Card.Title>
                     <p style={{ color: "grey" }}>
                       Starting price: €{item.startingPrice}
                     </p>
@@ -80,7 +87,15 @@ export const ItemsContainer = ({
                         {item.title}
                       </Link>
                     </Card.Title>
-                    <Card.Title>{item.userFullName}</Card.Title>
+                    <Card.Title>
+                      <div className="d-flex">
+                        Owner:{" "}
+                        <p style={{ color: "grey" }} className="ml-1">
+                          {item.userFullName}
+                        </p>
+                      </div>
+                    </Card.Title>
+
                     <p style={{ color: "grey" }}>
                       Starting price: €{item.startingPrice}
                     </p>
