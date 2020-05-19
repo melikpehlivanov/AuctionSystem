@@ -12,7 +12,7 @@
             List<T> response,
             int totalDataCountInDatabase)
         {
-            var totalPages = (int) Math.Ceiling(totalDataCountInDatabase / (double) AppConstants.PageSize);
+            var totalPages = (int) Math.Ceiling(totalDataCountInDatabase / (double) pagination.PageSize);
             var nextPage = pagination.PageNumber >= 1 && pagination.PageNumber < totalPages
                 ? pagination.PageNumber + 1
                 : (int?)null;
