@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { toast } from "react-toastify";
-import { history } from "..";
+import { history } from "../..";
 
 const api = Axios.create({
   baseURL: "https://localhost:5001/api",

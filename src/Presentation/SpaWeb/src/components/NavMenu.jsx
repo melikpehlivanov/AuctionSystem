@@ -8,7 +8,7 @@ import {
   Container,
 } from "react-bootstrap";
 import { history } from "..";
-import { useAuth } from "../helpers/authHook";
+import { useAuth } from "../utils/helpers/authHook";
 
 export const NavMenu = () => {
   const auth = useAuth();

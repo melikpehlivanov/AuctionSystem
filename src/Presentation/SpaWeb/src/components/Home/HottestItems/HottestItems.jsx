@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 import { Container, Card } from "react-bootstrap";
-import { itemDetailsSlug } from "../../../helpers/slug";
+import { itemDetailsSlug } from "../../../utils/helpers/slug";
 
 import "../HottestItems/HottestItems.css";
 

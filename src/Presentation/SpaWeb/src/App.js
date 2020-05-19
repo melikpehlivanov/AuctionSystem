@@ -11,7 +11,8 @@ import { Login } from "./components/Login/Login";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ProvideAuth } from "./helpers/authHook";
+import { ProvideAuth } from "./utils/helpers/authHook";
+import { List } from "./components/Items/List/List";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route exact path="/sign-in" component={Login} />
             <Route exact path="/sign-up" component={Register} />
             <Route exact path="/error/network" component={NetworkError} />
+            <Route exact path="/items" component={List} />
             <Route path="*" component={NotFound} />
           </Switch>
         </Container>

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { PictureContainer } from "./Pictures/PictureContainer";
-import { bidSlug, itemDetailsSlug } from "../../../helpers/slug";
+import { bidSlug, itemDetailsSlug } from "../../../utils/helpers/slug";
 
 export const LiveItems = () => {
   const [items, setItems] = useState([]);

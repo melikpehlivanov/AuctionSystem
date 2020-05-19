@@ -1,4 +1,4 @@
-import api from "../helpers/api";
+import api from "../utils/helpers/api";
 
 const itemsApiPath = "/items";
 
@@ -25,7 +25,12 @@ const getLiveItems = () => {
   return api.get(itemsApiPath, { params }).then((response) => response);
 };
 
+const getItems = (query) => {
+  return api.get(itemsApiPath, { params: query }).then((response) => response);
+};
+
 export default {
   getHottestUpcomingItems,
   getLiveItems,
+  getItems,
 };
