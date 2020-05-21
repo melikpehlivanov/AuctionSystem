@@ -50,7 +50,7 @@ export const Search = ({ state, setState }) => {
                 onChange={(value) => {
                   setPrice(value);
                   setState({
-                    startingPrice: value.min < 1 ? 1 : value.min,
+                    minPrice: value.min < 1 ? 1 : value.min,
                     maxPrice: price.max,
                   });
                 }}

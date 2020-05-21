@@ -11,7 +11,7 @@ export const List = () => {
   const [state, setState] = useState({
     title: null,
     getLiveItems: false,
-    startingPrice: null,
+    minPrice: null,
     maxPrice: null,
     startTime: null,
     endTime: null,
