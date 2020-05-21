@@ -16,9 +16,9 @@
         [FromQuery(Name = "userId")]
         public string UserId { get; set; }
 
-        [FromQuery(Name = "startingPrice")]
+        [FromQuery(Name = "minPrice")]
         [Range(typeof(decimal), "0.01", DecimalMaxValue)]
-        public decimal? StartingPrice { get; set; }
+        public decimal? MinPrice { get; set; }
 
         [FromQuery(Name = "getLiveItems")]
         public bool? GetLiveItems { get; set; }
