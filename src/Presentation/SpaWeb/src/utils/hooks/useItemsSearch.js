@@ -4,12 +4,12 @@ import itemsService from "../../services/itemsService";
 const useItemsSearch = (query, pageNumber) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [items, setitems] = useState([]);
+  const [items, setItems] = useState([]);
   const [totalItemsCount, setTotalItemsCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
-    setitems([]);
+    setItems([]);
   }, [query]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const useItemsSearch = (query, pageNumber) => {
     itemsService
       .getItems(query)
       .then((result) => {
-        setitems((previtems) => {
+        setItems((previtems) => {
           return [...previtems, ...result.data.data];
         });
         setTotalItemsCount(result.data.totalDataCount);
