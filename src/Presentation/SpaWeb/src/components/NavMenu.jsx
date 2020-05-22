@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import {
   Nav,
   Navbar,
@@ -12,6 +12,7 @@ import { useAuth } from "../utils/helpers/authHook";
 
 export const NavMenu = () => {
   const auth = useAuth();
+  const [title, setTitle] = useState("");
 
   return (
     <header>
@@ -24,14 +25,6 @@ export const NavMenu = () => {
               <Nav.Link href="/items">All Items</Nav.Link>
               <Nav.Link href="/contact">Contact us</Nav.Link>
             </Nav>
-            <Form className="my-2 my-lg-0 mx-auto" inline>
-              <FormControl
-                type="text"
-                placeholder="Search item"
-                className="mr-sm-2"
-              />
-              <Button variant="outline-info">Search</Button>
-            </Form>
             {auth.user ? (
               <Button
                 onClick={() => {
@@ -44,7 +37,7 @@ export const NavMenu = () => {
               </Button>
             ) : (
               <Fragment>
-                <Nav className="mr-auto">
+                <Nav>
                   <Nav.Link href="/sign-up">Sign up</Nav.Link>
                   <Nav.Link href="/sign-in">Login</Nav.Link>
                 </Nav>
