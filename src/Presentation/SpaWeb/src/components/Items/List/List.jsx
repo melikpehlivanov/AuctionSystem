@@ -46,18 +46,7 @@ export const List = () => {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">
-                      Price low to high
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">
-                      Price high to low
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">
-                      Latest listings
-                    </Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">
-                      Oldest listings
-                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-1">TODO</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
