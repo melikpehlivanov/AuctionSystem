@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Form } from "react-bootstrap";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 import DateTimePicker from "react-datetime-picker";
+import categoriesService from "../../../services/categoriesService";
 
 export const Search = ({ state, setState }) => {
   const [price, setPrice] = useState({ min: 1, max: 15000 });
@@ -11,6 +12,20 @@ export const Search = ({ state, setState }) => {
   dateAfterTenDays.setDate(dateAfterTenDays.getDate() + 10);
   const [endTime, setendTime] = useState(dateAfterTenDays);
   const [dateEnabled, setDateEnabled] = useState(true);
+  const [categories, setCategories] = useState([]);
+
+  //It's better to extract fecth categories logic in store because we're repeating code...
+  //but let's leave it as it is now :D
+
+  useEffect(() => {
+    retrieveCategories();
+  }, []);
+
+  const retrieveCategories = () => {
+    categoriesService.getAll().then((response) => {
+      setCategories(response.data.data);
+    });
+  };
 
   return (
     <Col className="mt-5 mt-lg-0" lg={4}>
@@ -22,6 +37,7 @@ export const Search = ({ state, setState }) => {
 
           <Form>
             <Form.Group controlId="Title">
+              <Form.Label>Title</Form.Label>
               <Form.Control
                 onChange={(e) => setState({ title: e.target.value })}
                 type="input"
@@ -30,11 +46,35 @@ export const Search = ({ state, setState }) => {
                 aria-describedby="basic-addon1"
               />
             </Form.Group>
+            <Form.Group controlId="Category">
+              <Form.Label>Category</Form.Label>
+              <Form.Control as="select">
+                <option
+                  defaultValue
+                  onClick={() => setState({ subCategoryId: null })}
+                >
+                  Select category
+                </option>
+                {categories.map((category) => {
+                  return category.subCategories.map((subCategory, index) => {
+                    return (
+                      <option
+                        key={index}
+                        onClick={(e) => {
+                          setState({ subCategoryId: e.target.value });
+                        }}
+                        value={subCategory.id}
+                      >
+                        {subCategory.name}
+                      </option>
+                    );
+                  });
+                })}
+              </Form.Control>
+            </Form.Group>
             <Form.Group controlId="liveItems">
               <Form.Check
-                onChange={(e) =>
-                  setState({ getLiveItems: !state.getLiveItems })
-                }
+                onChange={() => setState({ getLiveItems: !state.getLiveItems })}
                 type="switch"
                 label="Live items"
               />

@@ -15,6 +15,7 @@ export const List = () => {
     maxPrice: null,
     startTime: null,
     endTime: null,
+    subCategoryId: null,
   });
 
   const [pageNumber, setPageNumber] = useState(1);
