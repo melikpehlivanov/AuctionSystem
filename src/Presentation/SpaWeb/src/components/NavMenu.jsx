@@ -22,7 +22,7 @@ export const NavMenu = () => {
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav className="mr-auto">
-              <Nav.Link href="/items">All Items</Nav.Link>
+              <Nav.Link href="/items">Items</Nav.Link>
               <Nav.Link href="/contact">Contact us</Nav.Link>
             </Nav>
             {auth.user ? (
