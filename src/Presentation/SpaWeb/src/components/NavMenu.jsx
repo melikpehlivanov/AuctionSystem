@@ -1,18 +1,10 @@
-import React, { Fragment, useState } from "react";
-import {
-  Nav,
-  Navbar,
-  Form,
-  FormControl,
-  Button,
-  Container,
-} from "react-bootstrap";
+import React, { Fragment } from "react";
+import { Nav, Navbar, Button, Container } from "react-bootstrap";
 import { history } from "..";
 import { useAuth } from "../utils/helpers/authHook";
 
 export const NavMenu = () => {
   const auth = useAuth();
-  const [title, setTitle] = useState("");
 
   return (
     <header>
