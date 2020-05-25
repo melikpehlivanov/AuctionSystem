@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import api from "./api";
+import {
+  setUserInLocalStorage,
+  removeUserFromLocalStorage,
+} from "./localStorage";
 
 const registerUserApiPath = "/identity/register";
 const loginUserApiPath = "/identity/login";
@@ -31,11 +35,8 @@ function useProvideAuth() {
   const signIn = (body) => {
     return api.post(loginUserApiPath, body).then((response) => {
       if (response.status === 200) {
-        setUser(response.data.data);
-        localStorage.setItem(
-          localStorageUser,
-          JSON.stringify(response.data.data)
-        );
+        const data = setUserInLocalStorage(response);
+        setUser(data);
       }
 
       return response.data;
@@ -47,7 +48,7 @@ function useProvideAuth() {
   };
 
   const signOut = () => {
-    localStorage.removeItem(localStorageUser);
+    removeUserFromLocalStorage();
     setUser(null);
   };
 

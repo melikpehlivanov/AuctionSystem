@@ -1,6 +1,7 @@
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
+import { getUserFromLocalStorage, setUserInLocalStorage } from "./localStorage";
 
 const api = Axios.create({
   baseURL: "https://localhost:5001/api",
@@ -18,9 +19,12 @@ let authTokenRequest;
 // or it returns the same promise as an in-progress call to get the auth token
 function getAuthToken() {
   if (!authTokenRequest) {
-    const tokens = JSON.parse(localStorage.getItem("user"));
+    const user = getUserFromLocalStorage();
     authTokenRequest = api
-      .post(refreshTokenUrl, tokens)
+      .post(refreshTokenUrl, {
+        token: user.token,
+        refreshToken: user.refreshToken,
+      })
       .then((tokenRefreshResponse) => tokenRefreshResponse);
     authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
   }
@@ -49,7 +53,7 @@ api.interceptors.response.use(
 
     if (error.response.status === 401 && !error.config._retry) {
       return getAuthToken().then((response) => {
-        localStorage.setItem("user", JSON.stringify(response.data.data));
+        setUserInLocalStorage(response);
         error.response.config.__isRetryRequest = true;
         return api(error.response.config);
       });
@@ -61,6 +65,12 @@ api.interceptors.response.use(
         return handleValidationErrors(errorResponse, error);
       } else if (errorResponse.status === 400 && errorResponse.data.error) {
         toast.error(errorResponse.data.error);
+        return Promise.reject(error);
+      } else if (errorResponse.status === 404) {
+        toast.error(
+          "Oops, looks like the item you are searching for actually does not exist."
+        );
+        history.push("/");
         return Promise.reject(error);
       }
 
