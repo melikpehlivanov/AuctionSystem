@@ -29,8 +29,13 @@ const getItems = (query) => {
   return api.get(itemsApiPath, { params: query }).then((response) => response);
 };
 
+const getItemById = (id) => {
+  return api.get(`${itemsApiPath}/${id}`).then((response) => response);
+};
+
 export default {
   getHottestUpcomingItems,
   getLiveItems,
   getItems,
+  getItemById,
 };
