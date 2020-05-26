@@ -22,8 +22,8 @@ function getAuthToken() {
     const user = getUserFromLocalStorage();
     authTokenRequest = api
       .post(refreshTokenUrl, {
-        token: user.token,
-        refreshToken: user.refreshToken,
+        token: user?.token,
+        refreshToken: user?.refreshToken,
       })
       .then((tokenRefreshResponse) => tokenRefreshResponse);
     authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
