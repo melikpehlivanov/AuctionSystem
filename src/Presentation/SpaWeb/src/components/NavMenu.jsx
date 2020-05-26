@@ -18,15 +18,25 @@ export const NavMenu = () => {
               <Nav.Link href="/contact">Contact us</Nav.Link>
             </Nav>
             {auth.user ? (
-              <Button
-                onClick={() => {
-                  auth.signOut();
-                  history.push("/");
-                  window.location.reload();
-                }}
-              >
-                logout
-              </Button>
+              <Fragment>
+                <Button
+                  onClick={() => {
+                    history.push("/items/create");
+                  }}
+                  className="mr-3"
+                  variant="primary"
+                >
+                  Create item
+                </Button>
+                <Button
+                  onClick={() => {
+                    auth.signOut();
+                    history.push("/");
+                  }}
+                >
+                  logout
+                </Button>
+              </Fragment>
             ) : (
               <Fragment>
                 <Nav>
