@@ -33,9 +33,14 @@ const getItemById = (id) => {
   return api.get(`${itemsApiPath}/${id}`).then((response) => response);
 };
 
+const createItem = (body) => {
+  return api.post(itemsApiPath, body).then((response) => response);
+};
+
 export default {
   getHottestUpcomingItems,
   getLiveItems,
   getItems,
   getItemById,
+  createItem,
 };
