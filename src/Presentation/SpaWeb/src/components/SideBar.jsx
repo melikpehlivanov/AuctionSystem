@@ -53,7 +53,7 @@ export const SideBar = (props) => {
               </span>
             )}
           </div>
-          <div class="pt-5 pb-5">
+          <div className="pt-5 pb-5">
             <Card border="dark">
               <Card.Body>
                 <Card.Text>
@@ -95,7 +95,7 @@ export const SideBar = (props) => {
               </Card.Body>
             </Card>
           </div>
-          {user?.userId === props.item?.userId ? (
+          {user?.id === props?.item.userId ? (
             <Card className="text-center">
               <Card.Header>Actions</Card.Header>
               <div className="list-group list-group-flush">
