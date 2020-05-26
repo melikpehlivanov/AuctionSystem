@@ -2,24 +2,36 @@ import React, { useState, useEffect } from "react";
 import { Col, Form } from "react-bootstrap";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
-import DateTimePicker from "react-datetime-picker";
 import categoriesService from "../../../services/categoriesService";
+import { EndTimeDatePicker, StartTimeDatePicker } from "../../DateTimePicker";
+import moment from "moment";
 
 export const Search = ({ state, setState }) => {
   const [price, setPrice] = useState({ min: 1, max: 15000 });
-  const [startTime, setstartTime] = useState(new Date());
-  const dateAfterTenDays = new Date();
-  dateAfterTenDays.setDate(dateAfterTenDays.getDate() + 10);
-  const [endTime, setendTime] = useState(dateAfterTenDays);
-  const [dateEnabled, setDateEnabled] = useState(true);
+  const [startTime, setStartTime] = useState(
+    moment().add(2, "minutes").toDate()
+  );
+  const [endTime, setEndTime] = useState(
+    moment().add(1, "months").add(10, "m").toDate()
+  );
+  const [isDateDisabled, setIsDateDisabled] = useState(true);
   const [categories, setCategories] = useState([]);
 
-  //It's better to extract fecth categories logic in store because we're repeating code...
+  //It's better to extract fecth categories logic in store because we're repeating unnecessary requests...
   //but let's leave it as it is now :D
 
   useEffect(() => {
     retrieveCategories();
   }, []);
+
+  useEffect(() => {
+    if (!isDateDisabled) {
+      setState({
+        startTime: startTime.toISOString("dd/mm/yyyy HH:mm"),
+        endTime: endTime.toISOString("dd/mm/yyyy HH:mm"),
+      });
+    }
+  }, [startTime, endTime, setState, isDateDisabled]);
 
   const retrieveCategories = () => {
     categoriesService.getAll().then((response) => {
@@ -97,11 +109,11 @@ export const Search = ({ state, setState }) => {
               />
             </Form.Group>
 
-            <Form.Group className="mt-5" controlId="dateEnabled">
+            <Form.Group className="mt-5" controlId="isDateDisabled">
               <Form.Check
                 onChange={() => {
-                  setDateEnabled(!dateEnabled);
-                  if (!dateEnabled) {
+                  setIsDateDisabled(!isDateDisabled);
+                  if (!isDateDisabled) {
                     setState({
                       startTime: null,
                       endTime: null,
@@ -114,31 +126,22 @@ export const Search = ({ state, setState }) => {
             </Form.Group>
             <Form.Group controlId="StartingTime">
               <p>Starting time</p>
-              <DateTimePicker
-                disabled={dateEnabled}
+              <StartTimeDatePicker
+                disabled={isDateDisabled}
                 readOnly={true}
-                format="dd-MM-yyyy HH:mm"
-                value={startTime}
-                onChange={(value) => {
-                  setstartTime(value);
-                  setState({
-                    startTime: startTime,
-                  });
-                }}
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
               />
             </Form.Group>
             <Form.Group controlId="EndTime">
               <p>End time</p>
-              <DateTimePicker
-                disabled={dateEnabled}
-                format="dd-MM-yyyy HH:mm"
-                value={endTime}
-                onChange={(value) => {
-                  setendTime(value);
-                  setState({
-                    endTime: endTime,
-                  });
-                }}
+              <EndTimeDatePicker
+                disabled={isDateDisabled}
+                readOnly={true}
+                endTime={endTime}
+                setEndTime={setEndTime}
+                startTime={startTime}
               />
             </Form.Group>
           </Form>
