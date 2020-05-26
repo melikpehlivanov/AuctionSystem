@@ -50,7 +50,7 @@
             await this.context.Items.AddAsync(item, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            await this.mediator.Send(new CreatePictureCommand {ItemId = item.Id, Pictures = request.PictureFormFiles},
+            await this.mediator.Send(new CreatePictureCommand {ItemId = item.Id, Pictures = request.Pictures},
                 cancellationToken);
 
             return new Response<ItemResponseModel>(new ItemResponseModel(item.Id));

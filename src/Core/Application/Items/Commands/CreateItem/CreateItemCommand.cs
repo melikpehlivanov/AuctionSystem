@@ -27,7 +27,7 @@ namespace Application.Items.Commands.CreateItem
 
         public Guid SubCategoryId { get; set; }
 
-        public ICollection<IFormFile> PictureFormFiles { get; set; } = new HashSet<IFormFile>();
+        public ICollection<IFormFile> Pictures { get; set; } = new HashSet<IFormFile>();
 
         public void ConfigureMapping(Profile mapper)
         {
@@ -36,7 +36,7 @@ namespace Application.Items.Commands.CreateItem
                 .ForMember(dest => dest.StartTime,
                     opt => opt.MapFrom(src => src.StartTime.ToUniversalTime()))
                 .ForMember(dest => dest.EndTime,
-                    opt => opt.MapFrom(src => src.EndTime.ToUniversalTime()));;
+                    opt => opt.MapFrom(src => src.EndTime.ToUniversalTime())).ForMember(p=> p.Pictures, opt => opt.Ignore());
         }
     }
 }
