@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Container, Form, InputGroup, Button } from "react-bootstrap";
+import { Container, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import categoriesService from "../../../services/categoriesService";
 import moment from "moment";
 import "./Create.css";
@@ -11,6 +11,7 @@ import { history } from "../../..";
 
 export const Create = (props) => {
   const { register, handleSubmit, errors } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [pictures, setPictures] = useState([]);
   const [startTime, setStartTime] = useState(
@@ -27,6 +28,7 @@ export const Create = (props) => {
   }, []);
 
   const onSubmit = (data, e) => {
+    setIsLoading(true);
     var formData = new FormData(e.target);
     pictures.forEach((file) => {
       formData.append("pictures", file, file.name);
@@ -34,11 +36,10 @@ export const Create = (props) => {
     formData.append("startTime", startTime.toISOString("dd/mm/yyyy HH:mm"));
     formData.append("endTime", endTime.toISOString("dd/mm/yyyy HH:mm"));
 
-    itemsService
-      .createItem(formData)
-      .then((response) =>
-        history.push(`/items/details/${response.data.data.id}`)
-      );
+    itemsService.createItem(formData).then((response) => {
+      history.push(`/items/details/${response.data.data.id}`);
+      setIsLoading(false);
+    });
   };
 
   const onDrop = (picture) => {
@@ -183,9 +184,22 @@ export const Create = (props) => {
           <Form.Group>
             <ImageUploader onChange={onDrop} />
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+          {!isLoading ? (
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          ) : (
+            <Button variant="primary" disabled>
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              Loading...
+            </Button>
+          )}
         </Form>
       </div>
     </Container>
