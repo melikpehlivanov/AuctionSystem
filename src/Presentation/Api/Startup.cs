@@ -29,11 +29,6 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
-
             services
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
@@ -45,6 +40,7 @@ namespace Api
                 .AddRedisCache(this.Configuration)
                 .AddSwagger()
                 .AddControllers()
+                .AddNewtonsoftJson(options => options.UseCamelCasing(true))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
         }
 
