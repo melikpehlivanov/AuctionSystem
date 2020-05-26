@@ -19,8 +19,8 @@ export const Details = () => {
     itemsService.getItemById(id).then(({ data: response }) => {
       setItem(response.data);
       setImages(createImageObj(response.data.pictures));
+      setIsLoading(false);
     });
-    setIsLoading(false);
   }, [id]);
 
   const createImageObj = (pictures) => {
