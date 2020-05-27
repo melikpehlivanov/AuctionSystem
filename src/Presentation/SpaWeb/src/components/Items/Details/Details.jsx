@@ -4,7 +4,7 @@ import ImageGallery from "react-image-gallery";
 import itemsService from "../../../services/itemsService";
 import { useParams } from "react-router-dom";
 import "moment-timezone";
-import { SideBar } from "../../SideBar";
+import { SideBar } from "../SideBar";
 import "./Details.css";
 
 export const Details = () => {
