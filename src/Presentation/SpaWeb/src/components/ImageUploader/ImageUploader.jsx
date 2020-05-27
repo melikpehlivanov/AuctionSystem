@@ -27,7 +27,7 @@ export const ImageUploader = (props) => {
 
   useEffect(() => {
     onChange(files, pictures);
-  }, [pictures, files]);
+  }, [pictures, files, onChange]);
 
   const hasExtension = (fileName) => {
     const pattern =
