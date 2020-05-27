@@ -7,7 +7,7 @@ import { EndTimeDatePicker, StartTimeDatePicker } from "../../DateTimePicker";
 import moment from "moment";
 
 export const Search = ({ state, setState }) => {
-  const [price, setPrice] = useState({ min: 1, max: 15000 });
+  const [price, setPrice] = useState({ min: 0, max: 50000 });
   const [startTime, setStartTime] = useState(
     moment().add(2, "minutes").toDate()
   );
@@ -97,12 +97,12 @@ export const Search = ({ state, setState }) => {
                 formatLabel={(value) => `€${value}`}
                 step={100}
                 value={price}
-                maxValue={15000}
-                minValue={1}
+                maxValue={50000}
+                minValue={0}
                 onChange={(value) => {
                   setPrice(value);
                   setState({
-                    minPrice: value.min < 1 ? 1 : value.min,
+                    minPrice: value.min <= 0 ? null : value.min,
                     maxPrice: price.max,
                   });
                 }}

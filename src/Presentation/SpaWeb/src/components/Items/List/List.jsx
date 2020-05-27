@@ -19,8 +19,8 @@ export const List = () => {
   });
 
   const [pageNumber, setPageNumber] = useState(1);
-
   const query = useDebounce(state, 500);
+  query.getLiveItems = query.getLiveItems ? query.getLiveItems : false;
   const { items, totalItemsCount, hasMore, loading, error } = useItemsSearch(
     query,
     pageNumber,
