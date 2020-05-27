@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Nav, Navbar, Button, Container } from "react-bootstrap";
 import { history } from "..";
-import { useAuth } from "../utils/helpers/authHook";
+import { useAuth } from "../utils/hooks/authHook";
 
 export const NavMenu = () => {
   const auth = useAuth();

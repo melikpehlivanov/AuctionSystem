@@ -11,7 +11,7 @@ import { Login } from "./components/Login/Login";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ProvideAuth } from "./utils/helpers/authHook";
+import { ProvideAuth } from "./utils/hooks/authHook";
 import { List } from "./components/Items/List/List";
 import { Details } from "./components/Items/Details/Details";
 import { Create } from "./components/Items/Create/Create";

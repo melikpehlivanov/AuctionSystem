@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { useCounter } from "../../utils/hooks/useCounter";
-import { useAuth } from "../../utils/helpers/authHook";
+import { useAuth } from "../../utils/hooks/authHook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import api from "./api";
+import api from "../helpers/api";
 import {
   setUserInLocalStorage,
   removeUserFromLocalStorage,
-} from "./localStorage";
+} from "../helpers/localStorage";
 
 const registerUserApiPath = "/identity/register";
 const loginUserApiPath = "/identity/login";

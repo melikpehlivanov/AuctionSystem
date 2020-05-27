@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Form, Button } from "react-bootstrap";
 import { history } from "../../index";
 import { toast } from "react-toastify";
-import { useAuth } from "../../utils/helpers/authHook";
+import { useAuth } from "../../utils/hooks/authHook";
 
 export const Login = () => {
   const { register, handleSubmit, errors, formState } = useForm({
