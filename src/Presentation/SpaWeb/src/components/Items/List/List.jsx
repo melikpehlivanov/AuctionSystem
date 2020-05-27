@@ -23,7 +23,8 @@ export const List = () => {
   const query = useDebounce(state, 500);
   const { items, totalItemsCount, hasMore, loading, error } = useItemsSearch(
     query,
-    pageNumber
+    pageNumber,
+    setPageNumber
   );
 
   return (
@@ -59,7 +60,7 @@ export const List = () => {
               <Col lg={8}>
                 <ItemsContainer
                   items={items}
-                  totalItemsCount={totalItemsCount}
+                  pageSize={state.pageSize}
                   hasMore={hasMore}
                   loading={loading}
                   error={error}

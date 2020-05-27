@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import itemsService from "../../services/itemsService";
 
-const useItemsSearch = (query, pageNumber) => {
+const useItemsSearch = (query, pageNumber, setPageNumber) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [items, setItems] = useState([]);
@@ -10,7 +10,8 @@ const useItemsSearch = (query, pageNumber) => {
 
   useEffect(() => {
     setItems([]);
-  }, [query]);
+    setPageNumber(1);
+  }, [query, setPageNumber]);
 
   useEffect(() => {
     setLoading(true);
@@ -26,7 +27,10 @@ const useItemsSearch = (query, pageNumber) => {
           return [...previtems, ...result.data.data];
         });
         setTotalItemsCount(result.data.totalDataCount);
-        setHasMore(result.data.data.length > 0);
+        setHasMore(
+          result.data.totalDataCount > result.data.pageSize &&
+            result.data.data.length > 0
+        );
         setLoading(false);
       })
       .catch(() => setError(true));
