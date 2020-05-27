@@ -14,7 +14,11 @@ const authContext = createContext();
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
 
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return (
+    <authContext.Provider value={auth}>
+      {!auth.isLoading ? children : null}
+    </authContext.Provider>
+  );
 }
 
 export const useAuth = () => {
@@ -23,10 +27,14 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setUser(getCurrentUser());
-  }, []);
+    if (user === null) {
+      setUser(getCurrentUser());
+      setIsLoading(false);
+    }
+  }, [user, isLoading]);
 
   const getCurrentUser = () => {
     return JSON.parse(localStorage.getItem(localStorageUser));
@@ -54,6 +62,7 @@ function useProvideAuth() {
 
   return {
     user,
+    isLoading,
     signIn,
     signUp,
     signOut,
