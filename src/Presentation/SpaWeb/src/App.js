@@ -15,6 +15,7 @@ import { ProvideAuth } from "./utils/hooks/authHook";
 import { List } from "./components/Items/List/List";
 import { Details } from "./components/Items/Details/Details";
 import { Create } from "./components/Items/Create/Create";
+import { PrivateRoute } from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
             <Route exact path="/sign-in" component={Login} />
             <Route exact path="/sign-up" component={Register} />
             <Route exact path="/error/network" component={NetworkError} />
-            <Route exact path="/items/create" component={Create} />
+            <PrivateRoute exact path="/items/create" component={Create} />
             <Route exact path="/items" component={List} />
             <Route path="/items/:slug/:id" component={Details} />
             <Route path="*" component={NotFound} />
