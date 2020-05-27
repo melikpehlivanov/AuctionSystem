@@ -31,84 +31,47 @@ export const ItemsContainer = ({
     <Fragment>
       <Row>
         {items.map((item, index) => {
-          if (items.length === index + 1) {
-            return (
-              <Col ref={lastItemElementRef} key={index} lg={6} sm={6}>
-                <Card className="shadow m-2">
-                  <Link to={itemDetailsSlug(item.title, item.id)}>
-                    <Card.Img
-                      height="240px"
-                      variant="top"
-                      alt="item image"
-                      src={item.pictures[0]?.url}
-                    />
-                  </Link>
-                  <Card.Body>
-                    <Card.Title>
-                      <Link to={itemDetailsSlug(item.title, item.id)}>
-                        {item.title}
-                      </Link>
-                    </Card.Title>
-                    <Card.Title>
-                      <div className="d-flex">
-                        Owner:{" "}
-                        <p style={{ color: "grey" }} className="ml-1">
-                          {item.userFullName}
-                        </p>
-                      </div>
-                    </Card.Title>
-                    <p style={{ color: "grey" }}>
-                      Starting price: €{item.startingPrice}
-                    </p>
-                    <Link to={bidSlug(item.title, item.id)}>
-                      <span className="float-right" style={{ color: "red" }}>
-                        Bid now <FontAwesomeIcon icon={faCaretRight} />
-                      </span>
+          return (
+            <Col key={index} lg={6} sm={6}>
+              <Card
+                ref={items.length === index + 1 ? lastItemElementRef : null}
+                className="shadow m-2"
+              >
+                <Link to={itemDetailsSlug(item.title, item.id)}>
+                  <Card.Img
+                    height="240px"
+                    variant="top"
+                    alt="item image"
+                    src={item.pictures[0]?.url}
+                  />
+                </Link>
+                <Card.Body>
+                  <Card.Title>
+                    <Link to={itemDetailsSlug(item.title, item.id)}>
+                      {item.title}
                     </Link>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          } else {
-            return (
-              <Col key={index} lg={6} sm={6}>
-                <Card className="shadow m-2">
-                  <Link to={itemDetailsSlug(item.title, item.id)}>
-                    <Card.Img
-                      height="240px"
-                      variant="top"
-                      alt="item image"
-                      src={item.pictures[0]?.url}
-                    />
-                  </Link>
-                  <Card.Body>
-                    <Card.Title>
-                      <Link to={itemDetailsSlug(item.title, item.id)}>
-                        {item.title}
-                      </Link>
-                    </Card.Title>
-                    <Card.Title>
-                      <div className="d-flex">
-                        Owner:{" "}
-                        <p style={{ color: "grey" }} className="ml-1">
-                          {item.userFullName}
-                        </p>
-                      </div>
-                    </Card.Title>
+                  </Card.Title>
+                  <Card.Title>
+                    <div className="d-flex">
+                      Owner:{" "}
+                      <p style={{ color: "grey" }} className="ml-1">
+                        {item.userFullName}
+                      </p>
+                    </div>
+                  </Card.Title>
 
-                    <p style={{ color: "grey" }}>
-                      Starting price: €{item.startingPrice}
-                    </p>
-                    <Link to={bidSlug(item.title, item.id)}>
-                      <span className="float-right" style={{ color: "red" }}>
-                        Bid now <FontAwesomeIcon icon={faCaretRight} />
-                      </span>
-                    </Link>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-          }
+                  <p style={{ color: "grey" }}>
+                    Starting price: €{item.startingPrice}
+                  </p>
+                  <Link to={bidSlug(item.title, item.id)}>
+                    <span className="float-right" style={{ color: "red" }}>
+                      Bid now <FontAwesomeIcon icon={faCaretRight} />
+                    </span>
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          );
         })}
       </Row>
       {loading === true ? (
