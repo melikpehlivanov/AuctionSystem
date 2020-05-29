@@ -7,11 +7,9 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { useCounter } from "../../utils/hooks/useCounter";
-import { useAuth } from "../../utils/hooks/authHook";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { useCounter } from "../../../utils/hooks/useCounter";
+import { useAuth } from "../../../utils/hooks/authHook";
+import { UserActionsContainer } from "./UserActionsContainer";
 
 export const SideBar = (props) => {
   const { counter, currentUtcTime } = useCounter(props);
@@ -95,23 +93,7 @@ export const SideBar = (props) => {
               </Card.Body>
             </Card>
           </div>
-          {user?.id === props?.item.userId ? (
-            <Card className="text-center">
-              <Card.Header>Actions</Card.Header>
-              <div className="list-group list-group-flush">
-                <Link className="list-group-item list-group-item-action text-primary">
-                  <FontAwesomeIcon icon={faEdit} /> Edit
-                </Link>
-              </div>
-              <div className="list-group list-group-flush">
-                <Link className="list-group-item list-group-item-action text-danger">
-                  <FontAwesomeIcon icon={faTrash} /> Delete
-                </Link>
-              </div>
-            </Card>
-          ) : (
-            ""
-          )}
+          <UserActionsContainer userId={user?.id} item={props?.item} />
         </Col>
       ) : (
         ""

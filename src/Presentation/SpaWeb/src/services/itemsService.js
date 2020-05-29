@@ -37,10 +37,15 @@ const createItem = (body) => {
   return api.post(itemsApiPath, body).then((response) => response);
 };
 
+const deleteItem = (id) => {
+  return api.delete(`${itemsApiPath}/${id}`).then((response) => response);
+};
+
 export default {
   getHottestUpcomingItems,
   getLiveItems,
   getItems,
   getItemById,
   createItem,
+  deleteItem,
 };
