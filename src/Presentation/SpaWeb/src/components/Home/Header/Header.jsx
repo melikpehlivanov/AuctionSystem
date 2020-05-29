@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import categoriesService from "../../../services/categoriesService";
-
+import { history } from "../../..";
 import "./Header.css";
 
 export const Header = () => {
@@ -48,7 +48,13 @@ export const Header = () => {
               >
                 {category.subCategories.map((subcategory, index) => {
                   return (
-                    <NavDropdown.Item key={index}>
+                    <NavDropdown.Item
+                      id={subcategory.id}
+                      key={index}
+                      onClick={(e) => {
+                        history.push(`/items/${e.target.id}`);
+                      }}
+                    >
                       {subcategory.name}
                     </NavDropdown.Item>
                   );

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Dropdown } from "react-bootstrap";
 import "react-input-range/lib/css/index.css";
 import "./List.css";
@@ -6,6 +6,7 @@ import useItemsSearch from "../../../utils/hooks/useItemsSearch";
 import useDebounce from "../../../utils/hooks/useDebounce";
 import { ItemsContainer } from "./ItemsContainer";
 import { Search } from "./Search";
+import { useParams } from "react-router-dom";
 
 export const List = () => {
   const [state, setState] = useState({
@@ -17,6 +18,12 @@ export const List = () => {
     endTime: null,
     subCategoryId: null,
   });
+
+  let { subCategoryId } = useParams();
+
+  useEffect(() => {
+    state.subCategoryId = subCategoryId ?? subCategoryId;
+  }, [subCategoryId]);
 
   const [pageNumber, setPageNumber] = useState(1);
   const query = useDebounce(state, 500);

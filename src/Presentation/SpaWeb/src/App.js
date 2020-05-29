@@ -30,7 +30,7 @@ function App() {
             <Route exact path="/sign-up" component={Register} />
             <Route exact path="/error/network" component={NetworkError} />
             <PrivateRoute exact path="/items/create" component={Create} />
-            <Route exact path="/items" component={List} />
+            <Route exact path="/items/:subCategoryId?" component={List} />
             <Route path="/items/:slug/:id" component={Details} />
             <Route path="*" component={NotFound} />
           </Switch>
