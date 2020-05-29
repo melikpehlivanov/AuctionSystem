@@ -18,8 +18,10 @@ export function useCounter(props) {
     }
 
     const interval = 1000;
+
+    let timeout;
     if (!counter) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         setCounter(duration);
       }, 500);
     }
@@ -33,7 +35,10 @@ export function useCounter(props) {
         duration = moment.duration(duration - interval, "milliseconds");
         setCounter(duration);
       }, interval);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearTimeout(timeout);
+    };
   }, [counter, props, currentTime]);
 
   return {
