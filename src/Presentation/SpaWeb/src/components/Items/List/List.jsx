@@ -22,7 +22,7 @@ export const List = () => {
   let { subCategoryId } = useParams();
 
   useEffect(() => {
-    state.subCategoryId = subCategoryId ?? subCategoryId;
+    setState({ subCategoryId: subCategoryId });
   }, [subCategoryId]);
 
   const [pageNumber, setPageNumber] = useState(1);
