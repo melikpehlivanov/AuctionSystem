@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import itemsService from "../../services/itemsService";
 
 const useItemsSearch = (query, pageNumber, setPageNumber) => {
@@ -13,7 +13,7 @@ const useItemsSearch = (query, pageNumber, setPageNumber) => {
     setPageNumber(1);
   }, [query, setPageNumber]);
 
-  useEffect(() => {
+  const makeRequest = useCallback(() => {
     setLoading(true);
     setError(false);
 
@@ -36,7 +36,14 @@ const useItemsSearch = (query, pageNumber, setPageNumber) => {
       .catch(() => setError(true));
   }, [query, pageNumber]);
 
-  return { loading, error, items, totalItemsCount, hasMore };
+  return {
+    makeRequest,
+    loading,
+    error,
+    items,
+    totalItemsCount,
+    hasMore,
+  };
 };
 
 export default useItemsSearch;

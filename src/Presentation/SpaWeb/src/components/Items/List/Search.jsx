@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Col, Form } from "react-bootstrap";
+import { Col, Form, Spinner } from "react-bootstrap";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 import categoriesService from "../../../services/categoriesService";
 import { EndTimeDatePicker, StartTimeDatePicker } from "../../DateTimePicker";
 import moment from "moment";
+import { history } from "../../..";
 
-export const Search = ({ state, setState }) => {
+export const Search = ({ loading, state, setState }) => {
   const [price, setPrice] = useState({ min: 0, max: 50000 });
   const [startTime, setStartTime] = useState(
     moment().add(2, "minutes").toDate()
@@ -26,10 +27,11 @@ export const Search = ({ state, setState }) => {
 
   useEffect(() => {
     if (!isDateDisabled) {
-      setState({
+      setState((prev) => ({
+        ...prev,
         startTime: startTime.toISOString("dd/mm/yyyy HH:mm"),
         endTime: endTime.toISOString("dd/mm/yyyy HH:mm"),
-      });
+      }));
     }
   }, [startTime, endTime, setState, isDateDisabled]);
 
@@ -51,7 +53,10 @@ export const Search = ({ state, setState }) => {
             <Form.Group controlId="Title">
               <Form.Label>Title</Form.Label>
               <Form.Control
-                onChange={(e) => setState({ title: e.target.value })}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setState((prev) => ({ ...prev, title: value }));
+                }}
                 type="input"
                 placeholder="Search for given item by title"
                 aria-label="Item search"
@@ -60,35 +65,48 @@ export const Search = ({ state, setState }) => {
             </Form.Group>
             <Form.Group controlId="Category">
               <Form.Label>Category</Form.Label>
-              <Form.Control as="select">
-                <option
-                  defaultValue
-                  onClick={() => setState({ subCategoryId: null })}
+              {!loading ? (
+                <Form.Control
+                  as="select"
+                  defaultValue={state.subCategoryId ?? state.subCategoryId}
                 >
-                  Select category
-                </option>
-                {categories.map((category) => {
-                  return category.subCategories.map((subCategory, index) => {
-                    return (
-                      <option
-                        key={index}
-                        onClick={(e) => {
-                          setState({ subCategoryId: e.target.value });
-                        }}
-                        value={subCategory.id}
-                      >
-                        {subCategory.name}
-                      </option>
-                    );
-                  });
-                })}
-              </Form.Control>
+                  <option onClick={() => history.replace("/items")}>
+                    Select category
+                  </option>
+                  {categories.map((category) => {
+                    return category.subCategories.map((subCategory, index) => {
+                      return (
+                        <option
+                          key={index}
+                          onClick={(e) => {
+                            // setState({ subCategoryId: e.target.value });
+                            history.replace(`/items/${e.target.value}`);
+                          }}
+                          value={subCategory.id}
+                        >
+                          {subCategory.name}
+                        </option>
+                      );
+                    });
+                  })}
+                </Form.Control>
+              ) : (
+                <div>
+                  <Spinner animation="border" />
+                </div>
+              )}
             </Form.Group>
             <Form.Group controlId="liveItems">
               <Form.Check
-                onChange={() => setState({ getLiveItems: !state.getLiveItems })}
+                onChange={() =>
+                  setState((prev) => ({
+                    ...prev,
+                    getLiveItems: !state.getLiveItems,
+                  }))
+                }
                 type="switch"
                 label="Live items"
+                checked={state.getLiveItems}
               />
             </Form.Group>
             <Form.Group controlId="Price">
@@ -101,23 +119,24 @@ export const Search = ({ state, setState }) => {
                 minValue={0}
                 onChange={(value) => {
                   setPrice(value);
-                  setState({
+                  setState((prev) => ({
+                    ...prev,
                     minPrice: value.min <= 0 ? null : value.min,
                     maxPrice: price.max,
-                  });
+                  }));
                 }}
               />
             </Form.Group>
-
             <Form.Group className="mt-5" controlId="isDateDisabled">
               <Form.Check
                 onChange={() => {
                   setIsDateDisabled(!isDateDisabled);
                   if (!isDateDisabled) {
-                    setState({
+                    setState((prev) => ({
+                      ...prev,
                       startTime: null,
                       endTime: null,
-                    });
+                    }));
                   }
                 }}
                 type="switch"

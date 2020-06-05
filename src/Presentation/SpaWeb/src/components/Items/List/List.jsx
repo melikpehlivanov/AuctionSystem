@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 export const List = () => {
   const [state, setState] = useState({
     title: null,
-    getLiveItems: false,
+    getLiveItems: true,
     minPrice: null,
     maxPrice: null,
     startTime: null,
@@ -21,18 +21,22 @@ export const List = () => {
 
   let { subCategoryId } = useParams();
 
-  useEffect(() => {
-    setState({ subCategoryId: subCategoryId });
-  }, [subCategoryId]);
-
   const [pageNumber, setPageNumber] = useState(1);
   const query = useDebounce(state, 500);
-  query.getLiveItems = query.getLiveItems ? query.getLiveItems : false;
-  const { items, totalItemsCount, hasMore, loading, error } = useItemsSearch(
-    query,
-    pageNumber,
-    setPageNumber
-  );
+  const {
+    makeRequest,
+    items,
+    totalItemsCount,
+    hasMore,
+    loading,
+    error,
+  } = useItemsSearch(query, pageNumber, setPageNumber);
+
+  useEffect(() => {
+    if (state.subCategoryId !== subCategoryId) {
+      setState((prev) => ({ ...prev, subCategoryId }));
+    } else makeRequest();
+  }, [subCategoryId, makeRequest]);
 
   return (
     <Fragment>
@@ -63,7 +67,7 @@ export const List = () => {
           </Col>
           <Col lg={12}>
             <Row>
-              <Search state={state} setState={setState} />
+              <Search loading={loading} state={state} setState={setState} />
               <Col lg={8}>
                 <ItemsContainer
                   items={items}
