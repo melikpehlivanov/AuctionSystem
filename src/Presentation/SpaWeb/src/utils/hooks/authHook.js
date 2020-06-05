@@ -1,3 +1,8 @@
+//########################## WARNING  ##########################
+// PLEASE KEEP IN MIND THAT THIS IS DEMO PROJECT AND JWT SHOULDN'T BE STORED IN THE LOCALSTORAGE IN PROD ENVIRONMENT.
+// THE REFRESH TOKEN SHOULD BE SEND AS A COOKIE FROM THE SERVER AND THE JWT SHOULD BE STORED INMEMORY IN PROD ENVIRONMENT.
+//########################## WARNING  ##########################
+
 import React, { useState, useEffect, useContext, createContext } from "react";
 import api from "../helpers/api";
 import {
