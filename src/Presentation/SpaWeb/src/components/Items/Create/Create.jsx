@@ -38,7 +38,6 @@ export const Create = (props) => {
 
     itemsService.createItem(formData).then((response) => {
       history.push(`/items/details/${response.data.data.id}`);
-      setIsLoading(false);
     });
   };
 
