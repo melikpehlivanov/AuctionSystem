@@ -78,7 +78,7 @@ export const ItemsContainer = ({
           })
         )}
       </Row>
-      {loading === true ? (
+      {loading ? (
         <div className="ml-5 pt-3 pb-3">
           Loading...
           <Spinner animation="border" />
