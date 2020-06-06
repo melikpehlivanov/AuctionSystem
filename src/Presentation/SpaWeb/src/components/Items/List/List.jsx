@@ -36,6 +36,7 @@ export const List = () => {
     if (state.subCategoryId !== subCategoryId) {
       setState((prev) => ({ ...prev, subCategoryId }));
     } else makeRequest();
+    // eslint-disable-next-line
   }, [subCategoryId, makeRequest]);
 
   return (
