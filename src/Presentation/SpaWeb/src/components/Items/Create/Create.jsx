@@ -36,9 +36,12 @@ export const Create = (props) => {
     formData.append("startTime", startTime.toISOString("dd/mm/yyyy HH:mm"));
     formData.append("endTime", endTime.toISOString("dd/mm/yyyy HH:mm"));
 
-    itemsService.createItem(formData).then((response) => {
-      history.push(`/items/details/${response.data.data.id}`);
-    });
+    itemsService
+      .createItem(formData)
+      .then((response) => {
+        history.push(`/items/details/${response.data.data.id}`);
+      })
+      .catch(() => setIsLoading(false));
   };
 
   const onDrop = (picture) => {
@@ -196,7 +199,7 @@ export const Create = (props) => {
                 role="status"
                 aria-hidden="true"
               />
-              Loading...
+              Creating...
             </Button>
           )}
         </Form>
