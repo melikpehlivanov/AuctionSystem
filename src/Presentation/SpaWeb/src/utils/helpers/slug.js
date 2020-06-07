@@ -4,6 +4,10 @@ export const itemDetailsSlug = (title, id) => {
   return `/items/${slugify(title)}/${id}`;
 };
 
+export const itemEditSlug = (title, id) => {
+  return `/items/edit/${slugify(title)}/${id}`;
+};
+
 export const bidSlug = (itemTitle, itemId) => {
   return `/bids/${slugify(itemTitle)}/${itemId}`;
 };

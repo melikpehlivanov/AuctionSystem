@@ -16,6 +16,7 @@ import { List } from "./components/Items/List/List";
 import { Details } from "./components/Items/Details/Details";
 import { Create } from "./components/Items/Create/Create";
 import { PrivateRoute } from "./components/PrivateRoute";
+import { Edit } from "./components/Items/Edit/Edit";
 
 function App() {
   return (
@@ -30,8 +31,9 @@ function App() {
             <Route exact path="/sign-up" component={Register} />
             <Route exact path="/error/network" component={NetworkError} />
             <PrivateRoute exact path="/items/create" component={Create} />
+            <PrivateRoute path="/items/edit/:slug/:id" component={Edit} />
             <Route exact path="/items/:subCategoryId?" component={List} />
-            <Route path="/items/:slug/:id" component={Details} />
+            <Route path="/items/:slug?/:id" component={Details} />
             <Route path="*" component={NotFound} />
           </Switch>
         </Container>

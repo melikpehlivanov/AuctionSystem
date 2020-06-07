@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { DeleteModal } from "../DeleteModal";
+import { itemEditSlug } from "../../../utils/helpers/slug";
 
 export const UserActionsContainer = ({ userId, item }) => {
   const [showModal, setShowModal] = useState(false);
@@ -17,7 +18,7 @@ export const UserActionsContainer = ({ userId, item }) => {
         <Card.Header>Actions</Card.Header>
         <div className="list-group list-group-flush">
           <Link
-            to="/"
+            to={itemEditSlug(item.title, item.id)}
             className="list-group-item list-group-item-action text-primary"
           >
             <FontAwesomeIcon icon={faEdit} /> Edit

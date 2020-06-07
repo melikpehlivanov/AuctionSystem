@@ -37,6 +37,10 @@ const createItem = (body) => {
   return api.post(itemsApiPath, body).then((response) => response);
 };
 
+const editItem = (id, data) => {
+  return api.put(`${itemsApiPath}/${id}`, data).then((response) => response);
+};
+
 const deleteItem = (id) => {
   return api.delete(`${itemsApiPath}/${id}`).then((response) => response);
 };
@@ -47,5 +51,6 @@ export default {
   getItems,
   getItemById,
   createItem,
+  editItem,
   deleteItem,
 };

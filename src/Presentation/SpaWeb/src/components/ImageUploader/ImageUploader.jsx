@@ -21,9 +21,20 @@ export const ImageUploader = (props) => {
   const [pictures, setPictures] = useState([]);
   const [files, setFiles] = useState([]);
   const [fileErrors, setFileErrors] = useState([]);
+  const [
+    shouldAcceptInitialPictures,
+    setShouldAcceptInitialPictures,
+  ] = useState(true);
   let inputElement = "";
 
-  const { onChange } = props;
+  const { onChange, images, onRemove } = props;
+
+  useEffect(() => {
+    if (shouldAcceptInitialPictures && images) {
+      setPictures(images);
+      setShouldAcceptInitialPictures(false);
+    }
+  }, [shouldAcceptInitialPictures, images]);
 
   useEffect(() => {
     onChange(files, pictures);
@@ -101,13 +112,16 @@ export const ImageUploader = (props) => {
 
   const removeImage = (picture) => {
     const removeIndex = pictures.findIndex((e) => e === picture);
-    const filteredPictures = pictures.filter(
-      (e, index) => index !== removeIndex
-    );
-    const filteredFiles = files.filter((e, index) => index !== removeIndex);
+    if (picture.id) {
+      onRemove((prev) => [...prev, picture.id]);
+    } else
+      setFiles((oldFiles) =>
+        oldFiles.filter((e, index) => index !== removeIndex)
+      );
 
-    setPictures(filteredPictures);
-    setFiles(filteredFiles);
+    setPictures((oldPictures) =>
+      oldPictures.filter((e, index) => index !== removeIndex)
+    );
     onChange(files, pictures);
   };
 
@@ -161,7 +175,11 @@ export const ImageUploader = (props) => {
           <div className="deleteImage" onClick={() => removeImage(picture)}>
             X
           </div>
-          <img src={picture} className="uploadPicture" alt="preview" />
+          <img
+            src={picture.url ? picture.url : picture}
+            className="uploadPicture"
+            alt="preview"
+          />
         </div>
       );
     });
