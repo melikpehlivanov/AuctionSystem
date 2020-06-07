@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,6 +9,7 @@ export const StartTimeDatePicker = ({
   setStartTime,
   endTime,
   disabled,
+  errorHideTimeOut = 3000,
 }) => {
   const startTimeConf = createDatePickerConf(
     startTime,
@@ -17,20 +18,24 @@ export const StartTimeDatePicker = ({
   );
   const [error, setError] = useState();
 
+  useEffect(() => {
+    const interval = setTimeout(() => setError(null), errorHideTimeOut);
+    return () => {
+      clearTimeout(interval);
+    };
+  }, [error, errorHideTimeOut]);
+
   const handleOnChange = (date) => {
     if (date <= moment()) {
-      setError({
-        startTime: "Start time cannot be before current time.",
-      });
+      setError("Start time cannot be before current time.");
       return;
     }
     if (date >= endTime) {
-      setError({
-        startTime: "Start time cannot be after end time.",
-      });
+      setError("Start time cannot be after end time.");
       return;
     }
 
+    setError(null);
     setStartTime(date);
   };
 
@@ -63,21 +68,25 @@ export const EndTimeDatePicker = ({
   setEndTime,
   startTime,
   disabled,
+  errorHideTimeOut = 3000,
 }) => {
   const [error, setError] = useState();
   const endTimeConf = createDatePickerConf(endTime, 30, moment().endOf("day"));
 
+  useEffect(() => {
+    const interval = setTimeout(() => setError(null), errorHideTimeOut);
+    return () => {
+      clearTimeout(interval);
+    };
+  }, [error, errorHideTimeOut]);
+
   const handleOnChange = (date) => {
     if (date < moment()) {
-      setError({
-        endTime: "End time cannot be after current time.",
-      });
+      setError("End time cannot be after current time.");
       return;
     }
     if (date <= startTime) {
-      setError({
-        endTime: "End time cannot be before start time.",
-      });
+      setError("End time cannot be before start time.");
       return;
     }
 
