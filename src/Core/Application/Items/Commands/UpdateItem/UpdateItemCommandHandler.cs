@@ -6,16 +6,22 @@
     using Common.Interfaces;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using Pictures.Commands.UpdatePicture;
 
     public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly ICurrentUserService currentUserService;
+        private readonly IMediator mediator;
 
-        public UpdateItemCommandHandler(IAuctionSystemDbContext context, ICurrentUserService currentUserService)
+        public UpdateItemCommandHandler(
+            IAuctionSystemDbContext context,
+            ICurrentUserService currentUserService,
+            IMediator mediator)
         {
             this.context = context;
             this.currentUserService = currentUserService;
+            this.mediator = mediator;
         }
 
         public async Task<Unit> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
@@ -47,6 +53,11 @@
 
             this.context.Items.Update(item);
             await this.context.SaveChangesAsync(cancellationToken);
+            await this.mediator.Send(new UpdatePictureCommand
+                {
+                    ItemId = item.Id, PicturesToAdd = request.PicturesToAdd, PicturesToRemove = request.PicturesToRemove
+                },
+                cancellationToken);
 
             return Unit.Value;
         }
