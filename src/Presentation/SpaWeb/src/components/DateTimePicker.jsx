@@ -18,7 +18,6 @@ export const StartTimeDatePicker = ({
   const [error, setError] = useState();
 
   const handleOnChange = (date) => {
-    console.log(date);
     if (date <= moment()) {
       setError({
         startTime: "Start time cannot be before current time.",
