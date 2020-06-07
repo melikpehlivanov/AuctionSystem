@@ -42,7 +42,7 @@ export const Details = () => {
           <Col md={8}>
             <h1 style={{ wordBreak: "break-word" }}>{item.title}</h1>
             <ImageGallery showPlayButton={false} items={images} />
-            <Card>
+            <Card className="mb-3">
               <Card.Header>
                 <Button>Details</Button>
               </Card.Header>
