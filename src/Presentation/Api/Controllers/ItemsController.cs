@@ -108,7 +108,7 @@
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
             SwaggerDocumentation.UnauthorizedDescriptionMessage)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateItemCommand model)
+        public async Task<IActionResult> Put(Guid id, [FromForm] UpdateItemCommand model)
         {
             if (id != model.Id)
             {
