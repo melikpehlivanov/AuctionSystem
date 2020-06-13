@@ -19,7 +19,7 @@ namespace Api.Middlewares
             context.Request.Cookies.TryGetValue(ApiConstants.RefreshToken, out var refreshToken);
             context.Request.Cookies.TryGetValue(ApiConstants.JwtToken, out var jwtToken);
 
-            if (jwtToken != null && refreshToken != null && !context.Request.Headers.ContainsKey(AuthorizationHeader))
+            if (jwtToken != null && refreshToken != null)
             {
                 context.Request.Headers.Append(AuthorizationHeader, $"Bearer {jwtToken}");
             }
