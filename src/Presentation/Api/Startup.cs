@@ -11,6 +11,7 @@ namespace Api
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Middlewares;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Persistence;
@@ -71,6 +72,7 @@ namespace Api
             app
                 .UseHttpsRedirection()
                 .UseCustomExceptionHandler()
+                .UseAuthorizationHeader()
                 .UseRouting()
                 .UseHsts()
                 .UseCors()

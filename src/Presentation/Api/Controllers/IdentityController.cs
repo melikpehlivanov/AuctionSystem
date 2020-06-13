@@ -51,7 +51,7 @@
         public async Task<IActionResult> Login(LoginUserCommand model)
         {
             var result = await this.Mediator.Send(model);
-            SetRefreshTokenCookie(result.Data.RefreshToken.ToString());
+            SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
         }
 
@@ -70,17 +70,25 @@
             typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Refresh(JwtRefreshTokenCommand model)
         {
-            var refreshToken = this.Request.Cookies["refreshToken"];
+            var refreshToken = this.Request.Cookies[ApiConstants.RefreshToken];
+            var jwtToken = this.Request.Cookies[ApiConstants.JwtToken];
 
-            if (refreshToken == null)
+            if (refreshToken == null || jwtToken == null)
             {
                 return this.Unauthorized();
             }
 
             model.RefreshToken = Guid.Parse(refreshToken);
+            model.Token = jwtToken;
             var result = await this.Mediator.Send(model);
-            SetRefreshTokenCookie(result.Data.RefreshToken.ToString());
+            SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
+        }
+
+        private void SetCookies(string jwtToken, string refreshToken)
+        {
+            SetJwtTokenCookie(jwtToken);
+            SetRefreshTokenCookie(refreshToken);
         }
 
         private void SetRefreshTokenCookie(string token)
@@ -92,7 +100,20 @@
                 Expires = DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths)
             };
 
-            this.Response.Cookies.Append("refreshToken", token, cookieOptions);
+            this.Response.Cookies.Append(ApiConstants.RefreshToken, token, cookieOptions);
+        }
+
+        private void SetJwtTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                // It doesn't mater what time we will set since we check the expiration time later :)
+                Expires = DateTimeOffset.MaxValue
+            };
+
+            this.Response.Cookies.Append(ApiConstants.JwtToken, token, cookieOptions);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Api.Common
+﻿namespace Api.Middlewares
 {
     using System;
     using System.Collections.Generic;

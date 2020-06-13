@@ -1,18 +1,13 @@
 import Axios from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
-import { getUserFromLocalStorage, setUserInLocalStorage } from "./localStorage";
+import { setUserInLocalStorage } from "./localStorage";
 
 const api = Axios.create({
   baseURL: "https://localhost:5001/api",
   withCredentials: true,
 });
-
 const refreshTokenUrl = "/identity/refresh";
-
-function getAccessToken() {
-  return JSON.parse(localStorage.getItem("user"))?.token;
-}
 
 let authTokenRequest;
 
@@ -20,11 +15,8 @@ let authTokenRequest;
 // or it returns the same promise as an in-progress call to get the auth token
 function getAuthToken() {
   if (!authTokenRequest) {
-    const user = getUserFromLocalStorage();
     authTokenRequest = api
-      .post(refreshTokenUrl, {
-        token: user?.token,
-      })
+      .post(refreshTokenUrl, {})
       .then((tokenRefreshResponse) => tokenRefreshResponse);
     authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
   }
@@ -35,11 +27,6 @@ function getAuthToken() {
 function resetAuthTokenRequest() {
   authTokenRequest = null;
 }
-
-api.interceptors.request.use((request) => {
-  request.headers["Authorization"] = `Bearer ${getAccessToken()}`;
-  return request;
-});
 
 api.interceptors.response.use(
   (response) => response,
@@ -57,6 +44,10 @@ api.interceptors.response.use(
         error.response.config.__isRetryRequest = true;
         return api(error.response.config);
       });
+    } else if (error.response.status === 401 && error.config._retry) {
+      toast.error("Please sign in.");
+      history.push("/sign-in");
+      return;
     }
 
     if (errorResponse.status) {
