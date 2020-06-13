@@ -38,16 +38,17 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    if (error.config.url === refreshTokenUrl) {
+      history.push("/sign-in");
+      toast.error("Please sign in");
+    }
+
     if (error.response.status === 401 && !error.config._retry) {
       return getAuthToken().then((response) => {
         setUserInLocalStorage(response);
         error.response.config.__isRetryRequest = true;
         return api(error.response.config);
       });
-    } else if (error.response.status === 401 && error.config._retry) {
-      toast.error("Please sign in.");
-      history.push("/sign-in");
-      return;
     }
 
     if (errorResponse.status) {
