@@ -8,6 +8,7 @@
     using Application.Users.Commands.CreateUser;
     using Application.Users.Commands.Jwt.Refresh;
     using Application.Users.Commands.LoginUser;
+    using Application.Users.Commands.Logout;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using SwaggerExamples;
@@ -83,6 +84,24 @@
             var result = await this.Mediator.Send(model);
             SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
+        }
+
+        /// <summary>
+        /// Invalidates jwt tokens and removes cookies - logout user
+        /// </summary>
+        [HttpPost]
+        [Route(nameof(Logout))]
+        [SwaggerResponse(
+            StatusCodes.Status200OK,
+            SwaggerDocumentation.IdentityConstants.SuccessfulLogOut)]
+        public async Task<IActionResult> Logout()
+        {
+            this.Request.Cookies.TryGetValue(ApiConstants.RefreshToken, out var refreshToken);
+            this.Response.Cookies.Delete(ApiConstants.JwtToken);
+            this.Response.Cookies.Delete(ApiConstants.RefreshToken);
+
+            await this.Mediator.Send(new LogoutUserCommand {RefreshToken = refreshToken});
+            return this.Ok();
         }
 
         private void SetCookies(string jwtToken, string refreshToken)

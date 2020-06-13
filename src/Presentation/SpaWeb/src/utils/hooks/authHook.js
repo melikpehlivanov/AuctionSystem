@@ -8,6 +8,7 @@ import {
 
 const registerUserApiPath = "/identity/register";
 const loginUserApiPath = "/identity/login";
+const logoutUserApiPath = "/identity/logout";
 
 const authContext = createContext();
 
@@ -56,8 +57,10 @@ function useProvideAuth() {
   };
 
   const signOut = () => {
-    removeUserFromLocalStorage();
-    setUser(null);
+    api.post(logoutUserApiPath, {}).then(() => {
+      removeUserFromLocalStorage();
+      setUser(null);
+    });
   };
 
   return {
