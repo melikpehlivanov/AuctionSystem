@@ -7,7 +7,6 @@
         public JwtRefreshTokenCommandValidator()
         {
             this.RuleFor(p => p.Token).NotEmpty();
-            this.RuleFor(p => p.RefreshToken).NotEmpty();
         }
     }
 }

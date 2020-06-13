@@ -9,5 +9,7 @@
         public const string DefaultPictureUrl = "https://res.cloudinary.com/auctionsystem/image/upload/v1547833155/default-img.jpg";
 
         public const int PageSize = 24;
+
+        public const int RefreshTokenExpirationTimeInMonths = 6;
     }
 }

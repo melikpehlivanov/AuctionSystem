@@ -39,6 +39,18 @@ namespace Api
                 .AddRequiredServices()
                 .AddRedisCache(this.Configuration)
                 .AddSwagger()
+                .AddCors(options =>
+                {
+                    options.AddDefaultPolicy(
+                        builder =>
+                        {
+                            builder.WithOrigins("http://localhost:3000",
+                                "https://localhost:3000");
+                            builder.AllowCredentials();
+                            builder.AllowAnyMethod();
+                            builder.AllowAnyHeader();
+                        });
+                })
                 .AddControllers()
                 .AddNewtonsoftJson(options => options.UseCamelCasing(true))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
@@ -56,10 +68,7 @@ namespace Api
                 .UseCustomExceptionHandler()
                 .UseRouting()
                 .UseHsts()
-                .UseCors(options => options
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod())
+                .UseCors()
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseSwaggerUi()

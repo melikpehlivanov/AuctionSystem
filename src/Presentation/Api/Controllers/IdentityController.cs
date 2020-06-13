@@ -1,6 +1,8 @@
 ﻿namespace Api.Controllers
 {
+    using System;
     using System.Threading.Tasks;
+    using Application;
     using Application.Common.Models;
     using Application.Users.Commands;
     using Application.Users.Commands.CreateUser;
@@ -49,8 +51,10 @@
         public async Task<IActionResult> Login(LoginUserCommand model)
         {
             var result = await this.Mediator.Send(model);
+            SetRefreshTokenCookie(result.Data.RefreshToken.ToString());
             return this.Ok(result);
         }
+
         /// <summary>
         /// Verifies the provided token and generates new token and refresh token
         /// </summary>
@@ -66,8 +70,29 @@
             typeof(BadRequestErrorModel))]
         public async Task<IActionResult> Refresh(JwtRefreshTokenCommand model)
         {
+            var refreshToken = this.Request.Cookies["refreshToken"];
+
+            if (refreshToken == null)
+            {
+                return this.Unauthorized();
+            }
+
+            model.RefreshToken = Guid.Parse(refreshToken);
             var result = await this.Mediator.Send(model);
+            SetRefreshTokenCookie(result.Data.RefreshToken.ToString());
             return this.Ok(result);
+        }
+
+        private void SetRefreshTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                Expires = DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths)
+            };
+
+            this.Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
     }
 }
