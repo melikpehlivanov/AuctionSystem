@@ -5,6 +5,7 @@ import { getUserFromLocalStorage, setUserInLocalStorage } from "./localStorage";
 
 const api = Axios.create({
   baseURL: "https://localhost:5001/api",
+  withCredentials: true,
 });
 
 const refreshTokenUrl = "/identity/refresh";
@@ -23,7 +24,6 @@ function getAuthToken() {
     authTokenRequest = api
       .post(refreshTokenUrl, {
         token: user?.token,
-        refreshToken: user?.refreshToken,
       })
       .then((tokenRefreshResponse) => tokenRefreshResponse);
     authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);

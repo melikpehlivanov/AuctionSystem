@@ -17,7 +17,36 @@ export const NavMenu = () => {
               <Nav.Link href="/items">Items</Nav.Link>
               <Nav.Link href="/contact">Contact us</Nav.Link>
             </Nav>
-            {auth.user ? (
+            {auth.user && auth.user.isAdmin ? (
+              <Fragment>
+                <Button
+                  onClick={() => {
+                    history.push("/admin");
+                  }}
+                  className="mr-3"
+                  variant="outline-danger"
+                >
+                  Administration
+                </Button>
+                <Button
+                  onClick={() => {
+                    history.push("/items/create");
+                  }}
+                  className="mr-3"
+                  variant="primary"
+                >
+                  Create item
+                </Button>
+                <Button
+                  onClick={() => {
+                    auth.signOut();
+                    history.push("/");
+                  }}
+                >
+                  logout
+                </Button>
+              </Fragment>
+            ) : auth.user ? (
               <Fragment>
                 <Button
                   onClick={() => {
