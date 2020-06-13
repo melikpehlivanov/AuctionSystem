@@ -29,6 +29,11 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            
             services
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
