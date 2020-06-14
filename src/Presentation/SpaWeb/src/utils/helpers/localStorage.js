@@ -16,10 +16,7 @@ export const setUserInLocalStorage = (response) => {
   return dataToStore;
 };
 
-export const removeUserFromLocalStorage = () => {
-  localStorage.removeItem(user);
-};
+export const removeUserFromLocalStorage = () => localStorage.removeItem(user);
 
-export const getUserFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem(user));
-};
+export const getUserFromLocalStorage = () =>
+  JSON.parse(localStorage.getItem(user));
