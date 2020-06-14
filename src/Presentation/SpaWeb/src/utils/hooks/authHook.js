@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import api from "../helpers/api";
+import api, { setupAxiosInterceptor } from "../helpers/api";
 import {
   setUserInLocalStorage,
   removeUserFromLocalStorage,
@@ -14,7 +14,6 @@ const authContext = createContext();
 
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
-
   return (
     <authContext.Provider value={auth}>
       {!auth.isLoading ? children : null}
@@ -32,14 +31,14 @@ function useProvideAuth() {
 
   useEffect(() => {
     if (user === null) {
-      setUser(getCurrentUser());
+      setUser(getUserFromLocalStorage());
       setIsLoading(false);
     }
   }, [user, isLoading]);
 
-  const getCurrentUser = () => {
-    return getUserFromLocalStorage();
-  };
+  useEffect(() => {
+    setupAxiosInterceptor(signOut);
+  }, []);
 
   const signIn = (body) => {
     return api.post(loginUserApiPath, body).then((response) => {

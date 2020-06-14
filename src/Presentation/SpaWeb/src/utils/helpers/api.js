@@ -28,48 +28,51 @@ function resetAuthTokenRequest() {
   authTokenRequest = null;
 }
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // network error
-    const errorResponse = error.response;
-    if (!errorResponse) {
-      history.push("/error/network");
-      return Promise.reject(error);
-    }
-
-    if (error.config.url === refreshTokenUrl) {
-      history.push("/sign-in");
-      toast.error("Please sign in");
-    }
-
-    if (error.response.status === 401 && !error.config._retry) {
-      return getAuthToken().then((response) => {
-        setUserInLocalStorage(response);
-        error.response.config.__isRetryRequest = true;
-        return api(error.response.config);
-      });
-    }
-
-    if (errorResponse.status) {
-      // validation errors
-      if (errorResponse.status === 400 && errorResponse.data.errors) {
-        return handleValidationErrors(errorResponse, error);
-      } else if (errorResponse.status === 400 && errorResponse.data.error) {
-        toast.error(errorResponse.data.error);
-        return Promise.reject(error);
-      } else if (errorResponse.status === 404) {
-        toast.error(
-          "Oops, looks like the item you are searching for actually does not exist."
-        );
-        history.push("/");
+export const setupAxiosInterceptor = (signOut) => {
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      // network error
+      const errorResponse = error.response;
+      if (!errorResponse) {
+        history.push("/error/network");
         return Promise.reject(error);
       }
 
-      return Promise.reject(error);
+      if (error.config.url === refreshTokenUrl) {
+        signOut();
+        history.push("/sign-in");
+        toast.error("Please sign in");
+      }
+
+      if (error.response.status === 401 && !error.config._retry) {
+        return getAuthToken().then((response) => {
+          setUserInLocalStorage(response);
+          error.response.config.__isRetryRequest = true;
+          return api(error.response.config);
+        });
+      }
+
+      if (errorResponse.status) {
+        // validation errors
+        if (errorResponse.status === 400 && errorResponse.data.errors) {
+          return handleValidationErrors(errorResponse, error);
+        } else if (errorResponse.status === 400 && errorResponse.data.error) {
+          toast.error(errorResponse.data.error);
+          return Promise.reject(error);
+        } else if (errorResponse.status === 404) {
+          toast.error(
+            "Oops, looks like the item you are searching for actually does not exist."
+          );
+          history.push("/");
+          return Promise.reject(error);
+        }
+
+        return Promise.reject(error);
+      }
     }
-  }
-);
+  );
+};
 
 function handleValidationErrors(errorResponse, error) {
   Object.keys(errorResponse.data.errors).forEach(function (key) {
