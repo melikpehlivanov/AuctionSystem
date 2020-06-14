@@ -14,8 +14,10 @@ export const NavMenu = () => {
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav className="mr-auto">
-              <Nav.Link href="/items">Items</Nav.Link>
-              <Nav.Link href="/contact">Contact us</Nav.Link>
+              <Nav.Link onClick={() => history.push("/items")}>Items</Nav.Link>
+              <Nav.Link onClick={() => history.push("/contact")}>
+                Contact us
+              </Nav.Link>
             </Nav>
             {auth.user && auth.user.isAdmin ? (
               <Fragment>
@@ -69,8 +71,12 @@ export const NavMenu = () => {
             ) : (
               <Fragment>
                 <Nav>
-                  <Nav.Link href="/sign-up">Sign up</Nav.Link>
-                  <Nav.Link href="/sign-in">Login</Nav.Link>
+                  <Nav.Link onClick={() => history.push("/sign-up")}>
+                    Sign up
+                  </Nav.Link>
+                  <Nav.Link onClick={() => history.push("/sign-in")}>
+                    Login
+                  </Nav.Link>
                 </Nav>
               </Fragment>
             )}
