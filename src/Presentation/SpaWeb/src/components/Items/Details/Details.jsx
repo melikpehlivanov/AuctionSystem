@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import "moment-timezone";
 import { SideBar } from "./SideBar";
 import "./Details.css";
+import createImageObj from "../../../services/picturesService";
 
 export const Details = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,18 +23,6 @@ export const Details = () => {
       setIsLoading(false);
     });
   }, [id]);
-
-  const createImageObj = (pictures) => {
-    let data = [];
-    pictures.forEach((element) => {
-      data.push({
-        original: element.url,
-        thumbnail: element.url,
-      });
-    });
-
-    return data;
-  };
 
   return (
     <Fragment>
