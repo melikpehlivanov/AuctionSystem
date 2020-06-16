@@ -28,7 +28,7 @@ export const PrivateRoute = ({
         if (!user) {
           return (
             <Fragment>
-              {history.push("/sign-in")}
+              {history.push("/sign-in", history.location.pathname)}
               {toast.warning("Please sign in!")}
             </Fragment>
           );

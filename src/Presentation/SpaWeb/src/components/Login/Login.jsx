@@ -15,7 +15,7 @@ export const Login = () => {
 
   const onSubmit = (data) => {
     auth.signIn(data).then(() => {
-      history.push("/");
+      history.replace(history.location.state);
       toast.success("You've logged in successfully.");
     });
   };
