@@ -34,7 +34,7 @@ namespace Api
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            
+
             services
                 .AddPersistence(this.Configuration)
                 .AddInfrastructure(this.Configuration)
@@ -60,6 +60,8 @@ namespace Api
                 .AddControllers()
                 .AddNewtonsoftJson(options => options.UseCamelCasing(true))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -80,7 +82,11 @@ namespace Api
                 .UseAuthorization()
                 .UseSwaggerUi()
                 //TODO: Allow only client app when it's implemented
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHub<BidHub>("/bidHub");
+                });
         }
     }
 }
