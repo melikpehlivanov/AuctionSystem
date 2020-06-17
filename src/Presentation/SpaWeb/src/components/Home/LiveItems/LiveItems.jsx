@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import itemsService from "../../../services/itemsService";
-import { Container, Card } from "react-bootstrap";
+import { Container, Card, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import { itemDetailsSlug } from "../../../utils/helpers/slug";
 export const LiveItems = () => {
   const [items, setItems] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     retrieveLiveItems();
@@ -19,14 +20,19 @@ export const LiveItems = () => {
     itemsService.getLiveItems().then((response) => {
       setItems(response.data.data);
       setTotalItems(response.data.totalDataCount);
+      setIsLoading(false);
     });
   };
 
   return (
     <Container className="pt-3">
-      <h3>{totalItems} Live Items</h3>
-      {items.length !== 0 ? (
+      {isLoading ? (
+        <h1>
+          Loading live items... <Spinner animation="grow" />
+        </h1>
+      ) : items.length !== 0 ? (
         <Fragment>
+          <h3>{totalItems} Live Items</h3>
           <div className="row">
             {items.map((item, index) => {
               return (
