@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Col, Form, Spinner } from "react-bootstrap";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
-import categoriesService from "../../../services/categoriesService";
-import { EndTimeDatePicker, StartTimeDatePicker } from "../../DateTimePicker";
+import categoriesService from "../../../../services/categoriesService";
+import {
+  EndTimeDatePicker,
+  StartTimeDatePicker,
+} from "../../../DateTimePicker";
 import moment from "moment";
-import { history } from "../../..";
+import { history } from "../../../..";
+import "./Search.css";
 
 export const Search = ({ loading, state, setState }) => {
   const [price, setPrice] = useState({ min: 0, max: 50000 });
