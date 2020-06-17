@@ -8,15 +8,13 @@ import { NetworkError } from "./components/Error/NetworkError";
 import { NotFound } from "./components/Error/NotFound";
 import { Register } from "./components/Register/Register";
 import { Login } from "./components/Login/Login";
-
-import "./App.css";
-import "react-toastify/dist/ReactToastify.css";
 import { ProvideAuth } from "./utils/hooks/authHook";
 import { List } from "./components/Items/List/List";
 import { Details } from "./components/Items/Details/Details";
 import { Create } from "./components/Items/Create/Create";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Edit } from "./components/Items/Edit/Edit";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
