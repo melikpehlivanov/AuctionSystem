@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { PictureContainer } from "./Pictures/PictureContainer";
-import { bidSlug, itemDetailsSlug } from "../../../utils/helpers/slug";
+import { itemDetailsSlug } from "../../../utils/helpers/slug";
 
 export const LiveItems = () => {
   const [items, setItems] = useState([]);
@@ -53,7 +53,7 @@ export const LiveItems = () => {
                           {item.title}
                         </Link>
                       </Card.Title>
-                      <Link to={bidSlug(item.title, item.id)}>
+                      <Link to={itemDetailsSlug(item.title, item.id)}>
                         <span className="float-right" style={{ color: "red" }}>
                           Bid now <FontAwesomeIcon icon={faCaretRight} />
                         </span>
