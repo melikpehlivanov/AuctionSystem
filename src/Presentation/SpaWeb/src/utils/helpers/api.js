@@ -4,11 +4,9 @@ import { history } from "../..";
 import { setUserInLocalStorage } from "./localStorage";
 
 const api = Axios.create({
-  baseURL: "https://localhost:5001/api",
+  baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
 });
-const refreshTokenUrl = "/identity/refresh";
-
 let authTokenRequest;
 
 // This function makes a call to get the auth token
@@ -16,7 +14,7 @@ let authTokenRequest;
 function getAuthToken() {
   if (!authTokenRequest) {
     authTokenRequest = api
-      .post(refreshTokenUrl, {})
+      .post(process.env.REACT_APP_API_REFRESH_TOKENS_ENDPOINT, {})
       .then((tokenRefreshResponse) => tokenRefreshResponse);
     authTokenRequest.then(resetAuthTokenRequest, resetAuthTokenRequest);
   }
@@ -39,7 +37,9 @@ export const setupAxiosInterceptor = (signOut) => {
         return Promise.reject(error);
       }
 
-      if (error.config.url === refreshTokenUrl) {
+      if (
+        error.config.url === process.env.REACT_APP_API_REFRESH_TOKENS_ENDPOINT
+      ) {
         signOut();
         history.push("/sign-in");
         toast.error("Please sign in");

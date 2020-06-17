@@ -112,7 +112,9 @@ export const Search = ({ loading, state, setState }) => {
             <Form.Group controlId="Price">
               <p className="mb-4">Price</p>
               <InputRange
-                formatLabel={(value) => `€${value}`}
+                formatLabel={(value) =>
+                  `${process.env.REACT_APP_CURRENCY_SIGN}${value}`
+                }
                 step={100}
                 value={price}
                 maxValue={50000}

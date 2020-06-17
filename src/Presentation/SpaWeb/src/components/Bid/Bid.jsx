@@ -41,7 +41,9 @@ export const Bid = ({ itemId, minPriceIncrease, CounterContainer }) => {
 
   const handleOnClick = (amount) => {
     if (amount < nextBidMinimumAmount) {
-      toast.error(`The minimum bidding amount is €${nextBidMinimumAmount}`);
+      toast.error(
+        `The minimum bidding amount is ${process.env.REACT_APP_CURRENCY_SIGN}${nextBidMinimumAmount}`
+      );
       return;
     }
 
@@ -110,13 +112,21 @@ export const Bid = ({ itemId, minPriceIncrease, CounterContainer }) => {
     <Fragment>
       <Col md={4}>
         <CounterContainer />
-        <h4>Highest bid - €{highestBid}</h4>
-        <p>Min bid amount - €{nextBidMinimumAmount}</p>
+        <h4>
+          Highest bid - {process.env.REACT_APP_CURRENCY_SIGN}
+          {highestBid}
+        </h4>
+        <p>
+          Min bid amount - {process.env.REACT_APP_CURRENCY_SIGN}
+          {nextBidMinimumAmount}
+        </p>
         <Card className="mt-3">
           <Card.Body>
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
-                <InputGroup.Text>€</InputGroup.Text>
+                <InputGroup.Text>
+                  {process.env.REACT_APP_CURRENCY_SIGN}
+                </InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
                 placeholder="Amount to bid"

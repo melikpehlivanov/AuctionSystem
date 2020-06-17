@@ -6,10 +6,6 @@ import {
   getUserFromLocalStorage,
 } from "../helpers/localStorage";
 
-const registerUserApiPath = "/identity/register";
-const loginUserApiPath = "/identity/login";
-const logoutUserApiPath = "/identity/logout";
-
 const authContext = createContext();
 
 export function ProvideAuth({ children }) {
@@ -41,22 +37,26 @@ function useProvideAuth() {
   }, []);
 
   const signIn = (body) => {
-    return api.post(loginUserApiPath, body).then((response) => {
-      if (response.status === 200) {
-        const data = setUserInLocalStorage(response);
-        setUser(data);
-      }
+    return api
+      .post(process.env.REACT_APP_API_LOGIN_ENDPOINT, body)
+      .then((response) => {
+        if (response.status === 200) {
+          const data = setUserInLocalStorage(response);
+          setUser(data);
+        }
 
-      return response.data;
-    });
+        return response.data;
+      });
   };
 
   const signUp = (body) => {
-    return api.post(registerUserApiPath, body).then((response) => response);
+    return api
+      .post(process.env.REACT_APP_API_REGISTER_ENDPOINT, body)
+      .then((response) => response);
   };
 
   const signOut = () => {
-    api.post(logoutUserApiPath, {}).then(() => {
+    api.post(process.env.REACT_APP_API_LOGOUT_ENDPOINT, {}).then(() => {
       removeUserFromLocalStorage();
       setUser(null);
     });

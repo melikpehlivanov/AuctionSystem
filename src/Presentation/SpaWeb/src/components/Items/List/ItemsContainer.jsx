@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useCallback } from "react";
 import { Row, Col, Card, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { itemDetailsSlug, bidSlug } from "../../../utils/helpers/slug";
+import { itemDetailsSlug } from "../../../utils/helpers/slug";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -64,9 +64,10 @@ export const ItemsContainer = ({
                     </Card.Title>
 
                     <p style={{ color: "grey" }}>
-                      Starting price: €{item.startingPrice}
+                      Starting price: {process.env.REACT_APP_CURRENCY_SIGN}
+                      {item.startingPrice}
                     </p>
-                    <Link to={bidSlug(item.title, item.id)}>
+                    <Link to={itemDetailsSlug(item.title, item.id)}>
                       <span className="float-right" style={{ color: "red" }}>
                         Bid now <FontAwesomeIcon icon={faCaretRight} />
                       </span>

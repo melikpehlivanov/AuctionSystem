@@ -14,11 +14,13 @@ export const Chat = ({ messages }) => {
             let message = messages[messages.length - 1 - index];
             return message.userId === auth.user.id ? (
               <li key={index} className="yellow-message">
-                You've successfully bid €{message.bidAmount}
+                You've successfully bid {process.env.REACT_APP_CURRENCY_SIGN}
+                {message.bidAmount}
               </li>
             ) : (
               <li key={index} className="message">
-                €{message.bidAmount.tofixed}: Competing Bid
+                {process.env.REACT_APP_CURRENCY_SIGN}
+                {message.bidAmount.tofixed}: Competing Bid
               </li>
             );
           })}

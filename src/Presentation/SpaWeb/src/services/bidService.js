@@ -1,10 +1,8 @@
 import api from "../utils/helpers/api";
 
-const bidsApiPath = "/bids";
-
 const getHighestBid = (itemId) => {
   return api
-    .get(`${bidsApiPath}/getHighestBid/${itemId}`)
+    .get(`${process.env.REACT_APP_API_BIDS_ENDPOINT}/getHighestBid/${itemId}`)
     .then((response) => response);
 };
 

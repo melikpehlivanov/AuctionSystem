@@ -39,7 +39,10 @@ export const HottestItems = () => {
                 />
                 <Card.Body>
                   <Card.Title>{item.title}</Card.Title>
-                  <p className="card-text">€{item.startingPrice}</p>
+                  <p className="card-text">
+                    {process.env.REACT_APP_CURRENCY_SIGN}
+                    {item.startingPrice}
+                  </p>
                   <Link
                     className="btn btn-primary"
                     to={itemDetailsSlug(item.title, item.id)}

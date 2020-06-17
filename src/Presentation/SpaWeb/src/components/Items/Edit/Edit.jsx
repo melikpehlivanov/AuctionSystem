@@ -166,7 +166,9 @@ export const Edit = () => {
               <Form.Label>Starting Price</Form.Label>
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="starting-price">€</InputGroup.Text>
+                  <InputGroup.Text id="starting-price">
+                    {process.env.REACT_APP_CURRENCY_SIGN}
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   name="startingPrice"
@@ -199,7 +201,9 @@ export const Edit = () => {
               </Form.Label>
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="min-increase">€</InputGroup.Text>
+                  <InputGroup.Text id="min-increase">
+                    {process.env.REACT_APP_CURRENCY_SIGN}
+                  </InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   name="minIncrease"

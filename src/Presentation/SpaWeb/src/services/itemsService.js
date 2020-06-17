@@ -1,7 +1,5 @@
 import api from "../utils/helpers/api";
 
-const itemsApiPath = "/items";
-
 const getHottestUpcomingItems = () => {
   const tommorowDate = new Date();
   tommorowDate.setDate(tommorowDate.getDate() + 1);
@@ -14,7 +12,9 @@ const getHottestUpcomingItems = () => {
     startTime: tommorowDate.toUTCString(),
     endTime: dateAfterTenDays.toUTCString(),
   };
-  return api.get(itemsApiPath, { params }).then((response) => response);
+  return api
+    .get(process.env.REACT_APP_API_ITEMS_ENDPOINT, { params })
+    .then((response) => response);
 };
 
 const getLiveItems = () => {
@@ -22,27 +22,39 @@ const getLiveItems = () => {
     getLiveItems: true,
     pageSize: 10,
   };
-  return api.get(itemsApiPath, { params }).then((response) => response);
+  return api
+    .get(process.env.REACT_APP_API_ITEMS_ENDPOINT, { params })
+    .then((response) => response);
 };
 
 const getItems = (query) => {
-  return api.get(itemsApiPath, { params: query }).then((response) => response);
+  return api
+    .get(process.env.REACT_APP_API_ITEMS_ENDPOINT, { params: query })
+    .then((response) => response);
 };
 
 const getItemById = (id) => {
-  return api.get(`${itemsApiPath}/${id}`).then((response) => response);
+  return api
+    .get(`${process.env.REACT_APP_API_ITEMS_ENDPOINT}/${id}`)
+    .then((response) => response);
 };
 
 const createItem = (body) => {
-  return api.post(itemsApiPath, body).then((response) => response);
+  return api
+    .post(process.env.REACT_APP_API_ITEMS_ENDPOINT, body)
+    .then((response) => response);
 };
 
 const editItem = (id, data) => {
-  return api.put(`${itemsApiPath}/${id}`, data).then((response) => response);
+  return api
+    .put(`${process.env.REACT_APP_API_ITEMS_ENDPOINT}/${id}`, data)
+    .then((response) => response);
 };
 
 const deleteItem = (id) => {
-  return api.delete(`${itemsApiPath}/${id}`).then((response) => response);
+  return api
+    .delete(`${process.env.REACT_APP_API_ITEMS_ENDPOINT}/${id}`)
+    .then((response) => response);
 };
 
 export default {

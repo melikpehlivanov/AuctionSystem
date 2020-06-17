@@ -19,7 +19,8 @@ export const BidHigherButton = ({
       variant="primary"
       size="lg"
     >
-      Bid €{suggestedBid ? suggestedBid : "0.00"}
+      Bid {process.env.REACT_APP_CURRENCY_SIGN}
+      {suggestedBid ? suggestedBid : "0.00"}
     </Button>
   ) : (
     <Button block variant="primary" size="lg" disabled>
