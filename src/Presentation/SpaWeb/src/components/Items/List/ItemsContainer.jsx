@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { itemDetailsSlug } from "../../../utils/helpers/slug";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import "./ItemsContainer.css";
 
 export const ItemsContainer = ({
   loading,
@@ -38,7 +39,7 @@ export const ItemsContainer = ({
               <Col key={index} lg={6} sm={6}>
                 <Card
                   ref={items.length === index + 1 ? lastItemElementRef : null}
-                  className="shadow m-2"
+                  className="shadow m-2 floating-card"
                 >
                   <Link to={itemDetailsSlug(item.title, item.id)}>
                     <Card.Img
