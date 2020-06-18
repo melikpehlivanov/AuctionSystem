@@ -8,18 +8,21 @@ import { StartTimeDatePicker, EndTimeDatePicker } from "../../DateTimePicker";
 import itemsService from "../../../services/itemsService";
 import { ImageUploader } from "../../ImageUploader/ImageUploader";
 import { history } from "../../..";
+import { useTime } from "../../../utils/hooks/useTime";
 
-export const Create = (props) => {
+export const Create = () => {
   const { register, handleSubmit, errors } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [pictures, setPictures] = useState([]);
-  const [startTime, setStartTime] = useState(
-    moment().add(2, "minutes").toDate()
-  );
-  const [endTime, setEndTime] = useState(
-    moment().add(1, "months").add(10, "m").toDate()
-  );
+  const { currentTime } = useTime();
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
+
+  useEffect(() => {
+    setStartTime(moment(currentTime).add(2, "minutes").toDate());
+    setEndTime(moment(currentTime).add(1, "week").add(10, "m").toDate());
+  }, [currentTime]);
 
   useEffect(() => {
     categoriesService.getAll().then((response) => {
