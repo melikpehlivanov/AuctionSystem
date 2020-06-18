@@ -1,12 +1,12 @@
 import React, { Fragment, useRef, useCallback } from "react";
 import { Row, Col, Card, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { itemDetailsSlug } from "../../../utils/helpers/slug";
+import { itemDetailsSlug } from "../../../../utils/helpers/slug";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import "./ItemsContainer.css";
+import "./Container.css";
 
-export const ItemsContainer = ({
+export const Container = ({
   loading,
   hasMore,
   setPageNumber,

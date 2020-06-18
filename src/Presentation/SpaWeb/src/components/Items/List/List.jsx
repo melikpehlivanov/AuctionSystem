@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import "react-input-range/lib/css/index.css";
 import useItemsSearch from "../../../utils/hooks/useItemsSearch";
 import useDebounce from "../../../utils/hooks/useDebounce";
-import { ItemsContainer } from "./ItemsContainer";
+import { Container as ItemsContainer } from "./Container/Container";
 import { Search } from "./Search/Search";
 import { useParams } from "react-router-dom";
 import { Header } from "./Header/Header";
