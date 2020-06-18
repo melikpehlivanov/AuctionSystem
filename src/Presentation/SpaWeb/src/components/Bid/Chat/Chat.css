@@ -12,7 +12,17 @@
   padding: 30px 20px 0 0;
   height: 575px;
 }
-.message {
+.my-message {
+  padding: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  color: #fff;
+  background: #00008b;
+  padding: 1.1rem;
+  border-radius: 7px;
+  margin-top: 30px;
+}
+.other-message {
   padding: 0.5rem;
   overflow: hidden;
   display: flex;
@@ -22,12 +32,12 @@
   border-radius: 7px;
   margin-top: 30px;
 }
-.yellow-message {
+.highest-bid-message {
   padding: 0.5rem;
   overflow: hidden;
   display: flex;
   color: #fff;
-  background: #00008b;
+  background: green;
   padding: 1.1rem;
   border-radius: 7px;
   margin-top: 30px;
@@ -41,17 +51,4 @@ ul {
 }
 .big-black-arrow {
   font-size: 40px;
-}
-.custom-price-card {
-  display: inline-block;
-  background-color: #000;
-  text-align: center;
-  border: 1px solid #c0c0c0;
-  border-radius: 8px;
-  margin-right: 2px;
-  line-height: 1;
-  position: relative;
-  width: 43px;
-  font-size: 40px;
-  font-weight: bold;
 }
