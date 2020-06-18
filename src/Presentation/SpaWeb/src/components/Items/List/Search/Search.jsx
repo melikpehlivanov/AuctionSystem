@@ -33,6 +33,7 @@ export const Search = ({ loading, state, setState }) => {
     if (!isDateDisabled) {
       setState((prev) => ({
         ...prev,
+        getLiveItems: false,
         startTime: startTime.toISOString("dd/mm/yyyy HH:mm"),
         endTime: endTime.toISOString("dd/mm/yyyy HH:mm"),
       }));
@@ -83,7 +84,6 @@ export const Search = ({ loading, state, setState }) => {
                         <option
                           key={index}
                           onClick={(e) => {
-                            // setState({ subCategoryId: e.target.value });
                             history.replace(`/items/${e.target.value}`);
                           }}
                           value={subCategory.id}
