@@ -13,7 +13,7 @@ export const NetworkError = () => {
       setInterval(() => setSecondsCounter(secondsCounter - 1), 1000);
 
     if (secondsCounter === 0) {
-      history.push("/");
+      history.push(history.location.state);
     }
     return () => clearInterval(interval);
   }, [secondsCounter]);

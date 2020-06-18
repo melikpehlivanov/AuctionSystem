@@ -33,7 +33,7 @@ export const setupAxiosInterceptor = (signOut) => {
       // network error
       const errorResponse = error.response;
       if (!errorResponse) {
-        history.push("/error/network");
+        history.push("/error/network", history.location.pathname);
         return Promise.reject(error);
       }
 
