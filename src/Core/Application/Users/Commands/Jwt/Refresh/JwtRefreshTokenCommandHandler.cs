@@ -40,7 +40,7 @@
                 .AddSeconds(expiryDateUnix);
 
             var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-            var storedRefreshToken = await this.context
+            var storedRefreshToken = await this.Context
                 .RefreshTokens
                 .SingleOrDefaultAsync(t => t.Token == request.RefreshToken, cancellationToken);
 
@@ -55,11 +55,11 @@
                 throw new BadRequestException(ExceptionMessages.User.InvalidRefreshToken);
             }
 
-            this.context.RefreshTokens.Remove(storedRefreshToken);
-            await this.context.SaveChangesAsync(cancellationToken);
+            this.Context.RefreshTokens.Remove(storedRefreshToken);
+            await this.Context.SaveChangesAsync(cancellationToken);
 
             var userId = validatedToken.Claims.Single(x => x.Type == "id").Value;
-            var user = await this.userManager.GetUserByIdAsync(userId);
+            var user = await this.UserManager.GetUserByIdAsync(userId);
 
             return new Response<AuthSuccessResponse>(await this.GenerateAuthResponse(user.Id, user.UserName, cancellationToken));
         }

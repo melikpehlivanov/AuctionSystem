@@ -16,16 +16,16 @@
     public abstract class BaseJwtTokenHandler
     {
         private readonly JwtSettings options;
-        protected readonly IUserManager userManager;
-        protected readonly IAuctionSystemDbContext context;
+        protected readonly IUserManager UserManager;
+        protected readonly IAuctionSystemDbContext Context;
 
         protected BaseJwtTokenHandler(
             IOptions<JwtSettings> options,
             IUserManager userManager,
             IAuctionSystemDbContext context)
         {
-            this.userManager = userManager;
-            this.context = context;
+            this.UserManager = userManager;
+            this.Context = context;
             this.options = options.Value;
         }
 
@@ -34,7 +34,7 @@
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(this.options.Secret);
 
-            var userRoles = await this.userManager.GetUserRolesAsync(userId);
+            var userRoles = await this.UserManager.GetUserRolesAsync(userId);
             var claims = new ClaimsIdentity(new[]
             {
                 new Claim("id", userId),
@@ -65,8 +65,8 @@
                 ExpiryDate = DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths),
             };
 
-            await this.context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
-            await this.context.SaveChangesAsync(cancellationToken);
+            await this.Context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
+            await this.Context.SaveChangesAsync(cancellationToken);
 
             var result = new AuthSuccessResponse
             {
