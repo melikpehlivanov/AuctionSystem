@@ -1,7 +1,9 @@
 import React, { Fragment } from "react";
-import { Nav, Navbar, Button, Container } from "react-bootstrap";
+import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 import { history } from "..";
 import { useAuth } from "../utils/hooks/authHook";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export const NavMenu = () => {
   const auth = useAuth();
@@ -19,55 +21,41 @@ export const NavMenu = () => {
                 Contact us
               </Nav.Link>
             </Nav>
-            {auth.user && auth.user.isAdmin ? (
-              <Fragment>
-                <Button
-                  onClick={() => {
-                    history.push("/administration");
-                  }}
-                  className="mr-3"
-                  variant="outline-danger"
+            {auth.user ? (
+              <Nav>
+                <NavDropdown
+                  title={<FontAwesomeIcon icon={faUser} />}
+                  style={{ textColor: "white" }}
                 >
-                  Administration
-                </Button>
-                <Button
-                  onClick={() => {
-                    history.push("/items/create");
-                  }}
-                  className="mr-3"
-                  variant="primary"
-                >
-                  Create item
-                </Button>
-                <Button
-                  onClick={() => {
-                    auth.signOut();
-                    history.push("/");
-                  }}
-                >
-                  logout
-                </Button>
-              </Fragment>
-            ) : auth.user ? (
-              <Fragment>
-                <Button
-                  onClick={() => {
-                    history.push("/items/create");
-                  }}
-                  className="mr-3"
-                  variant="primary"
-                >
-                  Create item
-                </Button>
-                <Button
-                  onClick={() => {
-                    auth.signOut();
-                    history.push("/");
-                  }}
-                >
-                  logout
-                </Button>
-              </Fragment>
+                  {auth.user.isAdmin ? (
+                    <NavDropdown.Item
+                      onClick={() => {
+                        history.push("/administration");
+                      }}
+                    >
+                      Administration
+                    </NavDropdown.Item>
+                  ) : (
+                    ""
+                  )}
+                  <NavDropdown.Item
+                    onClick={() => {
+                      history.push("/items/create");
+                    }}
+                  >
+                    Create Item
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item
+                    onClick={() => {
+                      auth.signOut();
+                      history.push("/");
+                    }}
+                  >
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
             ) : (
               <Fragment>
                 <Nav>
