@@ -3,7 +3,10 @@ import { useForm } from "react-hook-form";
 import { Container, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import categoriesService from "../../../services/categoriesService";
 import moment from "moment";
-import { StartTimeDatePicker, EndTimeDatePicker } from "../../DateTimePicker";
+import {
+  StartTimeDatePicker,
+  EndTimeDatePicker,
+} from "../../DateTimePicker/DateTimePicker";
 import itemsService from "../../../services/itemsService";
 import { ImageUploader } from "../../ImageUploader/ImageUploader";
 import { useParams } from "react-router-dom";
@@ -73,6 +76,7 @@ export const Edit = () => {
       );
 
   const onSubmit = (data, e) => {
+    console.log("xixix0");
     setIsLoading(true);
     var formData = new FormData(e.target);
     pictures.forEach((file) => {
@@ -251,7 +255,11 @@ export const Edit = () => {
               />
             </Form.Group>
             <div>
-              <Button variant="outline-info" type="submit" className="mr-3">
+              <Button
+                variant="outline-info"
+                className="mr-3"
+                onClick={() => history.goBack()}
+              >
                 Cancel
               </Button>
               <Button variant="outline-danger" type="submit">

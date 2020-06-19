@@ -1,10 +1,10 @@
 import React, { useState, Fragment } from "react";
 import { Card, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { DeleteModal } from "../DeleteModal";
 import { itemEditSlug } from "../../../utils/helpers/slug";
+import { history } from "../../..";
 
 export const UserActionsContainer = ({ userId, item }) => {
   const [showModal, setShowModal] = useState(false);
@@ -17,12 +17,17 @@ export const UserActionsContainer = ({ userId, item }) => {
       <Card className="text-center">
         <Card.Header>Actions</Card.Header>
         <div className="list-group list-group-flush">
-          <Link
-            to={itemEditSlug(item.title, item.id)}
+          <Button
             className="list-group-item list-group-item-action text-primary"
+            onClick={() =>
+              history.push(
+                itemEditSlug(item.title, item.id),
+                history.location.pathname
+              )
+            }
           >
             <FontAwesomeIcon icon={faEdit} /> Edit
-          </Link>
+          </Button>
         </div>
         <div className="list-group list-group-flush">
           <Button

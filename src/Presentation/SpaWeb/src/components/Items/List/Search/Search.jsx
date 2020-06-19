@@ -6,7 +6,7 @@ import categoriesService from "../../../../services/categoriesService";
 import {
   EndTimeDatePicker,
   StartTimeDatePicker,
-} from "../../../DateTimePicker";
+} from "../../../DateTimePicker/DateTimePicker";
 import moment from "moment";
 import { history } from "../../../..";
 import "./Search.css";
@@ -146,7 +146,7 @@ export const Search = ({ loading, state, setState }) => {
                   }
                 }}
                 type="switch"
-                label="Modify date"
+                label="Filter by date"
               />
             </Form.Group>
             <Form.Group controlId="StartingTime">

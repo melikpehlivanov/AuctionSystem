@@ -31,7 +31,7 @@ export const Chat = ({ messages }) => {
                 }`}
               >
                 {process.env.REACT_APP_CURRENCY_SIGN}
-                {message.bidAmount.tofixed}: Competing Bid
+                {message.bidAmount}: Competing Bid
               </li>
             );
           })}
