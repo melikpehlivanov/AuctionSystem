@@ -16,7 +16,7 @@ namespace Application.Pictures.Commands.UpdatePicture
         private readonly IAuctionSystemDbContext context;
         private readonly ICurrentUserService currentUserService;
         private readonly IMediator mediator;
-        
+
         public UpdatePictureCommandHandler(
             IAuctionSystemDbContext context,
             ICurrentUserService currentUserService,
@@ -45,7 +45,7 @@ namespace Application.Pictures.Commands.UpdatePicture
             if (request.PicturesToAdd.Any())
             {
                 await this.mediator.Send(new CreatePictureCommand
-                    {ItemId = request.ItemId, Pictures = request.PicturesToAdd}, cancellationToken);
+                    { ItemId = request.ItemId, Pictures = request.PicturesToAdd }, cancellationToken);
             }
 
             if (request.PicturesToRemove.Any())
@@ -53,7 +53,7 @@ namespace Application.Pictures.Commands.UpdatePicture
                 foreach (var pictureToRemove in request.PicturesToRemove)
                 {
                     await this.mediator.Send(new DeletePictureCommand
-                        {ItemId = request.ItemId, PictureId = pictureToRemove}, cancellationToken);
+                        { ItemId = request.ItemId, PictureId = pictureToRemove }, cancellationToken);
                 }
             }
 

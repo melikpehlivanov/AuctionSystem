@@ -10,17 +10,20 @@
     using Common.Interfaces;
     using Common.Models;
     using Domain.Entities;
+    using global::Common;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
     public class ListItemsQueryHandler : IRequestHandler<ListItemsQuery, PagedResponse<ListItemsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
+        private readonly IDateTime dateTime;
         private readonly IMapper mapper;
 
-        public ListItemsQueryHandler(IAuctionSystemDbContext context, IMapper mapper)
+        public ListItemsQueryHandler(IAuctionSystemDbContext context, IDateTime dateTime, IMapper mapper)
         {
             this.context = context;
+            this.dateTime = dateTime;
             this.mapper = mapper;
         }
 
@@ -32,7 +35,7 @@
             var queryable = this.context
                 .Items
                 .Include(i => i.Pictures)
-                .Include(u=> u.User)
+                .Include(u => u.User)
                 .AsQueryable();
 
             var totalItemsCount = await this.context.Items.CountAsync(cancellationToken);
@@ -45,7 +48,7 @@
                     .ToListAsync(cancellationToken), totalItemsCount);
             }
 
-            queryable = AddFiltersOnQuery(request.Filters, queryable);
+            queryable = this.AddFiltersOnQuery(request.Filters, queryable);
             totalItemsCount = await queryable.CountAsync(cancellationToken);
             var itemsList = await queryable
                 .Skip(skipCount)
@@ -60,7 +63,7 @@
             return result;
         }
 
-        private static IQueryable<Item> AddFiltersOnQuery(ListAllItemsQueryFilter filters, IQueryable<Item> queryable)
+        private IQueryable<Item> AddFiltersOnQuery(ListAllItemsQueryFilter filters, IQueryable<Item> queryable)
         {
             if (!string.IsNullOrEmpty(filters?.Title))
             {
@@ -74,19 +77,20 @@
 
             if (filters?.GetLiveItems == true)
             {
-                queryable = queryable.Where(i => i.StartTime < DateTime.UtcNow && i.EndTime > DateTime.UtcNow);
+                queryable = queryable.Where(i =>
+                    i.StartTime < this.dateTime.UtcNow && i.EndTime > this.dateTime.UtcNow);
             }
 
             if (filters?.MinPrice != null)
             {
                 queryable = queryable.Where(i => i.StartingPrice >= filters.MinPrice);
             }
-            
+
             if (filters?.MaxPrice != null)
             {
                 queryable = queryable.Where(i => i.StartingPrice <= filters.MaxPrice);
             }
-            
+
             if (filters?.StartTime != null)
             {
                 queryable = queryable.Where(i => i.StartTime >= filters.StartTime.Value.ToUniversalTime());

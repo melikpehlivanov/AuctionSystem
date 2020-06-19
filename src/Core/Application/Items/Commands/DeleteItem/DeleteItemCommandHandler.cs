@@ -14,7 +14,9 @@
         private readonly ICurrentUserService currentUserService;
         private readonly IMediator mediator;
 
-        public DeleteItemCommandHandler(IAuctionSystemDbContext context, ICurrentUserService currentUserService, IMediator mediator)
+        public DeleteItemCommandHandler(IAuctionSystemDbContext context,
+            ICurrentUserService currentUserService,
+            IMediator mediator)
         {
             this.context = context;
             this.currentUserService = currentUserService;

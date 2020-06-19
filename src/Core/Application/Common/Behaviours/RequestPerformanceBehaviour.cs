@@ -10,18 +10,18 @@
     public class RequestPerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private const int MaxResponseTime = 500;
-
-        private readonly Stopwatch timer;
         private readonly ICurrentUserService currentUserService;
         private readonly ILogger<TRequest> logger;
 
-        public RequestPerformanceBehaviour(ILogger<TRequest> logger, ICurrentUserService currentUserService)
-        {
-            this.timer = new Stopwatch();
+        private readonly Stopwatch timer;
 
-            this.logger = logger;
+        public RequestPerformanceBehaviour(ICurrentUserService currentUserService, ILogger<TRequest> logger)
+        {
             this.currentUserService = currentUserService;
+            this.logger = logger;
+            this.timer = new Stopwatch();
         }
+
 
         public async Task<TResponse> Handle(
             TRequest request,
@@ -41,7 +41,8 @@
 
             var name = typeof(TRequest).Name;
 
-            this.logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) @userId {@UserId} {@Request}",
+            this.logger.LogWarning(
+                "Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) @userId {@UserId} {@Request}",
                 name, this.timer.ElapsedMilliseconds, this.currentUserService.UserId, request);
 
             return response;

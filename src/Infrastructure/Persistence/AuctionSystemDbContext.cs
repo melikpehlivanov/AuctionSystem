@@ -15,9 +15,7 @@
         private readonly IDateTime dateTime;
 
         public AuctionSystemDbContext(DbContextOptions<AuctionSystemDbContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         public AuctionSystemDbContext(
             DbContextOptions<AuctionSystemDbContext> options,

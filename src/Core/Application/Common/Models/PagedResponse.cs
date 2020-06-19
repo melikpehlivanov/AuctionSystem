@@ -14,7 +14,7 @@
         public PagedResponse(IEnumerable<T> data, int totalDataCountInDatabase)
         {
             this.Data = data;
-            this.TotalPages = (int)Math.Ceiling(totalDataCountInDatabase / (double)AppConstants.PageSize);
+            this.TotalPages = (int) Math.Ceiling(totalDataCountInDatabase / (double) AppConstants.PageSize);
         }
 
         public int TotalPages { get; set; }
@@ -28,7 +28,7 @@
         public int? PreviousPage { get; set; }
 
         public IEnumerable<T> Data { get; set; }
-        
+
         public int TotalDataCount { get; set; }
     }
 }

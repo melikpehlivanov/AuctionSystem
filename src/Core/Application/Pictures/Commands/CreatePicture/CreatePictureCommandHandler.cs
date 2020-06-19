@@ -18,7 +18,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
 
-    public class CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, MultiResponse<PictureResponseModel>>
+    public class
+        CreatePictureCommandHandler : IRequestHandler<CreatePictureCommand, MultiResponse<PictureResponseModel>>
     {
         private readonly Cloudinary cloudinary;
         private readonly IAuctionSystemDbContext context;
@@ -45,7 +46,8 @@
             this.cloudinary = new Cloudinary(account);
         }
 
-        public async Task<MultiResponse<PictureResponseModel>> Handle(CreatePictureCommand request, CancellationToken cancellationToken)
+        public async Task<MultiResponse<PictureResponseModel>> Handle(CreatePictureCommand request,
+            CancellationToken cancellationToken)
         {
             var item = await this.context
                 .Items
@@ -95,7 +97,9 @@
             await this.context.Pictures.AddRangeAsync(picturesToAdd, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            var result = new MultiResponse<PictureResponseModel>(picturesToAdd.Select(p => this.mapper.Map<PictureResponseModel>(p)).ToList());
+            var result =
+                new MultiResponse<PictureResponseModel>(picturesToAdd
+                    .Select(p => this.mapper.Map<PictureResponseModel>(p)).ToList());
             return result;
         }
     }

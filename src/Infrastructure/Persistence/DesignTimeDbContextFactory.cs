@@ -1,9 +1,8 @@
-﻿using System.Reflection;
-
-namespace Persistence
+﻿namespace Persistence
 {
     using System;
     using System.IO;
+    using System.Reflection;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
     using Microsoft.Extensions.Configuration;
@@ -15,7 +14,8 @@ namespace Persistence
 
         public TContext CreateDbContext(string[] args)
         {
-            var basePath = Directory.GetCurrentDirectory() + string.Format("{0}../../Presentation{0}Api", Path.DirectorySeparatorChar);
+            var basePath = Directory.GetCurrentDirectory() +
+                           string.Format("{0}../../Presentation{0}Api", Path.DirectorySeparatorChar);
             return this.Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
         }
 
@@ -41,10 +41,12 @@ namespace Persistence
         {
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw new ArgumentException($"Connection string '{connectionString}' is null or empty.", nameof(connectionString));
+                throw new ArgumentException($"Connection string '{connectionString}' is null or empty.",
+                    nameof(connectionString));
             }
 
-            Console.WriteLine($"DesignTimeDbContextFactoryBase.Create(string): Connection string: '{connectionString}'.");
+            Console.WriteLine(
+                $"DesignTimeDbContextFactoryBase.Create(string): Connection string: '{connectionString}'.");
 
             var optionsBuilder = new DbContextOptionsBuilder<TContext>();
 

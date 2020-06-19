@@ -15,20 +15,20 @@
             var totalPages = (int) Math.Ceiling(totalDataCountInDatabase / (double) pagination.PageSize);
             var nextPage = pagination.PageNumber >= 1 && pagination.PageNumber < totalPages
                 ? pagination.PageNumber + 1
-                : (int?)null;
+                : (int?) null;
             var previousPage = pagination.PageNumber - 1 >= 1
                 ? pagination.PageNumber - 1
-                : (int?)null;
+                : (int?) null;
 
             return new PagedResponse<T>
             {
                 Data = response,
                 PageNumber = pagination.PageNumber >= 1 ? pagination.PageNumber : 1,
-                PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?)null,
+                PageSize = pagination.PageSize >= 1 ? pagination.PageSize : (int?) null,
                 NextPage = response.Any() ? nextPage : null,
                 PreviousPage = previousPage,
                 TotalPages = totalPages,
-                TotalDataCount = totalDataCountInDatabase,
+                TotalDataCount = totalDataCountInDatabase
             };
         }
     }

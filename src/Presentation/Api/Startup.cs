@@ -6,6 +6,7 @@ namespace Api
     using Common;
     using Extensions;
     using FluentValidation.AspNetCore;
+    using Hubs;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -15,15 +16,13 @@ namespace Api
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Persistence;
+    using Services.Hosted;
 
     public class Startup
     {
-        private IWebHostEnvironment Environment;
-
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration)
         {
             this.Configuration = configuration;
-            this.Environment = environment;
         }
 
         private IConfiguration Configuration { get; }
@@ -37,6 +36,7 @@ namespace Api
 
             services
                 .AddPersistence(this.Configuration)
+                .AddHostedService<MigrateDatabaseHostedService>()
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
                 .AddCloudinarySettings(this.Configuration)
@@ -81,7 +81,6 @@ namespace Api
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseSwaggerUi()
-                //TODO: Allow only client app when it's implemented
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();

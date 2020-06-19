@@ -31,7 +31,7 @@
                 IdentityMocker.GetMockedRoleManager().Object,
                 this.Context);
 
-            this.handler = new DeleteAdminCommandHandler(this.userManagerService, mockedUserService.Object);
+            this.handler = new DeleteAdminCommandHandler(this.mockedUserService.Object, this.userManagerService);
         }
 
         [Fact]

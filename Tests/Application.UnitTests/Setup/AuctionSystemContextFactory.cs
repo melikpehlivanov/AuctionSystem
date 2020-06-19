@@ -6,6 +6,7 @@ namespace Application.UnitTests.Setup
     using AuctionSystem.Infrastructure;
     using Common.Interfaces;
     using Domain.Entities;
+    using global::Common;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -13,6 +14,8 @@ namespace Application.UnitTests.Setup
 
     public class AuctionSystemContextFactory
     {
+        private static readonly IDateTime DateTime = new MachineDateTime();
+        
         public static AuctionSystemDbContext Create()
         {
             var currentUserServiceMock = new Mock<ICurrentUserService>();
@@ -22,7 +25,7 @@ namespace Application.UnitTests.Setup
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
-            var context = new AuctionSystemDbContext(options, new MachineDateTime(), currentUserServiceMock.Object);
+            var context = new AuctionSystemDbContext(options, DateTime, currentUserServiceMock.Object);
 
             context.Database.EnsureCreated();
             SeedUsers(context);
@@ -51,7 +54,7 @@ namespace Application.UnitTests.Setup
                 MinIncrease = DataConstants.SampleItemMinIncrease,
                 StartTime = DateTime.UtcNow.AddDays(10),
                 EndTime = DataConstants.SampleItemEndTime,
-                UserId = context.Users.FirstOrDefault().Id,
+                UserId = context.Users.FirstOrDefault()?.Id,
                 SubCategoryId = context.SubCategories.FirstOrDefault().Id
             };
 
@@ -85,19 +88,20 @@ namespace Application.UnitTests.Setup
 
         private static void SeedCategory(AuctionSystemDbContext context)
         {
-            context.Categories.Add(new Category { Id = DataConstants.SampleCategoryId });
+            context.Categories.Add(new Category {Id = DataConstants.SampleCategoryId});
             context.SaveChanges();
         }
 
         private static void SeedSubCategory(AuctionSystemDbContext context)
         {
-            context.SubCategories.AddAsync(new SubCategory { Id = DataConstants.SampleSubCategoryId });
+            context.SubCategories.AddAsync(new SubCategory {Id = DataConstants.SampleSubCategoryId});
             context.SaveChangesAsync();
         }
 
         private static void SeedPictures(AuctionSystemDbContext context)
         {
-            context.Pictures.AddAsync(new Picture { Id = DataConstants.SamplePictureId, ItemId = DataConstants.SampleItemId });
+            context.Pictures.AddAsync(new Picture
+                {Id = DataConstants.SamplePictureId, ItemId = DataConstants.SampleItemId});
             context.SaveChangesAsync(CancellationToken.None);
         }
     }

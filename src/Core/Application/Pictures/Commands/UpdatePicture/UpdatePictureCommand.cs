@@ -10,7 +10,7 @@ namespace Application.Pictures.Commands.UpdatePicture
         public Guid ItemId { get; set; }
 
         public ICollection<IFormFile> PicturesToAdd { get; set; } = new HashSet<IFormFile>();
-        
+
         public ICollection<Guid> PicturesToRemove { get; set; } = new HashSet<Guid>();
     }
 }
