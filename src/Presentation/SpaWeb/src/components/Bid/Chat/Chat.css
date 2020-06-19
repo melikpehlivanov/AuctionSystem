@@ -1,0 +1,73 @@
+.chat {
+  background: #f2f5f8;
+  color: #434651;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0 0 50px 0;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  height: 85vh;
+}
+
+.chat .chat-history {
+  padding: 30px 20px 0 0;
+  height: 575px;
+}
+
+.message {
+  padding: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  color: #fff;
+  padding: 1.1rem;
+  border-radius: 7px;
+  margin-top: 30px;
+}
+
+.message.my-message {
+  background: #00008b;
+}
+.message.other-message {
+  background: #94c2ed;
+}
+
+.message.highest-bid-message {
+  background: green;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.pre-scrollable {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
+.highest-bid-message:first-child {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+  animation-duration: 2s;
+}
+
+@-webkit-keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -18,18 +18,20 @@
     {
         private readonly IUserManager userManagerService;
         private readonly Mock<UserManager<AuctionUser>> mockedUserManager;
+        private readonly Mock<ICurrentUserService> mockedUserService;
 
         private readonly DeleteAdminCommandHandler handler;
 
         public DeleteAdminCommandTests()
         {
             this.mockedUserManager = IdentityMocker.GetMockedUserManager();
+            this.mockedUserService = new Mock<ICurrentUserService>();
             this.userManagerService = new UserManagerService(
                 this.mockedUserManager.Object,
                 IdentityMocker.GetMockedRoleManager().Object,
                 this.Context);
 
-            this.handler = new DeleteAdminCommandHandler(this.userManagerService);
+            this.handler = new DeleteAdminCommandHandler(this.userManagerService, mockedUserService.Object);
         }
 
         [Fact]
@@ -49,7 +51,7 @@
                 .ReturnsAsync(IdentityResult.Success);
             this.mockedUserManager
                 .Setup(x => x.GetUsersInRoleAsync(AppConstants.AdministratorRole))
-                .ReturnsAsync(new List<AuctionUser> { new AuctionUser { Id = Guid.NewGuid().ToString() } });
+                .ReturnsAsync(new List<AuctionUser> { new AuctionUser { Id = DataConstants.SampleAdminUserId } });
 
             var command = new DeleteAdminCommand { Email = "admin@admin.com", Role = "Administrator" };
 
@@ -62,6 +64,9 @@
             this.mockedUserManager
                 .Setup(x => x.RemoveFromRoleAsync(It.IsAny<AuctionUser>(), AppConstants.AdministratorRole))
                 .ReturnsAsync(IdentityResult.Success);
+            this.mockedUserService
+                .Setup(x => x.UserId)
+                .Returns(DataConstants.SampleAdminUserId);
             this.mockedUserManager
                 .Setup(x => x.GetUsersInRoleAsync(AppConstants.AdministratorRole))
                 .ReturnsAsync(new List<AuctionUser>

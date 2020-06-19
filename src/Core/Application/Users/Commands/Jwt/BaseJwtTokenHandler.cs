@@ -11,14 +11,11 @@
     using Common.Interfaces;
     using Domain.Entities;
     using Microsoft.Extensions.Options;
-    using Microsoft.IdentityModel.JsonWebTokens;
     using Microsoft.IdentityModel.Tokens;
 
     public abstract class BaseJwtTokenHandler
     {
-        private const int ExpiryDateInMonths = 6;
-
-        protected readonly JwtSettings options;
+        private readonly JwtSettings options;
         protected readonly IUserManager userManager;
         protected readonly IAuctionSystemDbContext context;
 
@@ -65,7 +62,7 @@
                 JwtId = token.Id,
                 UserId = userId,
                 CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMonths(ExpiryDateInMonths),
+                ExpiryDate = DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths),
             };
 
             await this.context.RefreshTokens.AddAsync(refreshToken, cancellationToken);

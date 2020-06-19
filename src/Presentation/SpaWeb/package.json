@@ -1,0 +1,53 @@
+{
+  "name": "spaweb",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aspnet/signalr": "^1.1.4",
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1",
+    "moment": "^2.26.0",
+    "moment-timezone": "^0.5.31",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-card-carousel": "^1.1.3",
+    "react-datepicker": "^2.16.0",
+    "react-dom": "^16.13.1",
+    "react-flip-move": "^3.0.4",
+    "react-hook-form": "^5.7.2",
+    "react-image-gallery": "^1.0.7",
+    "react-input-range": "^1.3.0",
+    "react-paginate": "^6.3.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-slugify": "^2.0.1",
+    "react-toastify": "^6.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

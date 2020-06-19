@@ -11,6 +11,7 @@ namespace Api
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Middlewares;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Persistence;
@@ -44,8 +45,23 @@ namespace Api
                 .AddRequiredServices()
                 .AddRedisCache(this.Configuration)
                 .AddSwagger()
+                .AddCors(options =>
+                {
+                    options.AddDefaultPolicy(
+                        builder =>
+                        {
+                            builder.WithOrigins("http://localhost:3000",
+                                "https://localhost:3000");
+                            builder.AllowCredentials();
+                            builder.AllowAnyMethod();
+                            builder.AllowAnyHeader();
+                        });
+                })
                 .AddControllers()
+                .AddNewtonsoftJson(options => options.UseCamelCasing(true))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateUserCommandValidator>());
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -58,17 +74,19 @@ namespace Api
             app
                 .UseHttpsRedirection()
                 .UseCustomExceptionHandler()
+                .UseAuthorizationHeader()
                 .UseRouting()
                 .UseHsts()
-                .UseCors(options => options
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod())
+                .UseCors()
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseSwaggerUi()
                 //TODO: Allow only client app when it's implemented
-                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHub<BidHub>("/bidHub");
+                });
         }
     }
 }

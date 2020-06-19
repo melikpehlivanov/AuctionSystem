@@ -48,6 +48,8 @@
             public const string SuccessfulTokenRefreshRequestDescriptionMessage = 
                 "Indicates that everything went ok and returns new jwt & refresh token";
             public const string BadRequestOnTokenRefreshDescriptionMessage = "Indicates that the provided token is invalid";
+
+            public const string SuccessfulLogOut = "Indicates that everything went ok and signs out user";
         }
 
         public static class BidConstants

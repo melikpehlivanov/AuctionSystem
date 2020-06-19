@@ -210,7 +210,10 @@
             return users.Select(r => r.Id).ToList();
         }
 
-        public async Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(string username, string role)
+        public async Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(
+            string username, 
+            string role, 
+            string currentUserId)
         {
             var user = await this.context
                 .Users
@@ -223,16 +226,21 @@
             }
 
             var administrators = await this.GetUsersInRoleAsync(role);
-            if (administrators.Contains(user.Id))
+            if (administrators.Contains(user.Id) && currentUserId == user.Id)
             {
                 return (IdentityResult.Failed(), $"You can not remove yourself from role {role}!");
+            }
+
+            if (!administrators.Contains(user.Id))
+            {
+                return (IdentityResult.Failed(), $"{user.Email} is not {role}.");
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
             return (result, null);
         }
 
-        public async Task<bool> DeleteUserAsync(AuctionUser user)
+        private async Task<bool> DeleteUserAsync(AuctionUser user)
         {
             if (user == null)
             {

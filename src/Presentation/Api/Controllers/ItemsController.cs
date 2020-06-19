@@ -81,7 +81,7 @@
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
             SwaggerDocumentation.UnauthorizedDescriptionMessage)]
-        public async Task<IActionResult> Post([FromBody] CreateItemCommand model)
+        public async Task<IActionResult> Post([FromForm] CreateItemCommand model)
         {
             var result = await this.Mediator.Send(model);
             return this.CreatedAtAction(nameof(this.Post), result);
@@ -108,7 +108,7 @@
         [SwaggerResponse(
             StatusCodes.Status401Unauthorized,
             SwaggerDocumentation.UnauthorizedDescriptionMessage)]
-        public async Task<IActionResult> Put(Guid id, [FromBody] UpdateItemCommand model)
+        public async Task<IActionResult> Put(Guid id, [FromForm] UpdateItemCommand model)
         {
             if (id != model.Id)
             {
