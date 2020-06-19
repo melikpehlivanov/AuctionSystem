@@ -12,7 +12,8 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, MultiResponse<ListCategoriesResponseModel>>
+    public class
+        ListCategoriesQueryHandler : IRequestHandler<ListCategoriesQuery, MultiResponse<ListCategoriesResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -23,18 +24,14 @@
             this.mapper = mapper;
         }
 
-        public async Task<MultiResponse<ListCategoriesResponseModel>> Handle(ListCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<MultiResponse<ListCategoriesResponseModel>> Handle(ListCategoriesQuery request,
+            CancellationToken cancellationToken)
         {
             var categories = await this.context
                 .Categories
                 .Include(c => c.SubCategories)
                 .ProjectTo<ListCategoriesResponseModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-
-            if (!categories.Any())
-            {
-                throw new NotFoundException(nameof(Category));
-            }
 
             return new MultiResponse<ListCategoriesResponseModel>(categories);
         }
