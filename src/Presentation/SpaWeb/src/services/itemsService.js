@@ -33,7 +33,12 @@ const getLiveItems = () => {
             ...item,
             pictures:
               item.pictures.length === 0
-                ? [{ url: process.env.REACT_APP_DEFAULT_PICTURE_URL }]
+                ? [
+                    {
+                      id: process.env.REACT_APP_DEFAULT_PICTURE_ID,
+                      url: process.env.REACT_APP_DEFAULT_PICTURE_URL,
+                    },
+                  ]
                 : item.pictures,
           })),
         },
@@ -53,7 +58,12 @@ const getItems = (query) => {
             ...item,
             pictures:
               item.pictures.length === 0
-                ? [{ url: process.env.REACT_APP_DEFAULT_PICTURE_URL }]
+                ? [
+                    {
+                      id: process.env.REACT_APP_DEFAULT_PICTURE_ID,
+                      url: process.env.REACT_APP_DEFAULT_PICTURE_URL,
+                    },
+                  ]
                 : item.pictures,
           })),
         },
@@ -64,7 +74,27 @@ const getItems = (query) => {
 const getItemById = (id) => {
   return api
     .get(`${process.env.REACT_APP_API_ITEMS_ENDPOINT}/${id}`)
-    .then((response) => response);
+    .then((response) => {
+      const item = response.data.data;
+      return {
+        ...response,
+        data: {
+          ...response.data,
+          data: {
+            ...item,
+            pictures:
+              item.pictures.length === 0
+                ? [
+                    {
+                      id: process.env.REACT_APP_DEFAULT_PICTURE_ID,
+                      url: process.env.REACT_APP_DEFAULT_PICTURE_URL,
+                    },
+                  ]
+                : item.pictures,
+          },
+        },
+      };
+    });
 };
 
 const createItem = (body) => {
