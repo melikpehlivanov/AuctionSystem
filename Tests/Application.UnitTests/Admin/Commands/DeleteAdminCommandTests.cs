@@ -51,7 +51,7 @@
                 .ReturnsAsync(IdentityResult.Success);
             this.mockedUserManager
                 .Setup(x => x.GetUsersInRoleAsync(AppConstants.AdministratorRole))
-                .ReturnsAsync(new List<AuctionUser> { new AuctionUser { Id = Guid.NewGuid().ToString() } });
+                .ReturnsAsync(new List<AuctionUser> { new AuctionUser { Id = DataConstants.SampleAdminUserId } });
 
             var command = new DeleteAdminCommand { Email = "admin@admin.com", Role = "Administrator" };
 
