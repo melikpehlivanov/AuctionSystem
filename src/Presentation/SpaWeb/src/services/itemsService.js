@@ -24,13 +24,41 @@ const getLiveItems = () => {
   };
   return api
     .get(process.env.REACT_APP_API_ITEMS_ENDPOINT, { params })
-    .then((response) => response);
+    .then((response) => {
+      return {
+        ...response,
+        data: {
+          ...response.data,
+          data: response.data.data.map((item) => ({
+            ...item,
+            pictures:
+              item.pictures.length === 0
+                ? [{ url: process.env.REACT_APP_DEFAULT_PICTURE_URL }]
+                : item.pictures,
+          })),
+        },
+      };
+    });
 };
 
 const getItems = (query) => {
   return api
     .get(process.env.REACT_APP_API_ITEMS_ENDPOINT, { params: query })
-    .then((response) => response);
+    .then((response) => {
+      return {
+        ...response,
+        data: {
+          ...response.data,
+          data: response.data.data.map((item) => ({
+            ...item,
+            pictures:
+              item.pictures.length === 0
+                ? [{ url: process.env.REACT_APP_DEFAULT_PICTURE_URL }]
+                : item.pictures,
+          })),
+        },
+      };
+    });
 };
 
 const getItemById = (id) => {
