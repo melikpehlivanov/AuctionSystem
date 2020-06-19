@@ -255,7 +255,11 @@ export const Edit = () => {
               />
             </Form.Group>
             <div>
-              <Button variant="outline-info" className="mr-3">
+              <Button
+                variant="outline-info"
+                className="mr-3"
+                onClick={() => history.goBack()}
+              >
                 Cancel
               </Button>
               <Button variant="outline-danger" type="submit">
