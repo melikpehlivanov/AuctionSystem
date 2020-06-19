@@ -64,13 +64,7 @@
 
             if (!request.Pictures.Any())
             {
-                // Add default picture
-                var picture = new Picture { ItemId = request.ItemId, Url = AppConstants.DefaultPictureUrl };
-                await this.context.Pictures.AddAsync(picture, cancellationToken);
-                await this.context.SaveChangesAsync(cancellationToken);
-
-                return new MultiResponse<PictureResponseModel>(new List<PictureResponseModel>
-                    { this.mapper.Map<PictureResponseModel>(picture) });
+                return new MultiResponse<PictureResponseModel>(new List<PictureResponseModel>());
             }
 
             var uploadResults = new ConcurrentBag<ImageUploadResult>();
