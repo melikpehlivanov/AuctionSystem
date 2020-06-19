@@ -23,6 +23,7 @@
     "react-hook-form": "^5.7.2",
     "react-image-gallery": "^1.0.7",
     "react-input-range": "^1.3.0",
+    "react-paginate": "^6.3.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-slugify": "^2.0.1",

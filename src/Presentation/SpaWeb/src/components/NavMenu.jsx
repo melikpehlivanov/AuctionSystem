@@ -23,7 +23,7 @@ export const NavMenu = () => {
               <Fragment>
                 <Button
                   onClick={() => {
-                    history.push("/admin");
+                    history.push("/administration");
                   }}
                   className="mr-3"
                   variant="outline-danger"

@@ -14,6 +14,7 @@ import { Details } from "./components/Items/Details/Details";
 import { Create } from "./components/Items/Create/Create";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { Edit } from "./components/Items/Edit/Edit";
+import { Admin } from "./components/Admin/Admin";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -30,6 +31,11 @@ function App() {
             <Route exact path="/error/network" component={NetworkError} />
             <PrivateRoute exact path="/items/create" component={Create} />
             <PrivateRoute path="/items/edit/:slug/:id" component={Edit} />
+            <PrivateRoute
+              path="/administration"
+              adminOnly={true}
+              component={Admin}
+            />
             <Route exact path="/items/:subCategoryId?" component={List} />
             <Route path="/items/:slug?/:id" component={Details} />
             <Route path="*" component={NotFound} />
