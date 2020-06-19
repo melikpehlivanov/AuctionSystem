@@ -6,6 +6,7 @@ namespace Api
     using Common;
     using Extensions;
     using FluentValidation.AspNetCore;
+    using Hubs;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -18,12 +19,9 @@ namespace Api
 
     public class Startup
     {
-        private IWebHostEnvironment Environment;
-
-        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration)
         {
             this.Configuration = configuration;
-            this.Environment = environment;
         }
 
         private IConfiguration Configuration { get; }
@@ -81,7 +79,6 @@ namespace Api
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseSwaggerUi()
-                //TODO: Allow only client app when it's implemented
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();

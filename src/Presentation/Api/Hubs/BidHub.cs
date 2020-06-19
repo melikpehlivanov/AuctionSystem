@@ -1,4 +1,4 @@
-namespace Api
+namespace Api.Hubs
 {
     using System;
     using System.Threading.Tasks;
