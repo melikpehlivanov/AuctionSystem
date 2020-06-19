@@ -231,6 +231,11 @@
                 return (IdentityResult.Failed(), $"You can not remove yourself from role {role}!");
             }
 
+            if (!administrators.Contains(user.Id))
+            {
+                return (IdentityResult.Failed(), $"{user.Email} is not {role}.");
+            }
+
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
             return (result, null);
         }
