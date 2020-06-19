@@ -45,7 +45,7 @@ export const Bid = ({
   }, [connection, itemId]);
 
   const handleOnClick = (amount) => {
-    if (amount < nextBidMinimumAmount) {
+    if (parseFloat(amount) < nextBidMinimumAmount) {
       toast.error(
         `The minimum bidding amount is ${process.env.REACT_APP_CURRENCY_SIGN}${nextBidMinimumAmount}`
       );
@@ -126,7 +126,7 @@ export const Bid = ({
         <CounterContainer />
         <h4>
           Highest bid - {process.env.REACT_APP_CURRENCY_SIGN}
-          {highestBid}
+          {highestBid.toFixed(2)}
         </h4>
         <p>
           Min bid amount - {process.env.REACT_APP_CURRENCY_SIGN}
