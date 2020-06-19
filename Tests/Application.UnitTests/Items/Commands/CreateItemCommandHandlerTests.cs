@@ -8,10 +8,12 @@
     using Application.Items.Commands.CreateItem;
     using Application.Pictures;
     using Application.Pictures.Commands.CreatePicture;
+    using AuctionSystem.Infrastructure;
     using Common.Exceptions;
     using Common.Interfaces;
     using Common.Models;
     using FluentAssertions;
+    using global::Common;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -22,6 +24,7 @@
     {
         private readonly Mock<ICurrentUserService> currentUserServiceMock;
         private readonly Mock<IMediator> mediatorMock;
+        private readonly IDateTime dateTime;
 
         private readonly CreateItemCommandHandler handler;
 
@@ -39,6 +42,11 @@
                 }, CancellationToken.None))
                 .ReturnsAsync(new MultiResponse<PictureResponseModel>(new List<PictureResponseModel>()));
 
+            var dateTimeMock = new Mock<IDateTime>();
+            dateTimeMock.Setup(x => x.UtcNow).Returns(DateTime.UtcNow);
+            dateTimeMock.Setup(x => x.Now).Returns(DateTime.Now);
+            this.dateTime = dateTimeMock.Object;
+            
             this.handler =
                 new CreateItemCommandHandler(this.Mapper, this.Context, this.currentUserServiceMock.Object, this.mediatorMock.Object);
         }
@@ -67,7 +75,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId
             };
@@ -89,7 +97,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId
             };

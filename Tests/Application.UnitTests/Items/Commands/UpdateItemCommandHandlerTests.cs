@@ -9,6 +9,7 @@
     using Common.Exceptions;
     using Common.Interfaces;
     using FluentAssertions;
+    using global::Common;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -20,6 +21,7 @@
         private readonly Mock<ICurrentUserService> currentUserServiceMock;
         private readonly UpdateItemCommandHandler handler;
         private readonly Mock<IMediator> mediatorMock;
+        private readonly IDateTime dateTime;
 
         public UpdateItemCommandHandlerTests()
         {
@@ -34,6 +36,12 @@
                     ItemId = It.IsAny<Guid>(),
                 }, CancellationToken.None))
                 .ReturnsAsync(Unit.Value);
+            
+            var dateTimeMock = new Mock<IDateTime>();
+            dateTimeMock.Setup(x => x.UtcNow).Returns(DateTime.UtcNow);
+            dateTimeMock.Setup(x => x.Now).Returns(DateTime.Now);
+            this.dateTime = dateTimeMock.Object;
+            
             this.handler =
                 new UpdateItemCommandHandler(this.Context, this.currentUserServiceMock.Object,
                     this.mediatorMock.Object);
@@ -71,7 +79,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId
             };

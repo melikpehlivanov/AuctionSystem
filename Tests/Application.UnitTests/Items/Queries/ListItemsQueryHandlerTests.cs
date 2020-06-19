@@ -12,6 +12,7 @@
     using Common.Models;
     using Domain.Entities;
     using FluentAssertions;
+    using global::Common;
     using Moq;
     using Setup;
     using Xunit;
@@ -21,6 +22,7 @@
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
+        private readonly IDateTime dateTime;
 
         private readonly ListItemsQueryHandler handler;
 
@@ -29,21 +31,26 @@
             this.context = fixture.Context;
             this.mapper = fixture.Mapper;
 
-            this.handler = new ListItemsQueryHandler(this.context, this.mapper);
+            var mockedDatetime = new Mock<IDateTime>();
+            mockedDatetime.Setup(x => x.UtcNow).Returns(DateTime.UtcNow);
+            mockedDatetime.Setup(x => x.Now).Returns(DateTime.Now);
+            this.dateTime = mockedDatetime.Object;
+
+            this.handler = new ListItemsQueryHandler(this.context, this.mapper, this.dateTime);
         }
-        
+
         [Fact]
         public async Task ListItems_Given_QueryFilter_With_EndTime_Should_Return_CorrectEntities()
         {
-            var expectedEndTime = DateTime.UtcNow.AddDays(5);
+            var expectedEndTime = this.dateTime.UtcNow.AddDays(5);
             await this.context.Items.AddAsync(new Item
             {
                 Title = DataConstants.SampleItemTitle,
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
-                EndTime = DateTime.UtcNow.AddDays(2),
+                StartTime = this.dateTime.UtcNow,
+                EndTime = this.dateTime.UtcNow.AddDays(2),
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = DataConstants.SampleAdminUserId
             });
@@ -53,8 +60,8 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
-                EndTime = DateTime.UtcNow.AddDays(4),
+                StartTime = this.dateTime.UtcNow,
+                EndTime = this.dateTime.UtcNow.AddDays(4),
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = DataConstants.SampleAdminUserId
             });
@@ -104,9 +111,9 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                EndTime = DateTime.UtcNow.AddDays(10),
-                Pictures = new List<Picture> { new Picture(), new Picture(), new Picture() }
+                StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
+                EndTime = this.dateTime.UtcNow.AddDays(10),
+                Pictures = new List<Picture> {new Picture(), new Picture(), new Picture()}
             });
             await this.context.Items.AddAsync(new Item
             {
@@ -114,9 +121,9 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                EndTime = DateTime.UtcNow.AddDays(10),
-                Pictures = new List<Picture> { new Picture(), new Picture(), new Picture() }
+                StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
+                EndTime = this.dateTime.UtcNow.AddDays(10),
+                Pictures = new List<Picture> {new Picture(), new Picture(), new Picture()}
             });
 
             const int expectedMinNumberPicturesCount = 3;
@@ -145,7 +152,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = expectedPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = DataConstants.SampleAdminUserId
@@ -156,7 +163,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = expectedPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = DataConstants.SampleAdminUserId
@@ -177,7 +184,7 @@
                 .Should()
                 .BeTrue();
         }
-        
+
         [Fact]
         public async Task ListItems_Given_QueryFilter_With_MaxPrice_Should_Return_CorrectEntities()
         {
@@ -188,7 +195,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = expectedPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = DataConstants.SampleAdminUserId
@@ -199,7 +206,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = expectedPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = DataConstants.SampleAdminUserId
@@ -224,7 +231,7 @@
         [Fact]
         public async Task ListItems_Given_QueryFilter_With_StartTime_Should_Return_CorrectEntities()
         {
-            var expectedStartTime = DateTime.UtcNow.AddDays(5);
+            var expectedStartTime = this.dateTime.UtcNow.AddDays(5);
             await this.context.Items.AddAsync(new Item
             {
                 Title = DataConstants.SampleItemTitle,
@@ -274,8 +281,8 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                EndTime = DateTime.UtcNow.AddDays(10),
+                StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
+                EndTime = this.dateTime.UtcNow.AddDays(10),
                 SubCategoryId = expectedSubCategoryId
             });
             await this.context.Items.AddAsync(new Item
@@ -284,8 +291,8 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                EndTime = DateTime.UtcNow.AddDays(10),
+                StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
+                EndTime = this.dateTime.UtcNow.AddDays(10),
                 SubCategoryId = expectedSubCategoryId
             });
 
@@ -308,7 +315,7 @@
         public async Task ListItems_Given_QueryFilter_With_Title_Should_Return_CorrectEntities()
         {
             const string expectedTitle = "Filtered title";
-            await this.context.Items.AddAsync(new Item { Title = expectedTitle });
+            await this.context.Items.AddAsync(new Item {Title = expectedTitle});
             await this.context.SaveChangesAsync(CancellationToken.None);
 
             var result = await this.handler.Handle(new ListItemsQuery
@@ -336,7 +343,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = expectedUserId
@@ -347,7 +354,7 @@
                 Description = DataConstants.SampleItemDescription,
                 StartingPrice = DataConstants.SampleItemStartingPrice,
                 MinIncrease = DataConstants.SampleItemMinIncrease,
-                StartTime = DateTime.UtcNow,
+                StartTime = this.dateTime.UtcNow,
                 EndTime = DataConstants.SampleItemEndTime,
                 SubCategoryId = DataConstants.SampleSubCategoryId,
                 UserId = expectedUserId
@@ -378,7 +385,7 @@
                 .Should()
                 .BeOfType<PagedResponse<ListItemsResponseModel>>();
         }
-        
+
         private async Task SeedLiveItems(int count)
         {
             var items = new List<Item>();
@@ -390,8 +397,8 @@
                     Description = DataConstants.SampleItemDescription,
                     StartingPrice = DataConstants.SampleItemStartingPrice,
                     MinIncrease = DataConstants.SampleItemMinIncrease,
-                    StartTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
-                    EndTime = DateTime.UtcNow.AddDays(10),
+                    StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
+                    EndTime = this.dateTime.UtcNow.AddDays(10),
                     UserId = DataConstants.SampleUserId
                 };
                 items.Add(item);

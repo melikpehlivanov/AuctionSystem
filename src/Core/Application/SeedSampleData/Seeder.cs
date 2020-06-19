@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Common.Interfaces;
     using Domain.Entities;
+    using global::Common;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
@@ -16,11 +17,13 @@
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IUserManager userManager;
+        private readonly IDateTime dateTime;
 
-        public Seeder(IAuctionSystemDbContext context, IUserManager userManager)
+        public Seeder(IAuctionSystemDbContext context, IUserManager userManager, IDateTime dateTime)
         {
             this.context = context;
             this.userManager = userManager;
+            this.dateTime = dateTime;
         }
 
         public async Task SeedAllAsync(CancellationToken cancellationToken)
@@ -95,7 +98,7 @@
             }
         }
 
-        private static async Task SeedItems(IAuctionSystemDbContext dbContext, IUserManager manager,
+        private async Task SeedItems(IAuctionSystemDbContext dbContext, IUserManager manager,
             CancellationToken cancellationToken)
         {
             if (!dbContext.Items.Any())
@@ -107,7 +110,7 @@
                     var i = 1;
                     foreach (var subCategory in category.SubCategories)
                     {
-                        var startTime = DateTime.UtcNow.AddDays(random.Next(0, 5)).ToUniversalTime();
+                        var startTime = dateTime.UtcNow.AddDays(random.Next(0, 5)).ToUniversalTime();
                         var item = new Item
                         {
                             Description = $"Test Description_{i}",
@@ -118,7 +121,7 @@
                             MinIncrease = random.Next(1, 100),
                             SubCategoryId = subCategory.Id,
                             Pictures = new List<Picture>
-                                {new Picture {Url = AppConstants.DefaultPictureUrl, Created = DateTime.UtcNow,}},
+                                {new Picture {Url = AppConstants.DefaultPictureUrl, Created = dateTime.UtcNow,}},
                             UserId = await manager.GetFirstUserId()
                         };
 

@@ -9,6 +9,7 @@
     using Application.Users.Commands.Jwt.Refresh;
     using Application.Users.Commands.LoginUser;
     using Application.Users.Commands.Logout;
+    using global::Common;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using SwaggerExamples;
@@ -16,6 +17,13 @@
 
     public class IdentityController : BaseController
     {
+        private readonly IDateTime dateTime;
+
+        public IdentityController(IDateTime dateTime)
+        {
+            this.dateTime = dateTime;
+        }
+
         /// <summary>
         /// Creates a new user
         /// </summary>
@@ -116,7 +124,7 @@
             {
                 HttpOnly = true,
                 Secure = true,
-                Expires = DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths)
+                Expires = this.dateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths)
             };
 
             this.Response.Cookies.Append(ApiConstants.RefreshToken, token, cookieOptions);

@@ -1,7 +1,6 @@
 ﻿namespace Application.Users.Commands.Jwt
 {
     using System;
-    using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
@@ -10,6 +9,7 @@
     using AppSettingsModels;
     using Common.Interfaces;
     using Domain.Entities;
+    using global::Common;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
@@ -18,18 +18,22 @@
         private readonly JwtSettings options;
         protected readonly IUserManager UserManager;
         protected readonly IAuctionSystemDbContext Context;
+        protected readonly IDateTime DateTime;
 
         protected BaseJwtTokenHandler(
             IOptions<JwtSettings> options,
             IUserManager userManager,
-            IAuctionSystemDbContext context)
+            IAuctionSystemDbContext context,
+            IDateTime dateTime)
         {
             this.UserManager = userManager;
             this.Context = context;
+            this.DateTime = dateTime;
             this.options = options.Value;
         }
 
-        protected async Task<AuthSuccessResponse> GenerateAuthResponse(string userId, string userName, CancellationToken cancellationToken)
+        protected async Task<AuthSuccessResponse> GenerateAuthResponse(string userId, string userName,
+            CancellationToken cancellationToken)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(this.options.Secret);
@@ -51,8 +55,9 @@
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claims,
-                Expires = DateTime.UtcNow.Add(this.options.TokenLifetime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = this.DateTime.UtcNow.Add(this.options.TokenLifetime),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var encryptedToken = tokenHandler.WriteToken(token);
@@ -61,8 +66,8 @@
             {
                 JwtId = token.Id,
                 UserId = userId,
-                CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths),
+                CreationDate = this.DateTime.UtcNow,
+                ExpiryDate = this.DateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths),
             };
 
             await this.Context.RefreshTokens.AddAsync(refreshToken, cancellationToken);

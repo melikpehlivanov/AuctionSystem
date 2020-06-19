@@ -10,6 +10,7 @@
     using AppSettingsModels;
     using Common.Exceptions;
     using Common.Interfaces;
+    using global::Common;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
@@ -25,17 +26,20 @@
             IOptions<JwtSettings> options,
             IUserManager userManager,
             IAuctionSystemDbContext context,
+            IDateTime dateTime,
             TokenValidationParameters tokenValidationParameters)
-            : base(options, userManager, context)
+            : base(options, userManager, context, dateTime)
         {
             this.tokenValidationParameters = tokenValidationParameters;
         }
 
-        public async Task<Response<AuthSuccessResponse>> Handle(JwtRefreshTokenCommand request, CancellationToken cancellationToken)
+        public async Task<Response<AuthSuccessResponse>> Handle(JwtRefreshTokenCommand request,
+            CancellationToken cancellationToken)
         {
             var validatedToken = this.GetPrincipalFromToken(request.Token);
 
-            var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnix =
+                long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
 
@@ -45,9 +49,9 @@
                 .SingleOrDefaultAsync(t => t.Token == request.RefreshToken, cancellationToken);
 
             if (validatedToken == null
-                || expiryDateTimeUtc > DateTime.UtcNow
+                || expiryDateTimeUtc > this.DateTime.UtcNow
                 || storedRefreshToken == null
-                || DateTime.UtcNow > storedRefreshToken.ExpiryDate
+                || this.DateTime.UtcNow > storedRefreshToken.ExpiryDate
                 || storedRefreshToken.Invalidated
                 || storedRefreshToken.Used
                 || storedRefreshToken.JwtId != jti)
@@ -61,7 +65,8 @@
             var userId = validatedToken.Claims.Single(x => x.Type == "id").Value;
             var user = await this.UserManager.GetUserByIdAsync(userId);
 
-            return new Response<AuthSuccessResponse>(await this.GenerateAuthResponse(user.Id, user.UserName, cancellationToken));
+            return new Response<AuthSuccessResponse>(await this.GenerateAuthResponse(user.Id, user.UserName,
+                cancellationToken));
         }
 
         private ClaimsPrincipal GetPrincipalFromToken(string token)
@@ -72,7 +77,8 @@
             {
                 var clonedTokenValidationParameters = this.tokenValidationParameters.Clone();
                 clonedTokenValidationParameters.ValidateLifetime = false;
-                var principal = tokenHandler.ValidateToken(token, clonedTokenValidationParameters, out var validatedToken);
+                var principal =
+                    tokenHandler.ValidateToken(token, clonedTokenValidationParameters, out var validatedToken);
                 return !IsJwtWithValidSecurityAlgorithm(validatedToken) ? null : principal;
             }
             catch
@@ -83,6 +89,7 @@
 
         private static bool IsJwtWithValidSecurityAlgorithm(SecurityToken token)
             => (token is JwtSecurityToken jwtSecurityToken)
-               && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+               && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                   StringComparison.InvariantCultureIgnoreCase);
     }
 }
