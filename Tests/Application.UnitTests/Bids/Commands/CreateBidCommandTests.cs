@@ -34,10 +34,7 @@
                 .Returns(DataConstants.SampleUserId);
 
             this.handler = new CreateBidCommandHandler(
-                this.Context,
-                this.Mapper,
-                this.currentUserServiceMock.Object,
-                new MachineDateTime());
+                this.Context, this.currentUserServiceMock.Object, this.dateTime, this.Mapper);
         }
 
         [Theory]
@@ -47,7 +44,7 @@
         [InlineData("     asdf@$%45rtygf ")]
         public async Task Handle_Given_Model_With_WrongUserId_Should_Throw_NotFoundException(string userId)
         {
-            var command = new CreateBidCommand {Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = userId};
+            var command = new CreateBidCommand { Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = userId };
             await Assert.ThrowsAsync<NotFoundException>(() => this.handler.Handle(command, CancellationToken.None));
         }
 
@@ -55,7 +52,7 @@
         public async Task Handle_Given_Model_With_WrongItemId_Should_Throw_NotFoundException()
         {
             var command = new CreateBidCommand
-                {Amount = 1000, ItemId = Guid.Empty, UserId = DataConstants.SampleUserId};
+                { Amount = 1000, ItemId = Guid.Empty, UserId = DataConstants.SampleUserId };
             await Assert.ThrowsAsync<NotFoundException>(() => this.handler.Handle(command, CancellationToken.None));
         }
 
@@ -77,7 +74,7 @@
             });
             await this.Context.SaveChangesAsync(CancellationToken.None);
 
-            var command = new CreateBidCommand {Amount = 1000, ItemId = itemId, UserId = DataConstants.SampleUserId};
+            var command = new CreateBidCommand { Amount = 1000, ItemId = itemId, UserId = DataConstants.SampleUserId };
             await this.handler.Handle(command, CancellationToken.None);
         }
 
@@ -94,7 +91,7 @@
             await this.Context.SaveChangesAsync();
 
             var command = new CreateBidCommand
-                {Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId};
+                { Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId };
             await Assert.ThrowsAsync<BadRequestException>(() => this.handler.Handle(command, CancellationToken.None));
         }
 
@@ -111,7 +108,7 @@
             await this.Context.SaveChangesAsync();
 
             var command = new CreateBidCommand
-                {Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId};
+                { Amount = 1000, ItemId = DataConstants.SampleItemId, UserId = DataConstants.SampleUserId };
             await Assert.ThrowsAsync<BadRequestException>(() => this.handler.Handle(command, CancellationToken.None));
         }
 

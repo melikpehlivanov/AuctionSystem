@@ -8,13 +8,13 @@
 
     public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
     {
-        private readonly IUserManager userManager;
         private readonly ICurrentUserService currentUserService;
+        private readonly IUserManager userManager;
 
-        public DeleteAdminCommandHandler(IUserManager userManager, ICurrentUserService currentUserService)
+        public DeleteAdminCommandHandler(ICurrentUserService currentUserService, IUserManager userManager)
         {
-            this.userManager = userManager;
             this.currentUserService = currentUserService;
+            this.userManager = userManager;
         }
 
         public async Task<Unit> Handle(DeleteAdminCommand request, CancellationToken cancellationToken)

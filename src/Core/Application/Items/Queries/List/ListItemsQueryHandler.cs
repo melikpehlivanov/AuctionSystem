@@ -17,14 +17,14 @@
     public class ListItemsQueryHandler : IRequestHandler<ListItemsQuery, PagedResponse<ListItemsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
-        private readonly IMapper mapper;
         private readonly IDateTime dateTime;
+        private readonly IMapper mapper;
 
-        public ListItemsQueryHandler(IAuctionSystemDbContext context, IMapper mapper, IDateTime dateTime)
+        public ListItemsQueryHandler(IAuctionSystemDbContext context, IDateTime dateTime, IMapper mapper)
         {
             this.context = context;
-            this.mapper = mapper;
             this.dateTime = dateTime;
+            this.mapper = mapper;
         }
 
         public async Task<PagedResponse<ListItemsResponseModel>> Handle(
@@ -77,7 +77,8 @@
 
             if (filters?.GetLiveItems == true)
             {
-                queryable = queryable.Where(i => i.StartTime < dateTime.UtcNow && i.EndTime > dateTime.UtcNow);
+                queryable = queryable.Where(i =>
+                    i.StartTime < this.dateTime.UtcNow && i.EndTime > this.dateTime.UtcNow);
             }
 
             if (filters?.MinPrice != null)

@@ -10,7 +10,8 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetHighestBidDetailsQueryHandler : IRequestHandler<GetHighestBidDetailsQuery, Response<GetHighestBidDetailsResponseModel>>
+    public class GetHighestBidDetailsQueryHandler : IRequestHandler<GetHighestBidDetailsQuery,
+        Response<GetHighestBidDetailsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -21,7 +22,8 @@
             this.mapper = mapper;
         }
 
-        public async Task<Response<GetHighestBidDetailsResponseModel>> Handle(GetHighestBidDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetHighestBidDetailsResponseModel>> Handle(GetHighestBidDetailsQuery request,
+            CancellationToken cancellationToken)
         {
             var bid = await this.context
                 .Bids

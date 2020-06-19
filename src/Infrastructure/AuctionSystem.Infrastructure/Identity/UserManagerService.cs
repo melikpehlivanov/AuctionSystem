@@ -211,8 +211,8 @@
         }
 
         public async Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(
-            string username, 
-            string role, 
+            string username,
+            string role,
             string currentUserId)
         {
             var user = await this.context

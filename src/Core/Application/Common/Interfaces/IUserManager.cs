@@ -40,7 +40,7 @@
 
         //TODO: Extract in model
         Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(
-            string username, 
+            string username,
             string role,
             string currentUserId);
     }

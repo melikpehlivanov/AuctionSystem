@@ -19,14 +19,11 @@
         private readonly IMapper mapper;
         private readonly IUserManager userManager;
 
-        public ListAllUsersQueryHandler(
-            IAuctionSystemDbContext context,
-            IMapper mapper,
-            IUserManager userManager)
+        public ListAllUsersQueryHandler(IAuctionSystemDbContext context, IMapper mapper, IUserManager userManager)
         {
             this.context = context;
-            this.userManager = userManager;
             this.mapper = mapper;
+            this.userManager = userManager;
         }
 
         public async Task<PagedResponse<ListAllUsersResponseModel>> Handle(ListAllUsersQuery request,

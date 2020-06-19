@@ -36,7 +36,7 @@
             mockedDatetime.Setup(x => x.Now).Returns(DateTime.Now);
             this.dateTime = mockedDatetime.Object;
 
-            this.handler = new ListItemsQueryHandler(this.context, this.mapper, this.dateTime);
+            this.handler = new ListItemsQueryHandler(this.context, this.dateTime, this.mapper);
         }
 
         [Fact]
@@ -113,7 +113,7 @@
                 MinIncrease = DataConstants.SampleItemMinIncrease,
                 StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
                 EndTime = this.dateTime.UtcNow.AddDays(10),
-                Pictures = new List<Picture> {new Picture(), new Picture(), new Picture()}
+                Pictures = new List<Picture> { new Picture(), new Picture(), new Picture() }
             });
             await this.context.Items.AddAsync(new Item
             {
@@ -123,7 +123,7 @@
                 MinIncrease = DataConstants.SampleItemMinIncrease,
                 StartTime = this.dateTime.UtcNow.Subtract(TimeSpan.FromDays(1)),
                 EndTime = this.dateTime.UtcNow.AddDays(10),
-                Pictures = new List<Picture> {new Picture(), new Picture(), new Picture()}
+                Pictures = new List<Picture> { new Picture(), new Picture(), new Picture() }
             });
 
             const int expectedMinNumberPicturesCount = 3;
@@ -315,7 +315,7 @@
         public async Task ListItems_Given_QueryFilter_With_Title_Should_Return_CorrectEntities()
         {
             const string expectedTitle = "Filtered title";
-            await this.context.Items.AddAsync(new Item {Title = expectedTitle});
+            await this.context.Items.AddAsync(new Item { Title = expectedTitle });
             await this.context.SaveChangesAsync(CancellationToken.None);
 
             var result = await this.handler.Handle(new ListItemsQuery

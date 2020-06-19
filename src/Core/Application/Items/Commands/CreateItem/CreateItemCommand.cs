@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace Application.Items.Commands.CreateItem
+﻿namespace Application.Items.Commands.CreateItem
 {
     using System;
     using System.Collections.Generic;
@@ -36,7 +34,8 @@ namespace Application.Items.Commands.CreateItem
                 .ForMember(dest => dest.StartTime,
                     opt => opt.MapFrom(src => src.StartTime.ToUniversalTime()))
                 .ForMember(dest => dest.EndTime,
-                    opt => opt.MapFrom(src => src.EndTime.ToUniversalTime())).ForMember(p=> p.Pictures, opt => opt.Ignore());
+                    opt => opt.MapFrom(src => src.EndTime.ToUniversalTime()))
+                .ForMember(p => p.Pictures, opt => opt.Ignore());
         }
     }
 }

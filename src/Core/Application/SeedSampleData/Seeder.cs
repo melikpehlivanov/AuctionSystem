@@ -16,21 +16,21 @@
     public class Seeder
     {
         private readonly IAuctionSystemDbContext context;
-        private readonly IUserManager userManager;
         private readonly IDateTime dateTime;
+        private readonly IUserManager userManager;
 
-        public Seeder(IAuctionSystemDbContext context, IUserManager userManager, IDateTime dateTime)
+        public Seeder(IAuctionSystemDbContext context, IDateTime dateTime, IUserManager userManager)
         {
             this.context = context;
-            this.userManager = userManager;
             this.dateTime = dateTime;
+            this.userManager = userManager;
         }
 
         public async Task SeedAllAsync(CancellationToken cancellationToken)
         {
             await this.SeedUsers();
             await SeedCategories(this.context, cancellationToken);
-            await SeedItems(this.context, this.userManager, cancellationToken);
+            await this.SeedItems(this.context, this.userManager, cancellationToken);
         }
 
         private async Task SeedUsers()
@@ -98,7 +98,8 @@
             }
         }
 
-        private async Task SeedItems(IAuctionSystemDbContext dbContext, IUserManager manager,
+        private async Task SeedItems(IAuctionSystemDbContext dbContext,
+            IUserManager manager,
             CancellationToken cancellationToken)
         {
             if (!dbContext.Items.Any())
@@ -110,7 +111,7 @@
                     var i = 1;
                     foreach (var subCategory in category.SubCategories)
                     {
-                        var startTime = dateTime.UtcNow.AddDays(random.Next(0, 5)).ToUniversalTime();
+                        var startTime = this.dateTime.UtcNow.AddDays(random.Next(0, 5)).ToUniversalTime();
                         var item = new Item
                         {
                             Description = $"Test Description_{i}",
@@ -121,7 +122,9 @@
                             MinIncrease = random.Next(1, 100),
                             SubCategoryId = subCategory.Id,
                             Pictures = new List<Picture>
-                                {new Picture {Url = AppConstants.DefaultPictureUrl, Created = dateTime.UtcNow,}},
+                            {
+                                new Picture { Url = AppConstants.DefaultPictureUrl, Created = this.dateTime.UtcNow }
+                            },
                             UserId = await manager.GetFirstUserId()
                         };
 

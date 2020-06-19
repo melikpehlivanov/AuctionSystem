@@ -6,7 +6,9 @@
         {
             public const string InvalidRole = "Invalid role.";
             public const string UserNotAddedSuccessfullyToRole = "Something went wrong while adding user to {0} role!";
-            public const string UserNotRemovedSuccessfullyFromRole = "Something went wrong while removing user from {0} role!";
+
+            public const string UserNotRemovedSuccessfullyFromRole =
+                "Something went wrong while removing user from {0} role!";
         }
 
         public static class Bid

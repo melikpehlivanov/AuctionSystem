@@ -1,6 +1,5 @@
 ﻿namespace Application.Items.Commands.CreateItem
 {
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -19,19 +18,17 @@
         private readonly IMediator mediator;
         private readonly ICurrentUserService userService;
 
-        public CreateItemCommandHandler(
+        public CreateItemCommandHandler(IAuctionSystemDbContext context,
             IMapper mapper,
-            IAuctionSystemDbContext context,
-            ICurrentUserService userService,
-            IMediator mediator
-        )
+            IMediator mediator,
+            ICurrentUserService userService)
         {
-            this.mapper = mapper;
             this.context = context;
-            this.userService = userService;
+            this.mapper = mapper;
             this.mediator = mediator;
             this.userService = userService;
         }
+
 
         public async Task<Response<ItemResponseModel>> Handle(CreateItemCommand request,
             CancellationToken cancellationToken)
@@ -50,7 +47,7 @@
             await this.context.Items.AddAsync(item, cancellationToken);
             await this.context.SaveChangesAsync(cancellationToken);
 
-            await this.mediator.Send(new CreatePictureCommand {ItemId = item.Id, Pictures = request.Pictures},
+            await this.mediator.Send(new CreatePictureCommand { ItemId = item.Id, Pictures = request.Pictures },
                 cancellationToken);
 
             return new Response<ItemResponseModel>(new ItemResponseModel(item.Id));

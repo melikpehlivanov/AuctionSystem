@@ -1,14 +1,11 @@
 ﻿namespace Application.Categories.Queries.List
 {
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Common.Exceptions;
     using Common.Interfaces;
     using Common.Models;
-    using Domain.Entities;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 

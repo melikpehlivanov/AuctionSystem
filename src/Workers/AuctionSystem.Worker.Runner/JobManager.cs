@@ -28,12 +28,14 @@
             "Email was sent successfully on {0} utc time to {1} regarding of {2} being sold";
 
         private const string ExceptionMessage = "Entity update failed. Exception message: {0}";
+        private readonly IDateTime dateTime;
         private readonly AuctionSystemDbContext dbContext;
         private readonly IEmailSender emailSender;
         private readonly ILogger logger;
-        private readonly IDateTime dateTime;
 
-        public JobManager(AuctionSystemDbContext dbContext, IEmailSender emailSender, ILogger<JobManager> logger,
+        public JobManager(AuctionSystemDbContext dbContext,
+            IEmailSender emailSender,
+            ILogger<JobManager> logger,
             IDateTime dateTime)
         {
             this.dbContext = dbContext;
@@ -45,7 +47,7 @@
         public async Task ExecuteAllJobs(int repeatTimeInMinutes = 1)
         {
             // Add your Jobs/Tasks here
-            await SendEmailToTheWinnersOfGivenBids();
+            await this.SendEmailToTheWinnersOfGivenBids();
 
             var millisecondsTimeOut = repeatTimeInMinutes * 60_000;
             Thread.Sleep(millisecondsTimeOut);
@@ -54,7 +56,7 @@
         private async Task SendEmailToTheWinnersOfGivenBids()
         {
             var items = await this.dbContext.Items
-                .Where(i => i.EndTime <= dateTime.UtcNow && !i.IsEmailSent && i.Bids.Count >= 1)
+                .Where(i => i.EndTime <= this.dateTime.UtcNow && !i.IsEmailSent && i.Bids.Count >= 1)
                 .Select(i => new ItemDto
                 {
                     Id = i.Id,
@@ -62,7 +64,7 @@
                     IsEmailSent = i.IsEmailSent,
                     WinnerAmount = i.Bids.Max(b => b.Amount),
                     UserEmail = i.User.Email,
-                    UserFullName = i.User.FullName,
+                    UserFullName = i.User.FullName
                 })
                 .ToListAsync();
 
@@ -74,7 +76,7 @@
                     {
                         UserEmail = b.User.Email,
                         UserFullName = b.User.FullName,
-                        b.Amount,
+                        b.Amount
                     })
                     .SingleOrDefaultAsync();
 
@@ -87,7 +89,10 @@
                     string.Format(CongratsMessage, winnerBid.UserFullName, item.Title));
 
                 if (!isSuccessful || isEmailSendToItemOwner)
+                {
                     continue;
+                }
+
                 try
                 {
                     var dbItem = await this.dbContext.Items.FindAsync(item.Id);
@@ -99,9 +104,10 @@
                     dbItem.IsEmailSent = true;
                     this.dbContext.Items.Update(dbItem);
                     await this.dbContext.SaveChangesAsync();
-                    this.logger.LogInformation(string.Format(LogMessage, dateTime.UtcNow, winnerBid.UserEmail,
+                    this.logger.LogInformation(string.Format(LogMessage, this.dateTime.UtcNow, winnerBid.UserEmail,
                         item.Title));
-                    this.logger.LogInformation(string.Format(LogMessageForItemOwner, dateTime.UtcNow, item.UserEmail,
+                    this.logger.LogInformation(string.Format(LogMessageForItemOwner, this.dateTime.UtcNow,
+                        item.UserEmail,
                         item.Title));
                 }
                 catch (Exception ex)

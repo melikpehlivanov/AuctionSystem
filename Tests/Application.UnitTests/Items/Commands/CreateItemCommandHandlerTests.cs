@@ -46,9 +46,10 @@
             dateTimeMock.Setup(x => x.UtcNow).Returns(DateTime.UtcNow);
             dateTimeMock.Setup(x => x.Now).Returns(DateTime.Now);
             this.dateTime = dateTimeMock.Object;
-            
+
             this.handler =
-                new CreateItemCommandHandler(this.Mapper, this.Context, this.currentUserServiceMock.Object, this.mediatorMock.Object);
+                new CreateItemCommandHandler(this.Context, this.Mapper, this.mediatorMock.Object,
+                    this.currentUserServiceMock.Object);
         }
 
         [Fact]

@@ -12,7 +12,8 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public class GetPictureDetailsQueryHandler : IRequestHandler<GetPictureDetailsQuery, Response<PictureDetailsResponseModel>>
+    public class
+        GetPictureDetailsQueryHandler : IRequestHandler<GetPictureDetailsQuery, Response<PictureDetailsResponseModel>>
     {
         private readonly IAuctionSystemDbContext context;
         private readonly IMapper mapper;
@@ -23,7 +24,8 @@
             this.mapper = mapper;
         }
 
-        public async Task<Response<PictureDetailsResponseModel>> Handle(GetPictureDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<PictureDetailsResponseModel>> Handle(GetPictureDetailsQuery request,
+            CancellationToken cancellationToken)
         {
             var picture = await this.context
                 .Pictures

@@ -18,16 +18,15 @@
         private readonly IDateTime dateTime;
         private readonly IMapper mapper;
 
-        public CreateBidCommandHandler(
-            IAuctionSystemDbContext context,
-            IMapper mapper,
+        public CreateBidCommandHandler(IAuctionSystemDbContext context,
             ICurrentUserService currentUserService,
-            IDateTime dateTime)
+            IDateTime dateTime,
+            IMapper mapper)
         {
             this.context = context;
-            this.mapper = mapper;
             this.currentUserService = currentUserService;
             this.dateTime = dateTime;
+            this.mapper = mapper;
         }
 
         public async Task<Unit> Handle(CreateBidCommand request, CancellationToken cancellationToken)
@@ -41,7 +40,8 @@
             return Unit.Value;
         }
 
-        private async Task CheckWhetherItemIsEligibleForBidding(CreateBidCommand request, CancellationToken cancellationToken)
+        private async Task CheckWhetherItemIsEligibleForBidding(CreateBidCommand request,
+            CancellationToken cancellationToken)
         {
             var item = await this.context
                 .Items
@@ -52,7 +52,7 @@
                     i.StartTime,
                     i.EndTime,
                     HighestBidAmount = i.Bids
-                        .Select(b=> b.Amount)
+                        .Select(b => b.Amount)
                         .OrderByDescending(amount => amount)
                         .FirstOrDefault()
                 })

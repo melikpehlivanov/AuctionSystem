@@ -9,7 +9,7 @@
         public string UserId { get; set; }
 
         public decimal? MinPrice { get; set; }
-        
+
         public decimal? MaxPrice { get; set; }
 
         public DateTime? StartTime { get; set; }

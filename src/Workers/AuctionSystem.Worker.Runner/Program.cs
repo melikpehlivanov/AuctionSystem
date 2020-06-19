@@ -29,19 +29,15 @@
 
             var serviceProvider = services.BuildServiceProvider();
             var jobManager = serviceProvider.GetService<JobManager>();
-            
+
             while (true)
             {
-                Task.Run(async () =>
-                {
-                    await jobManager.ExecuteAllJobs();
-                }).Wait();
+                Task.Run(async () => { await jobManager.ExecuteAllJobs(); }).Wait();
             }
         }
 
         private static void ConfigureServices(IServiceCollection services, IConfigurationRoot configuration)
         {
-
             services.AddDbContext<AuctionSystemDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
@@ -55,7 +51,7 @@
             services
                 .AddLogging(configure => configure.AddConsole().AddFilter("Microsoft", LogLevel.None))
                 .AddTransient<JobManager>();
-            
+
             services.AddTransient<IEmailSender, EmailSender>();
         }
     }

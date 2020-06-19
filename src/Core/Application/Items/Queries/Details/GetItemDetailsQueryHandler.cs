@@ -22,7 +22,8 @@
             this.mapper = mapper;
         }
 
-        public async Task<Response<ItemDetailsResponseModel>> Handle(GetItemDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Response<ItemDetailsResponseModel>> Handle(GetItemDetailsQuery request,
+            CancellationToken cancellationToken)
         {
             var item = await this.context
                 .Items

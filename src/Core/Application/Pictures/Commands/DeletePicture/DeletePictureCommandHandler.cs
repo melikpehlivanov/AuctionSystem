@@ -76,13 +76,13 @@
 
             if (!pictures)
             {
-                await AddDefaultPicture(request.ItemId);
+                await this.AddDefaultPicture(request.ItemId);
             }
 
             return Unit.Value;
         }
 
         private async Task AddDefaultPicture(Guid itemId)
-            => await this.mediator.Send(new CreatePictureCommand {ItemId = itemId});
+            => await this.mediator.Send(new CreatePictureCommand { ItemId = itemId });
     }
 }
