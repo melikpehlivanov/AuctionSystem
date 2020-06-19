@@ -129,6 +129,7 @@ export const SideBar = (props) => {
         <Fragment>
           <Bid
             itemId={props.item.id}
+            startingPrice={props.item.startingPrice}
             minPriceIncrease={props.item.minIncrease}
             CounterContainer={CounterContainer}
           />

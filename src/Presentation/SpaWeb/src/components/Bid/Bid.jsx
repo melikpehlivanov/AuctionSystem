@@ -16,7 +16,12 @@ import { toast } from "react-toastify";
 import bidService from "../../services/bidService";
 import { useCallback } from "react";
 
-export const Bid = ({ itemId, minPriceIncrease, CounterContainer }) => {
+export const Bid = ({
+  itemId,
+  startingPrice,
+  minPriceIncrease,
+  CounterContainer,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [connection] = useState(() =>
     new HubConnectionBuilder().withUrl("https://localhost:5001/bidHub").build()
@@ -60,14 +65,21 @@ export const Bid = ({ itemId, minPriceIncrease, CounterContainer }) => {
 
   const fetchHighestBid = useCallback(() => {
     bidService.getHighestBid(itemId).then((response) => {
-      const highestBid = response.data.data.amount;
+      const amount = response.data.data?.amount;
+      let highestBid;
+      if (!amount) {
+        highestBid = startingPrice;
+      } else {
+        highestBid = response.data.data.amount;
+      }
+
       const nextBiddingAmount = parseFloat(
         highestBid + minPriceIncrease
       ).toFixed(2);
       setHighestBid(highestBid);
       setNextBidMinimumAmount(nextBiddingAmount);
     });
-  }, [itemId, minPriceIncrease]);
+  }, [itemId, startingPrice, minPriceIncrease]);
 
   useEffect(() => {
     async function connectToSignalR() {
