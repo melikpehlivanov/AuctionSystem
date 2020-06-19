@@ -5,6 +5,7 @@ namespace Api
     using System.Threading.Tasks;
     using Application.SeedSampleData;
     using MediatR;
+    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
@@ -14,35 +15,12 @@ namespace Api
 
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    var auctionSystemDbContext = services.GetRequiredService<AuctionSystemDbContext>();
-                    auctionSystemDbContext.Database.Migrate();
-                    logger.LogInformation("Migrated database.");
-
-                    var mediator = services.GetRequiredService<IMediator>();
-                    await mediator.Send(new SeedSampleDataCommand(), CancellationToken.None);
-                    logger.LogInformation("Seeded sample data such as items, categories and etc.");
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred while migrating or initializing the database.");
-                }
-            }
-
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }

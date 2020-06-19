@@ -16,6 +16,7 @@ namespace Api
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Persistence;
+    using Services.Hosted;
 
     public class Startup
     {
@@ -35,6 +36,7 @@ namespace Api
 
             services
                 .AddPersistence(this.Configuration)
+                .AddHostedService<MigrateDatabaseHostedService>()
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
                 .AddCloudinarySettings(this.Configuration)
