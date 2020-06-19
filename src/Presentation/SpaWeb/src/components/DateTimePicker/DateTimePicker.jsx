@@ -2,6 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "./DateTimePicker.css";
 import { Form } from "react-bootstrap";
 
 export const StartTimeDatePicker = ({
@@ -42,6 +43,7 @@ export const StartTimeDatePicker = ({
   return (
     <Fragment>
       <DatePicker
+        className="form-control custom-select"
         disabled={disabled}
         selected={startTime}
         onChange={(date) => handleOnChange(date)}
@@ -96,6 +98,7 @@ export const EndTimeDatePicker = ({
   return (
     <Fragment>
       <DatePicker
+        className="form-control custom-select"
         disabled={disabled}
         selected={endTime}
         onChange={(date) => handleOnChange(date)}

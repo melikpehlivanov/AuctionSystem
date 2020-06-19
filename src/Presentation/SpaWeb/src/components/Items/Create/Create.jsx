@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Container, Form, InputGroup, Button, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  InputGroup,
+  Button,
+  Spinner,
+  Row,
+} from "react-bootstrap";
 import categoriesService from "../../../services/categoriesService";
 import moment from "moment";
 import "./Create.css";
-import { StartTimeDatePicker, EndTimeDatePicker } from "../../DateTimePicker";
+import {
+  StartTimeDatePicker,
+  EndTimeDatePicker,
+} from "../../DateTimePicker/DateTimePicker";
 import itemsService from "../../../services/itemsService";
 import { ImageUploader } from "../../ImageUploader/ImageUploader";
 import { history } from "../../..";
@@ -96,22 +106,24 @@ export const Create = () => {
               </Form.Control.Feedback>
             )}
           </Form.Group>
-          <Form.Group controlId="StartTime">
-            <p>Start time</p>
-            <StartTimeDatePicker
-              startTime={startTime}
-              setStartTime={setStartTime}
-              endTime={endTime}
-            />
-          </Form.Group>
-          <Form.Group controlId="EndTime">
-            <p>End time</p>
-            <EndTimeDatePicker
-              endTime={endTime}
-              setEndTime={setEndTime}
-              startTime={startTime}
-            />
-          </Form.Group>
+          <Row>
+            <Form.Group className="col" controlId="StartTime">
+              <Form.Label>Start time</Form.Label>
+              <StartTimeDatePicker
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
+              />
+            </Form.Group>
+            <Form.Group className="col" controlId="EndTime">
+              <Form.Label>End time</Form.Label>
+              <EndTimeDatePicker
+                endTime={endTime}
+                setEndTime={setEndTime}
+                startTime={startTime}
+              />
+            </Form.Group>
+          </Row>
           <Form.Group controlId="startingPrice">
             <Form.Label>Starting Price</Form.Label>
             <InputGroup className="mb-3">
@@ -174,6 +186,7 @@ export const Create = () => {
           <Form.Group controlId="category">
             <Form.Label>Category</Form.Label>
             <Form.Control
+              custom
               name="subCategoryId"
               ref={register({ required: "Category is required" })}
               as="select"

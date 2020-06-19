@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Container, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import categoriesService from "../../../services/categoriesService";
 import moment from "moment";
-import { StartTimeDatePicker, EndTimeDatePicker } from "../../DateTimePicker";
+import { StartTimeDatePicker, EndTimeDatePicker } from "../../DateTimePicker/DateTimePicker";
 import itemsService from "../../../services/itemsService";
 import { ImageUploader } from "../../ImageUploader/ImageUploader";
 import { useParams } from "react-router-dom";
