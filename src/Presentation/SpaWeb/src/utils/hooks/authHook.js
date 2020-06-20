@@ -55,6 +55,12 @@ function useProvideAuth() {
       .then((response) => response);
   };
 
+  const confirmAccount = (body) => {
+    return api
+      .post(process.env.REACT_APP_API_CONFIRM_ACCOUNT_ENDPOINT, body)
+      .then((response) => response);
+  };
+
   const signOut = () => {
     api.post(process.env.REACT_APP_API_LOGOUT_ENDPOINT, {}).then(() => {
       removeUserFromLocalStorage();
@@ -67,6 +73,7 @@ function useProvideAuth() {
     isLoading,
     signIn,
     signUp,
+    confirmAccount,
     signOut,
   };
 }
