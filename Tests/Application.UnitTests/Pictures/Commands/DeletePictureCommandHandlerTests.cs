@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Pictures;
@@ -12,9 +11,7 @@
     using Common.Exceptions;
     using Common.Interfaces;
     using Common.Models;
-    using FluentAssertions;
     using MediatR;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
     using Moq;
     using Setup;

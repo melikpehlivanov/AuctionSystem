@@ -5,7 +5,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Bids.Commands.CreateBid;
-    using AuctionSystem.Infrastructure;
     using Common.Exceptions;
     using Common.Interfaces;
     using Domain.Entities;

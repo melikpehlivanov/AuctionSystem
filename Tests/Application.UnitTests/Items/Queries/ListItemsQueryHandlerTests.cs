@@ -6,7 +6,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Items.Queries.List;
-    using AuctionSystem.Infrastructure;
     using AutoMapper;
     using Common.Interfaces;
     using Common.Models;
