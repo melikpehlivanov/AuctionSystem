@@ -3,7 +3,6 @@ namespace Api
     using Application;
     using Application.Users.Commands.CreateUser;
     using AuctionSystem.Infrastructure;
-    using Common;
     using Extensions;
     using FluentValidation.AspNetCore;
     using Hubs;

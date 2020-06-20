@@ -5,7 +5,6 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Admin.Queries.List;
-    using AuctionSystem.Infrastructure;
     using AuctionSystem.Infrastructure.Identity;
     using AutoMapper;
     using Common.Interfaces;

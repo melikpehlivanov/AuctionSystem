@@ -15,7 +15,6 @@ namespace MvcWeb.Controllers
     using Application.Items.Queries.List;
     using AutoMapper;
     using Infrastructure.Collections.Interfaces;
-    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;

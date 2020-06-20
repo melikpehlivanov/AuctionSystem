@@ -8,7 +8,6 @@
     using Application.Items.Commands.CreateItem;
     using Application.Pictures;
     using Application.Pictures.Commands.CreatePicture;
-    using AuctionSystem.Infrastructure;
     using Common.Exceptions;
     using Common.Interfaces;
     using Common.Models;
