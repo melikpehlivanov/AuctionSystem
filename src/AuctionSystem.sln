@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workers", "Workers", "{B0108E7F-EA8A-4BDE-96F5-C332F7EACC02}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSystem.Worker.Runner", "Workers\AuctionSystem.Worker.Runner\AuctionSystem.Worker.Runner.csproj", "{E2CEDC32-1E4E-4397-A75B-D918D09F6166}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{12E6FC9E-93C9-4C64-ADA8-9874AAEE6A56}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Core\Domain\Domain.csproj", "{FDFCF57E-050A-4715-87BD-A03470F96C23}"
@@ -41,10 +37,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E2CEDC32-1E4E-4397-A75B-D918D09F6166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E2CEDC32-1E4E-4397-A75B-D918D09F6166}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E2CEDC32-1E4E-4397-A75B-D918D09F6166}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E2CEDC32-1E4E-4397-A75B-D918D09F6166}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDFCF57E-050A-4715-87BD-A03470F96C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDFCF57E-050A-4715-87BD-A03470F96C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDFCF57E-050A-4715-87BD-A03470F96C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,7 +82,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E2CEDC32-1E4E-4397-A75B-D918D09F6166} = {B0108E7F-EA8A-4BDE-96F5-C332F7EACC02}
 		{FDFCF57E-050A-4715-87BD-A03470F96C23} = {12E6FC9E-93C9-4C64-ADA8-9874AAEE6A56}
 		{A6D69BB7-A2F8-43E9-B8B6-371EEAF826EB} = {12E6FC9E-93C9-4C64-ADA8-9874AAEE6A56}
 		{F4E3CC19-D591-4AFA-B2BA-9C8026859DF6} = {12E6FC9E-93C9-4C64-ADA8-9874AAEE6A56}
