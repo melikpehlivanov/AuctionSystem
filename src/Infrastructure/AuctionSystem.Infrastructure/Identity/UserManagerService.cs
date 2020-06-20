@@ -1,6 +1,5 @@
 ﻿namespace AuctionSystem.Infrastructure.Identity
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -27,37 +26,6 @@
             this.roleManager = roleManager;
             this.context = context;
         }
-
-        public async Task<User> GetUserByUsernameAsync(string username)
-        {
-            var result = await this.context
-                .Users
-                .Where(u => u.UserName == username)
-                .SingleOrDefaultAsync();
-            if (result == null)
-            {
-                return null;
-            }
-
-            var user = new User
-            {
-                Id = result.Id,
-                Email = result.Email,
-                UserName = result.UserName,
-                FullName = result.FullName,
-                AccessFailedCount = result.AccessFailedCount,
-                IsEmailConfirmed = result.EmailConfirmed,
-                LockoutEnd = result.LockoutEnd,
-                PhoneNumber = result.PhoneNumber,
-                PhoneNumberConfirmed = result.PhoneNumberConfirmed,
-                TwoFactorEnabled = result.TwoFactorEnabled
-            };
-
-            return user;
-        }
-
-        public async Task<AuctionUser> GetDomainUserByUsernameAsync(string username)
-            => await this.context.Users.Where(u => u.UserName == username).SingleOrDefaultAsync();
 
         public async Task<User> GetUserByIdAsync(string id)
         {
@@ -88,23 +56,12 @@
             return user;
         }
 
-        public async Task<string> GetUserUsernameByIdAsync(string id)
-        {
-            var user = await this.context
-                .Users
-                .Select(u => new { u.Id, u.UserName })
-                .Where(u => u.Id == id)
-                .SingleOrDefaultAsync();
-
-            return user.UserName;
-        }
-
-        public async Task<Result> CreateUserAsync(string userName, string password, string fullName)
+        public async Task<Result> CreateUserAsync(string email, string password, string fullName)
         {
             var user = new AuctionUser
             {
-                UserName = userName,
-                Email = userName,
+                UserName = email,
+                Email = email,
                 FullName = fullName
             };
 
@@ -118,38 +75,39 @@
             return result.ToApplicationResult();
         }
 
-        public async Task<Result> DeleteUserAsync(string userId)
+        public async Task<(Result Result, string UserId)> SignIn(string email, string password)
         {
-            var user = await this.context
-                .Users
-                .Where(u => u.Id == userId)
-                .SingleOrDefaultAsync();
-
+            var user = await this.GetDomainUserByEmailAsync(email);
             if (user == null)
             {
-                return Result.Success();
+                return (Result.Failure(new List<string> { ExceptionMessages.User.UserNotFound }), null);
             }
 
-            var result = await this.DeleteUserAsync(user);
-            return Result.Success();
-        }
-
-        public async Task<(Result Result, string UserId)> CheckCredentials(string email, string password)
-        {
-            var user = await this.context
-                .Users
-                .Where(u => u.Email == email)
-                .SingleOrDefaultAsync();
-
-            if (user == null)
+            if (await this.userManager.IsLockedOutAsync(user))
             {
-                return (Result.Failure(new List<string> { "User not found" }), null);
+                return (
+                    Result.Failure(
+                        new List<string>()
+                        {
+                            ExceptionMessages.User.AccountLockout
+                        }, false), null);
             }
 
             var passwordValid = await this.userManager.CheckPasswordAsync(user, password);
-            return !passwordValid
-                ? (Result.Failure(new List<string> { "Wrong password" }), null)
-                : (Result.Success(), user.Id);
+            if (!passwordValid)
+            {
+                await this.userManager.AccessFailedAsync(user);
+                return (Result.Failure(new List<string> { ExceptionMessages.User.InvalidCredentials }), null);
+            }
+
+            if (!await this.userManager.IsEmailConfirmedAsync(user))
+            {
+                return (
+                    Result.Failure(new List<string> { ExceptionMessages.User.ConfirmAccount },
+                        isAccountConfirmationError: true), null);
+            }
+
+            return (Result.Success(), user.Id);
         }
 
         public async Task CreateRoleAsync(IdentityRole role)
@@ -165,12 +123,9 @@
         public async Task AddToRoleAsync(AuctionUser user, string role)
             => await this.userManager.AddToRoleAsync(user, role);
 
-        public async Task<IdentityResult> AddToRoleAsync(string username, string role)
+        public async Task<IdentityResult> AddToRoleAsync(string email, string role)
         {
-            var user = await this.context
-                .Users
-                .Where(u => u.UserName == username)
-                .SingleOrDefaultAsync();
+            var user = await this.GetDomainUserByEmailAsync(email);
 
             if (user == null)
             {
@@ -198,12 +153,6 @@
             return user.Id;
         }
 
-        public async Task<string> GetUserIdByUsernameAsync(string username)
-        {
-            var user = await this.context.Users.SingleOrDefaultAsync(u => u.UserName == username);
-            return user?.Id;
-        }
-
         public async Task<IEnumerable<string>> GetUsersInRoleAsync(string role)
         {
             var users = await this.userManager.GetUsersInRoleAsync(role);
@@ -211,52 +160,62 @@
         }
 
         public async Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(
-            string username,
+            string email,
             string role,
             string currentUserId)
         {
-            var user = await this.context
-                .Users
-                .Where(u => u.UserName == username)
-                .SingleOrDefaultAsync();
-
+            var user = await this.GetDomainUserByEmailAsync(email);
             if (user == null)
             {
-                return (IdentityResult.Failed(), "Such user does not exist");
+                return (IdentityResult.Failed(), ExceptionMessages.User.UserNotFound);
             }
 
             var administrators = await this.GetUsersInRoleAsync(role);
             if (administrators.Contains(user.Id) && currentUserId == user.Id)
             {
-                return (IdentityResult.Failed(), $"You can not remove yourself from role {role}!");
+                return (IdentityResult.Failed(), string.Format(ExceptionMessages.User.CannotRemoveSelfFromRole, role));
             }
 
             if (!administrators.Contains(user.Id))
             {
-                return (IdentityResult.Failed(), $"{user.Email} is not {role}.");
+                return (IdentityResult.Failed(), string.Format(ExceptionMessages.User.NotInRole, user.Email, role));
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
             return (result, null);
         }
 
-        private async Task<bool> DeleteUserAsync(AuctionUser user)
+        public async Task<string> GenerateEmailConfirmationCode(string email)
         {
+            var user = await this.GetDomainUserByEmailAsync(email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var token = await this.userManager.GenerateUserTokenAsync(user, FourDigitTokenProvider.FourDigitEmail,
+                "Confirmation");
+            return token;
+        }
+
+        public async Task<bool> ConfirmEmail(string email,
+            string token)
+        {
+            var user = await this.GetDomainUserByEmailAsync(email);
             if (user == null)
             {
                 return false;
             }
 
-            try
-            {
-                this.context.Users.Remove(user);
-                await this.context.SaveChangesAsync(CancellationToken.None);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var result = await this.userManager.VerifyUserTokenAsync(user, FourDigitTokenProvider.FourDigitEmail,
+                "Confirmation", token);
+            user.EmailConfirmed = true;
+            this.context.Users.Update(user);
+            await this.context.SaveChangesAsync(CancellationToken.None);
+            return result;
         }
+
+        private async Task<AuctionUser> GetDomainUserByEmailAsync(string email)
+            => await this.context.Users.Where(u => u.Email == email).SingleOrDefaultAsync();
     }
 }

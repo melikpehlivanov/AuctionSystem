@@ -1,24 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button } from "react-bootstrap";
-import { history } from "../../index";
+import { history } from "../../../index";
 import { toast } from "react-toastify";
-import { useAuth } from "../../utils/hooks/authHook";
+import { useAuth } from "../../../utils/hooks/authHook";
+import { ConfirmAccount } from "../ConfirmAccount";
 
-export const Register = () => {
+export const Login = () => {
   const { register, handleSubmit, errors, watch, formState } = useForm({
     mode: "onblur",
   });
-
+  const [showConfirmAccountPage, setShowConfirmAccountPage] = useState(false);
   const { touched } = formState;
-  const password = watch("password");
   const auth = useAuth();
+  const email = watch("email");
 
   const onSubmit = (data) => {
-    auth.signUp(data).then((response) => {
-      history.push("/sign-in");
-      toast.success("Your registration was successfull. Please log in.");
-    });
+    auth
+      .signIn(data)
+      .then(() => {
+        history.location.state
+          ? history.replace(history.location.state)
+          : history.push("/");
+        toast.success("You've logged in successfully.");
+      })
+      .catch((error) => {
+        if (error.response.data.error.includes("confirm", "account")) {
+          setShowConfirmAccountPage(true);
+        }
+      });
   };
 
   const hasError = (touched, errors) => {
@@ -29,7 +39,9 @@ export const Register = () => {
     }
   };
 
-  return (
+  return showConfirmAccountPage ? (
+    <ConfirmAccount auth={auth} email={email} />
+  ) : (
     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
@@ -50,31 +62,6 @@ export const Register = () => {
         {errors.email && (
           <Form.Control.Feedback type="invalid">
             {errors.email.message}
-          </Form.Control.Feedback>
-        )}
-      </Form.Group>
-
-      <Form.Group controlId="formBasicFullName">
-        <Form.Label>Full Name</Form.Label>
-        <Form.Control
-          name="fullName"
-          type="text"
-          placeholder="Enter your full name"
-          ref={register({
-            required: "Full name field is required",
-            maxLength: {
-              value: 50,
-              message: "Full name exceeds the maximum limit of 50 characters",
-            },
-          })}
-          isValid={
-            hasError(touched.fullName, errors.fullName) === false ?? true
-          }
-          isInvalid={hasError(touched.fullName, errors.fullName)}
-        />
-        {errors.fullName && (
-          <Form.Control.Feedback type="invalid">
-            {errors.fullName.message}
           </Form.Control.Feedback>
         )}
       </Form.Group>
@@ -108,40 +95,8 @@ export const Register = () => {
         )}
       </Form.Group>
 
-      <Form.Group controlId="formBasicConfirmPassword">
-        <Form.Label>Confirm password</Form.Label>
-        <Form.Control
-          name="confirmPassword"
-          type="password"
-          placeholder="Retype your password"
-          ref={register({
-            required: "Confirm password field is required",
-            minLength: {
-              value: 6,
-              message: "Password should be between 6 and 100 characters long",
-            },
-            maxLength: {
-              value: 100,
-              message: "Password should be between 6 and 100 characters long",
-            },
-            validate: (value) =>
-              value === password || "Passwords do not match!",
-          })}
-          isValid={
-            hasError(touched.confirmPassword, errors.confirmPassword) ===
-              false ?? true
-          }
-          isInvalid={hasError(touched.confirmPassword, errors.confirmPassword)}
-        />
-        {errors.confirmPassword && (
-          <Form.Control.Feedback type="invalid">
-            {errors.confirmPassword.message}
-          </Form.Control.Feedback>
-        )}
-      </Form.Group>
-
       <Button variant="primary" type="submit">
-        Submit
+        Login
       </Button>
     </Form>
   );
