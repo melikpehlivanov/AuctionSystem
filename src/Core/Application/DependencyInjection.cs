@@ -18,7 +18,7 @@
                 .AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
-            services.AddHostedService<EmailNotificationSenderService>();
+            services.AddHostedService<EmailNotificationSenderHostedService>();
             return services;
         }
     }

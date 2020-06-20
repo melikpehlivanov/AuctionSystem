@@ -12,7 +12,7 @@ namespace Application.Common
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
-    public class EmailNotificationSenderService : IHostedService, IDisposable
+    public class EmailNotificationSenderHostedService : IHostedService, IDisposable
     {
         private const string CongratsMessage =
             "Congratulations {0}! You won bid for item - {1}. You will be contacted shortly by the seller for additional information.";
@@ -33,9 +33,9 @@ namespace Application.Common
         private readonly IEmailSender emailSender;
         private Timer timer;
 
-        public EmailNotificationSenderService(IServiceScopeFactory scopeFactory,
+        public EmailNotificationSenderHostedService(IServiceScopeFactory scopeFactory,
             IDateTime dateTime,
-            ILogger<EmailNotificationSenderService> logger,
+            ILogger<EmailNotificationSenderHostedService> logger,
             IEmailSender emailSender)
         {
             this.scopeFactory = scopeFactory;
