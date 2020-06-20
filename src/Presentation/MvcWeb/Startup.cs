@@ -4,8 +4,6 @@
     using Application.Common.Interfaces;
     using Application.Users.Commands.CreateUser;
     using AuctionSystem.Infrastructure;
-    using AutoMapper;
-    using Common.AutoMapping.Profiles;
     using FluentValidation.AspNetCore;
     using Infrastructure.Collections;
     using Infrastructure.Collections.Interfaces;
@@ -13,13 +11,13 @@
     using Infrastructure.Middleware;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Persistence;
+    using Services;
     using SignalRHubs;
 
     public class Startup
@@ -29,12 +27,13 @@
             this.Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services
                 .AddPersistence(this.Configuration)
+                .AddHostedService<MigrateDatabaseHostedService>()
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
                 .AddScoped<IEmailSender, EmailSender>()
