@@ -1,4 +1,4 @@
-﻿namespace MvcWeb
+﻿namespace MvcWeb.Services
 {
     using System.Security.Claims;
     using Application;
