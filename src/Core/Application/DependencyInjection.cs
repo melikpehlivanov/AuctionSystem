@@ -2,6 +2,7 @@
 {
     using System.Reflection;
     using AutoMapper;
+    using Common;
     using Common.Behaviours;
     using global::Common.AutoMapping.Profiles;
     using MediatR;
@@ -17,7 +18,7 @@
                 .AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
-
+            services.AddHostedService<EmailNotificationSenderService>();
             return services;
         }
     }
