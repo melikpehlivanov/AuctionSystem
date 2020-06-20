@@ -8,7 +8,6 @@ export const ConfirmAccount = ({ auth, email }) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     auth.confirmAccount(data).then(() => {
       history.push("/");
       toast.success(
