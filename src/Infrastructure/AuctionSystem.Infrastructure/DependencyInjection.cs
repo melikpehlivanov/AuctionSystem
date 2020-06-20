@@ -13,7 +13,8 @@
         {
             services
                 .AddScoped<IUserManager, UserManagerService>()
-                .AddTransient<IDateTime, MachineDateTime>();
+                .AddTransient<IDateTime, MachineDateTime>()
+                .AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }
