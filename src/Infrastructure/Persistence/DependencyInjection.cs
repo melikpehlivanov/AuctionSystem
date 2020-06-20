@@ -22,6 +22,7 @@
                     options.Password.RequireUppercase = false;
 
                     options.SignIn.RequireConfirmedEmail = true;
+                    options.Lockout.MaxFailedAccessAttempts = 6;
                 })
                 .AddEntityFrameworkStores<AuctionSystemDbContext>()
                 .AddDefaultTokenProviders();
