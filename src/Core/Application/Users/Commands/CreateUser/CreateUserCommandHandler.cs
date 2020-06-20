@@ -2,6 +2,7 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using Common;
     using Common.Exceptions;
     using Common.Interfaces;
     using MediatR;
@@ -9,10 +10,12 @@
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
     {
         private readonly IUserManager userManager;
+        private readonly IEmailSender emailSender;
 
-        public CreateUserCommandHandler(IUserManager userManager)
+        public CreateUserCommandHandler(IUserManager userManager, IEmailSender emailSender)
         {
             this.userManager = userManager;
+            this.emailSender = emailSender;
         }
 
         public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -22,6 +25,9 @@
             {
                 throw new BadRequestException(ExceptionMessages.User.UserNotCreatedSuccessfully);
             }
+
+            var token = await this.userManager.GenerateEmailConfirmationCode(request.Email);
+            await this.emailSender.SendConfirmationEmail(request.Email, token);
 
             return Unit.Value;
         }

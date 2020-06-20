@@ -29,6 +29,16 @@
             public const string UserNotCreatedSuccessfully = "User was not created successfully!";
             public const string InvalidCredentials = "Invalid credentials!";
             public const string InvalidRefreshToken = "Invalid token";
+            public const string UserNotFound = "User not found";
+
+            public const string AccountLockout =
+                "Your account has been locked out due to too many invalid login attempts. Please try again.";
+
+            public const string ConfirmAccount = "Please confirm your account";
+            public const string EmailVerificationFailed = "Account confirmation failed. Please try again later.";
+            
+            public const string CannotRemoveSelfFromRole = "You can not remove yourself from role {0}!";
+            public const string NotInRole = "{0} is not {1}.";
         }
     }
 }
