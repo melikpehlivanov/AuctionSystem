@@ -44,6 +44,8 @@
             public const string SuccessfulLoginRequestDescriptionMessage = "Indicates that everything went ok and returns jwt token";
             public const string BadRequestOnLoginDescriptionMessage = "Indicates that the user credentials are invalid";
 
+            public const string SuccessfulEmailConfirmationMessage = "Indicates that email was confirmed successfully";
+            public const string BadRequestOnConfirmEmailMessage = "Indicates that the provided code was invalid and email is not confirmed";
 
             public const string SuccessfulTokenRefreshRequestDescriptionMessage = 
                 "Indicates that everything went ok and returns new jwt & refresh token";

@@ -5,6 +5,7 @@
     using Application;
     using Application.Common.Models;
     using Application.Users.Commands;
+    using Application.Users.Commands.ConfirmEmail;
     using Application.Users.Commands.CreateUser;
     using Application.Users.Commands.Jwt.Refresh;
     using Application.Users.Commands.LoginUser;
@@ -43,6 +44,24 @@
             await this.Mediator.Send(model);
             return this.Ok();
         }
+        
+        /// <summary>
+        /// Verifies user email
+        /// </summary>
+        [HttpPost]
+        [Route(nameof(Confirm))]
+        [SwaggerResponse(
+            StatusCodes.Status200OK,
+            SwaggerDocumentation.IdentityConstants.SuccessfulEmailConfirmationMessage)]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest,
+            SwaggerDocumentation.IdentityConstants.BadRequestOnConfirmEmailMessage,
+            typeof(BadRequestErrorModel))]
+        public async Task<IActionResult> Confirm(ConfirmEmailCommand model)
+        {
+            await this.Mediator.Send(model);
+            return this.Ok();
+        }
 
         /// <summary>
         /// Verifies user credentials and generates JWT and Refresh token
@@ -60,7 +79,7 @@
         public async Task<IActionResult> Login(LoginUserCommand model)
         {
             var result = await this.Mediator.Send(model);
-            SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
+            this.SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
         }
 
@@ -90,7 +109,7 @@
             model.RefreshToken = Guid.Parse(refreshToken);
             model.Token = jwtToken;
             var result = await this.Mediator.Send(model);
-            SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
+            this.SetCookies(result.Data.Token, result.Data.RefreshToken.ToString());
             return this.Ok(result);
         }
 
@@ -114,8 +133,8 @@
 
         private void SetCookies(string jwtToken, string refreshToken)
         {
-            SetJwtTokenCookie(jwtToken);
-            SetRefreshTokenCookie(refreshToken);
+            this.SetJwtTokenCookie(jwtToken);
+            this.SetRefreshTokenCookie(refreshToken);
         }
 
         private void SetRefreshTokenCookie(string token)
