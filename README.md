@@ -50,8 +50,6 @@ Example:
 3. Insert the API key in the following files:
     * *Presentation/Api/appsettings.json*
     * *Presentation/MvcWeb/appsettings.json*
-4. If you're using Visual Studio on Windows, set the *Workers/AuctionSystem.Worker.Runner/appsettings.json* file to be always copied to the /bin directory.
-5. After running the web app, run the worker in the background in order to automatically send emails to winners of auctions
 
 Example:
 ```
