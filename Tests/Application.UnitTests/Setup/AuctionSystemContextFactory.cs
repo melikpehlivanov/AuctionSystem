@@ -15,7 +15,7 @@ namespace Application.UnitTests.Setup
     public class AuctionSystemContextFactory
     {
         private static readonly IDateTime DateTime = new MachineDateTime();
-        
+
         public static AuctionSystemDbContext Create()
         {
             var currentUserServiceMock = new Mock<ICurrentUserService>();
@@ -33,6 +33,7 @@ namespace Application.UnitTests.Setup
             SeedSubCategory(context);
             SeedItems(context);
             SeedPictures(context);
+            SeedRefreshTokens(context);
 
             return context;
         }
@@ -88,21 +89,37 @@ namespace Application.UnitTests.Setup
 
         private static void SeedCategory(AuctionSystemDbContext context)
         {
-            context.Categories.Add(new Category {Id = DataConstants.SampleCategoryId});
+            context.Categories.Add(new Category { Id = DataConstants.SampleCategoryId });
             context.SaveChanges();
         }
 
         private static void SeedSubCategory(AuctionSystemDbContext context)
         {
-            context.SubCategories.AddAsync(new SubCategory {Id = DataConstants.SampleSubCategoryId});
+            context.SubCategories.AddAsync(new SubCategory { Id = DataConstants.SampleSubCategoryId });
             context.SaveChangesAsync();
         }
 
         private static void SeedPictures(AuctionSystemDbContext context)
         {
             context.Pictures.AddAsync(new Picture
-                {Id = DataConstants.SamplePictureId, ItemId = DataConstants.SampleItemId});
+                { Id = DataConstants.SamplePictureId, ItemId = DataConstants.SampleItemId });
             context.SaveChangesAsync(CancellationToken.None);
+        }
+
+        private static void SeedRefreshTokens(AuctionSystemDbContext context)
+        {
+            context.Users.ForEachAsync(user =>
+            {
+                context.RefreshTokens.Add(new RefreshToken()
+                {
+                    Token = Guid.NewGuid(),
+                    Used = false,
+                    UserId = user.Id,
+                    JwtId = Guid.NewGuid().ToString()
+                });
+            });
+
+            context.SaveChanges();
         }
     }
 }
