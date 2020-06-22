@@ -215,7 +215,11 @@
             // Invalidate demoted user refresh token
             var removedUserRefreshToken =
                 await this.GetLastValidToken(user.Id, cancellationToken);
-            removedUserRefreshToken.Invalidated = true;
+            if (removedUserRefreshToken != null)
+            {
+                removedUserRefreshToken.Invalidated = true;
+            }
+
             await this.context.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }
