@@ -2,7 +2,7 @@
 **Auction System** is an open-source web project where users can create multiple auctions, set the date of the auction and then users are able to bid for the given item. When the auction ends the user with the highest bid wins the item.
 
 # Azure DevOps - Build Status
-[![Build status](https://dev.azure.com/melikpehlivanov/AuctionSystem/_apis/build/status/AuctionSystem-ASP.NET%20Core-CI)](https://dev.azure.com/melikpehlivanov/AuctionSystem/_build/latest?definitionId=-1)
+[![Build Status](https://dev.azure.com/melikpehlivanov/AuctionSystem/_apis/build/status/AuctionSystem-ASP.NET%20Core-CI?branchName=master)](https://dev.azure.com/melikpehlivanov/AuctionSystem/_build/latest?definitionId=9&branchName=master)
 
 ## Branches
 1. **master** - as this was one of the first projects I've developed, I decided to refactor the project in my free time. I've used CQRS pattern with MediatR. The mvc project is the same, I just built an API gateway, a new SPA and improved abstraction by using Clean Architecture. Down below you will find more information about the Clean Architecture.
@@ -63,7 +63,7 @@ Example:
 
 ## Set up redis cache in Api project(optional)
 1. Follow the [docs](https://redis.io/topics/quickstart)
-2. Set RedisCacheSettings Enabled property to true
+2. In *Presentation/Api/appsettings.json* set RedisCacheSettings Enabled property to true
 
 Example:
 ```
