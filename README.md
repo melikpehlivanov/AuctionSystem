@@ -63,7 +63,7 @@ Example:
 
 ## Set up redis cache in Api project(optional)
 1. Follow the [docs](https://redis.io/topics/quickstart)
-2. Set RedisCacheSettings Enabled property to true
+2. In *Presentation/Api/appsettings.json* set RedisCacheSettings Enabled property to true
 
 Example:
 ```
