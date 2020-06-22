@@ -102,3 +102,8 @@ dotnet run
 ### P.S If you're too lazy to setup and run this project, here's a short overview of the project.
 ### [Video:](https://youtu.be/5Zn2BC5QS10)
 [![](https://img.youtube.com/vi/5Zn2BC5QS10/hqdefault.jpg)](https://youtu.be/5Zn2BC5QS10)
+
+### 🔥 And last but not least, make sure you check out my other projects which are way cooler and complex 🙂
+**[BankSystem](https://github.com/banksystembg/BankSystem)**
+
+**[AlgorithmVisualizer](https://github.com/melikpehlivanov/AlgorithmVisualizer)**
