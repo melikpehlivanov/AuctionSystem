@@ -1,8 +1,10 @@
 ﻿namespace Application.UnitTests.Admin.Commands
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using Application.Admin.Commands.CreateAdmin;
     using Application.Admin.Commands.DeleteAdmin;
     using AuctionSystem.Infrastructure.Identity;
     using Common.Exceptions;
@@ -25,6 +27,10 @@
         {
             this.mockedUserManager = IdentityMocker.GetMockedUserManager();
             this.mockedUserService = new Mock<ICurrentUserService>();
+            this.mockedUserService
+                .Setup(x => x.UserId)
+                .Returns(DataConstants.SampleAdminUserId);
+
             this.userManagerService = new UserManagerService(
                 this.mockedUserManager.Object,
                 IdentityMocker.GetMockedRoleManager().Object,
@@ -46,13 +52,13 @@
         public async Task Handle_Given_ValidModel_Should_Not_ThrowException()
         {
             this.mockedUserManager
+                .Setup(x => x.GetUsersInRoleAsync(AppConstants.AdministratorRole))
+                .ReturnsAsync(new List<AuctionUser> { new AuctionUser { Id = DataConstants.SampleUserId } });
+            this.mockedUserManager
                 .Setup(x => x.RemoveFromRoleAsync(It.IsAny<AuctionUser>(), AppConstants.AdministratorRole))
                 .ReturnsAsync(IdentityResult.Success);
-            this.mockedUserManager
-                .Setup(x => x.GetUsersInRoleAsync(AppConstants.AdministratorRole))
-                .ReturnsAsync(new List<AuctionUser> { new AuctionUser { Id = DataConstants.SampleAdminUserId } });
-
-            var command = new DeleteAdminCommand { Email = "admin@admin.com", Role = "Administrator" };
+            
+            var command = new DeleteAdminCommand { Email = "test@test.com", Role = "Administrator" };
 
             await this.handler.Handle(command, CancellationToken.None);
         }

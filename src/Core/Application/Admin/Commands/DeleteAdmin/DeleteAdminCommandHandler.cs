@@ -1,9 +1,11 @@
 ﻿namespace Application.Admin.Commands.DeleteAdmin
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Common.Exceptions;
     using Common.Interfaces;
+    using Common.Models;
     using MediatR;
 
     public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
@@ -26,10 +28,16 @@
             }
 
             var result =
-                await this.userManager.RemoveFromRoleAsync(request.Email, request.Role, this.currentUserService.UserId);
-            if (!result.identityResult.Succeeded)
+                await this.userManager.RemoveFromRoleAsync(request.Email, request.Role, this.currentUserService.UserId,
+                    cancellationToken);
+            if (!result.Succeeded && result.ErrorType == ErrorType.General)
             {
-                throw new BadRequestException(result.errorMessage);
+                throw new BadRequestException(result.Error);
+            }
+
+            if (!result.Succeeded && result.ErrorType == ErrorType.TokenExpired)
+            {
+                throw new UnauthorizedException();
             }
 
             return Unit.Value;
