@@ -57,7 +57,7 @@
                 .HasMany(b => b.Bids)
                 .WithOne(i => i.Item)
                 .HasForeignKey(i => i.ItemId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
                 .HasMany(b => b.Pictures)

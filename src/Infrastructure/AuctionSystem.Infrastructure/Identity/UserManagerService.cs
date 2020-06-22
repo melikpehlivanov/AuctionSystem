@@ -80,31 +80,28 @@
             var user = await this.GetDomainUserByEmailAsync(email);
             if (user == null)
             {
-                return (Result.Failure(new List<string> { ExceptionMessages.User.UserNotFound }), null);
+                return (Result.Failure(ExceptionMessages.User.InvalidCredentials), null);
             }
 
             if (await this.userManager.IsLockedOutAsync(user))
             {
                 return (
                     Result.Failure(
-                        new List<string>()
-                        {
-                            ExceptionMessages.User.AccountLockout
-                        }, false), null);
+                        ExceptionMessages.User.AccountLockout), null);
             }
 
             var passwordValid = await this.userManager.CheckPasswordAsync(user, password);
             if (!passwordValid)
             {
                 await this.userManager.AccessFailedAsync(user);
-                return (Result.Failure(new List<string> { ExceptionMessages.User.InvalidCredentials }), null);
+                return (Result.Failure(ExceptionMessages.User.InvalidCredentials), null);
             }
 
             if (!await this.userManager.IsEmailConfirmedAsync(user))
             {
                 return (
-                    Result.Failure(new List<string> { ExceptionMessages.User.ConfirmAccount },
-                        isAccountConfirmationError: true), null);
+                    Result.Failure(ExceptionMessages.User.ConfirmAccount,
+                        ErrorType.TokenExpired), null);
             }
 
             return (Result.Success(), user.Id);
@@ -120,20 +117,34 @@
             }
         }
 
-        public async Task AddToRoleAsync(AuctionUser user, string role)
-            => await this.userManager.AddToRoleAsync(user, role);
+        public async Task AddToRoleAsync(AuctionUser user, string role) =>
+            await this.userManager.AddToRoleAsync(user, role);
 
-        public async Task<IdentityResult> AddToRoleAsync(string email, string role)
+        public async Task<Result> AddToRoleAsync(string email, string role, string currentUserId)
         {
             var user = await this.GetDomainUserByEmailAsync(email);
 
             if (user == null)
             {
-                return IdentityResult.Failed();
+                return Result.Failure(
+                    string.Format(ExceptionMessages.Admin.UserNotAddedSuccessfullyToRole, role));
+            }
+
+            // This "admin" has no permission
+            var refreshToken =
+                await this.GetLastValidToken(currentUserId, CancellationToken.None);
+            if (refreshToken == null)
+            {
+                return Result.Failure(
+                    string.Format(ExceptionMessages.Admin.UserNotAddedSuccessfullyToRole, role),
+                    ErrorType.TokenExpired);
             }
 
             var result = await this.userManager.AddToRoleAsync(user, role);
-            return result;
+            return result.Succeeded
+                ? Result.Success()
+                : Result.Failure(
+                    string.Format(ExceptionMessages.Admin.UserNotAddedSuccessfullyToRole, role));
         }
 
         public async Task<IList<string>> GetUserRolesAsync(string userId)
@@ -159,30 +170,58 @@
             return users.Select(r => r.Id).ToList();
         }
 
-        public async Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(
+        public async Task<Result> RemoveFromRoleAsync(
             string email,
             string role,
-            string currentUserId)
+            string currentUserId,
+            CancellationToken cancellationToken)
         {
             var user = await this.GetDomainUserByEmailAsync(email);
             if (user == null)
             {
-                return (IdentityResult.Failed(), ExceptionMessages.User.UserNotFound);
+                return Result.Failure(ExceptionMessages.User.UserNotFound);
             }
 
             var administrators = await this.GetUsersInRoleAsync(role);
             if (administrators.Contains(user.Id) && currentUserId == user.Id)
             {
-                return (IdentityResult.Failed(), string.Format(ExceptionMessages.User.CannotRemoveSelfFromRole, role));
+                return Result.Failure(
+                    string.Format(ExceptionMessages.Admin.CannotRemoveSelfFromRole, role));
             }
 
             if (!administrators.Contains(user.Id))
             {
-                return (IdentityResult.Failed(), string.Format(ExceptionMessages.User.NotInRole, user.Email, role));
+                return Result.Failure(
+                    string.Format(ExceptionMessages.Admin.NotInRole, user.Email, role));
+            }
+
+            var refreshToken =
+                await this.GetLastValidToken(currentUserId, cancellationToken);
+            // This "admin" has no permission
+            if (refreshToken == null)
+            {
+                return Result.Failure(
+                    string.Format(ExceptionMessages.Admin.UserNotRemovedSuccessfullyFromRole, role),
+                    ErrorType.TokenExpired);
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
-            return (result, null);
+            if (!result.Succeeded)
+            {
+                return Result.Failure(
+                    string.Format(ExceptionMessages.Admin.UserNotRemovedSuccessfullyFromRole, role));
+            }
+
+            // Invalidate demoted user refresh token
+            var removedUserRefreshToken =
+                await this.GetLastValidToken(user.Id, cancellationToken);
+            if (removedUserRefreshToken != null)
+            {
+                removedUserRefreshToken.Invalidated = true;
+            }
+
+            await this.context.SaveChangesAsync(cancellationToken);
+            return Result.Success();
         }
 
         public async Task<string> GenerateEmailConfirmationCode(string email)
@@ -217,5 +256,10 @@
 
         private async Task<AuctionUser> GetDomainUserByEmailAsync(string email)
             => await this.context.Users.Where(u => u.Email == email).SingleOrDefaultAsync();
+
+        private async Task<RefreshToken> GetLastValidToken(string currentUserId, CancellationToken cancellationToken)
+            => await this.context.RefreshTokens.SingleOrDefaultAsync(
+                x => x.UserId == currentUserId && !x.Invalidated,
+                cancellationToken);
     }
 }

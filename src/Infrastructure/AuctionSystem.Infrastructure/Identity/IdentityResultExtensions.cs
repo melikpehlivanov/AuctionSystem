@@ -9,6 +9,6 @@
         public static Result ToApplicationResult(this IdentityResult result)
             => result.Succeeded
                 ? Result.Success()
-                : Result.Failure(result.Errors.Select(e => e.Description));
+                : Result.Failure(result.Errors.Select(e => e.Description).First());
     }
 }

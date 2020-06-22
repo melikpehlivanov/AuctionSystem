@@ -13,7 +13,7 @@ export function useCounter(props) {
       let eventTime = moment.utc(props.startTime).local();
       duration = moment.duration(eventTime.diff(currentTime));
     } else if (props.startTime < currentTime && props.endTime > currentTime) {
-      let eventTime = moment.utc(moment(props.endTime)).local();
+      let eventTime = moment.utc(props.endTime).local();
       duration = moment.duration(eventTime.diff(currentTime));
     }
 

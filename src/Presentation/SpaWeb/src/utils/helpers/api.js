@@ -43,6 +43,7 @@ export const setupAxiosInterceptor = (signOut) => {
         signOut();
         history.push("/sign-in");
         toast.error("Please sign in");
+        return Promise.reject(error);
       }
 
       if (error.response.status === 401 && !error.config._retry) {

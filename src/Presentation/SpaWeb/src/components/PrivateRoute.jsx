@@ -15,17 +15,18 @@ export const PrivateRoute = ({
     <Route
       {...rest}
       render={(props) => {
-        if (adminOnly && user.isAdmin) {
-          return <Component {...props} />;
-        }
-        if (adminOnly && !user.isAdmin) {
-          history.push("/notFound");
-          return;
-        }
-        if (!adminOnly && user) {
-          return <Component {...props} />;
-        }
-        if (!user) {
+        if (user) {
+          if (adminOnly && user.isAdmin) {
+            return <Component {...props} />;
+          }
+          if (adminOnly && !user.isAdmin) {
+            history.push("/notFound");
+            return;
+          }
+          if (!adminOnly && user) {
+            return <Component {...props} />;
+          }
+        } else {
           return (
             <Fragment>
               {history.push("/sign-in", history.location.pathname)}

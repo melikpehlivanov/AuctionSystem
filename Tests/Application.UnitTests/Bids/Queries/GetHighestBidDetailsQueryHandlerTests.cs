@@ -33,7 +33,7 @@
             await this.context.SaveChangesAsync(CancellationToken.None);
 
             var handler = new GetHighestBidDetailsQueryHandler(this.context, this.mapper);
-            var result = await handler.Handle(new GetHighestBidDetailsQuery(expectedModel.ItemId), CancellationToken.None);
+            var result = await handler.Handle(new GetHighestBidDetailsQuery(DataConstants.SampleItemId), CancellationToken.None);
 
             result
                 .Should()

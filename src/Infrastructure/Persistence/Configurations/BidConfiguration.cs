@@ -23,8 +23,7 @@
                 .IsRequired();
 
             builder
-                .Property(p => p.ItemId)
-                .IsRequired();
+                .Property(p => p.ItemId);
         }
     }
 }

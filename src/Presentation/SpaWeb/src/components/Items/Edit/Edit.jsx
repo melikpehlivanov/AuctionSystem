@@ -76,7 +76,6 @@ export const Edit = () => {
       );
 
   const onSubmit = (data, e) => {
-    console.log("xixix0");
     setIsLoading(true);
     var formData = new FormData(e.target);
     pictures.forEach((file) => {
