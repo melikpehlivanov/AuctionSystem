@@ -96,3 +96,7 @@ dotnet run
 ```
 2. Enjoy!!!
 ***
+
+### P.S If you're too lazy to run this project and try it out, here's a short overview of the project.
+### [Video:](https://youtu.be/5Zn2BC5QS10)
+[![](https://img.youtube.com/vi/5Zn2BC5QS10/hqdefault.jpg)](https://youtu.be/5Zn2BC5QS10)
