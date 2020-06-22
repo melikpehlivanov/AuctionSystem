@@ -5,8 +5,8 @@
 [![Build status](https://dev.azure.com/melikpehlivanov/AuctionSystem/_apis/build/status/AuctionSystem-ASP.NET%20Core-CI)](https://dev.azure.com/melikpehlivanov/AuctionSystem/_build/latest?definitionId=-1)
 
 ## Branches
-1. **master** - stable version of the application. Used Clean Architecture principles with CQRS and MediatR. This branch also includes SPA application with ASP.NET Core Api. Down below you will find more information about Clean Architecture.
-2. **mvc-with-services**
+1. **master** - as this was one of the first projects I've developed, I decided to refactor the project in my free time. I've used CQRS pattern with MediatR. The mvc project is the same, I just built an API gateway, a new SPA and improved abstraction by using Clean Architecture. Down below you will find more information about the Clean Architecture.
+2. **mvc-with-services** - simple mvc project
 
 ## Clean Architecture
 
@@ -33,7 +33,10 @@
 ## Set up Cloudinary (required)
 1. Register a [Cloudinary](https://cloudinary.com/) account.
 2. [Create a Cloud, API key and API secret](https://cloudinary.com/documentation/solution_overview#account_and_api_setup).
-2. In the *Web/AuctionSystem.Web/appsettings.json* configuration file insert the Cloud name, API key and API secret.
+2. In the 
+*Presentation/Api/appsettings.json* and 
+*Presentation/MvcWeb/appsettings.json* 
+configuration files insert the Cloud name, API key and API secret.
 
 Example:
 ```
@@ -95,6 +98,6 @@ dotnet run
 2. Enjoy!!!
 ***
 
-### P.S If you're too lazy to run this project and try it out, here's a short overview of the project.
+### P.S If you're too lazy to setup and run this project, here's a short overview of the project.
 ### [Video:](https://youtu.be/5Zn2BC5QS10)
 [![](https://img.youtube.com/vi/5Zn2BC5QS10/hqdefault.jpg)](https://youtu.be/5Zn2BC5QS10)
