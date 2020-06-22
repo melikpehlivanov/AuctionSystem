@@ -28,12 +28,12 @@
 
         public async Task SeedAllAsync(CancellationToken cancellationToken)
         {
-            await this.SeedUsers();
+            await this.SeedUsers(cancellationToken);
             await SeedCategories(this.context, cancellationToken);
             await this.SeedItems(this.context, this.userManager, cancellationToken);
         }
 
-        private async Task SeedUsers()
+        private async Task SeedUsers(CancellationToken cancellationToken)
         {
             if (!await this.context.Users.AnyAsync())
             {
@@ -53,7 +53,16 @@
 
                 foreach (var user in allUsers)
                 {
-                    var user2 = await this.userManager.CreateUserAsync(user, "test123");
+                    await this.userManager.CreateUserAsync(user, "test123");
+                    await this.context.RefreshTokens.AddAsync(new RefreshToken
+                    {
+                        Token = Guid.NewGuid(),
+                        JwtId = Guid.NewGuid().ToString(),
+                        CreationDate = this.dateTime.UtcNow,
+                        ExpiryDate = this.dateTime.UtcNow.AddMonths(AppConstants.RefreshTokenExpirationTimeInMonths),
+                        Invalidated = false,
+                        UserId = user.Id,
+                    });
                 }
 
                 var admin = new AuctionUser
@@ -67,6 +76,7 @@
                 await this.userManager.CreateUserAsync(admin, "admin123");
                 await this.SeedAdminRole();
                 await this.userManager.AddToRoleAsync(admin, AppConstants.AdministratorRole);
+                await this.context.SaveChangesAsync(cancellationToken);
             }
         }
 
@@ -137,17 +147,17 @@
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
-    }
 
-    internal class CategoryDto
-    {
-        public string Name { get; set; }
+        private class CategoryDto
+        {
+            public string Name { get; set; }
 
-        public SubCategoryDto[] SubCategoryNames { get; set; }
-    }
+            public SubCategoryDto[] SubCategoryNames { get; set; }
+        }
 
-    internal class SubCategoryDto
-    {
-        public string Name { get; set; }
+        private class SubCategoryDto
+        {
+            public string Name { get; set; }
+        }
     }
 }
