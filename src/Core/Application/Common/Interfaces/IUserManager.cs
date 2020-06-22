@@ -1,6 +1,7 @@
 ﻿namespace Application.Common.Interfaces
 {
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Domain.Entities;
     using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@
 
         Task AddToRoleAsync(AuctionUser user, string role);
 
-        Task<IdentityResult> AddToRoleAsync(string email, string role);
+        Task<Result> AddToRoleAsync(string email, string role, string currentUserId);
 
         Task<IList<string>> GetUserRolesAsync(string userId);
 
@@ -28,10 +29,11 @@
 
         Task<IEnumerable<string>> GetUsersInRoleAsync(string role);
 
-        Task<(IdentityResult identityResult, string errorMessage)> RemoveFromRoleAsync(
+        Task<Result> RemoveFromRoleAsync(
             string username,
             string role,
-            string currentUserId);
+            string currentUserId,
+            CancellationToken cancellationToken);
 
         Task<string> GenerateEmailConfirmationCode(string email);
 

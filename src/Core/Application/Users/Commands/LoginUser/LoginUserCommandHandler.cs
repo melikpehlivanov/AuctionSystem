@@ -27,15 +27,15 @@
             CancellationToken cancellationToken)
         {
             var (result, userId) = await this.userManager.SignIn(request.Email, request.Password);
-            if (!result.Succeeded && result.IsAccountConfirmationError)
+            if (!result.Succeeded && result.ErrorType == ErrorType.AccountNotConfirmed)
             {
                 var token = await this.userManager.GenerateEmailConfirmationCode(request.Email);
                 await this.emailSender.SendConfirmationEmail(request.Email, token);
             }
 
-            if (!result.Succeeded)
+            if (!result.Succeeded && result.ErrorType == ErrorType.General)
             {
-                throw new BadRequestException(result.Errors.First());
+                throw new BadRequestException(result.Error);
             }
 
             var model = await this.mediator

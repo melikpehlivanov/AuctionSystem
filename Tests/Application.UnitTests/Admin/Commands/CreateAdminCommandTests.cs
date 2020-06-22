@@ -1,5 +1,6 @@
 ﻿namespace Application.UnitTests.Admin.Commands
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Admin.Commands.CreateAdmin;
@@ -16,6 +17,7 @@
     {
         private readonly IUserManager userManagerService;
         private readonly Mock<UserManager<AuctionUser>> mockedUserManager;
+        private readonly Mock<ICurrentUserService> mockedUserService;
 
         private readonly CreateAdminCommandHandler handler;
 
@@ -26,8 +28,12 @@
                 this.mockedUserManager.Object,
                 IdentityMocker.GetMockedRoleManager().Object,
                 this.Context);
+            this.mockedUserService = new Mock<ICurrentUserService>();
+            this.mockedUserService
+                .Setup(x => x.UserId)
+                .Returns(DataConstants.SampleAdminUserId);
 
-            this.handler = new CreateAdminCommandHandler(this.userManagerService);
+            this.handler = new CreateAdminCommandHandler(this.userManagerService, this.mockedUserService.Object);
         }
 
         [Fact]

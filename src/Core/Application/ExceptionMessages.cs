@@ -6,6 +6,8 @@
         {
             public const string InvalidRole = "Invalid role.";
             public const string UserNotAddedSuccessfullyToRole = "Something went wrong while adding user to {0} role!";
+            public const string CannotRemoveSelfFromRole = "You can not remove yourself from role {0}!";
+            public const string NotInRole = "{0} is not {1}.";
 
             public const string UserNotRemovedSuccessfullyFromRole =
                 "Something went wrong while removing user from {0} role!";
@@ -36,9 +38,6 @@
 
             public const string ConfirmAccount = "Please confirm your account";
             public const string EmailVerificationFailed = "Account confirmation failed. Please try again later.";
-            
-            public const string CannotRemoveSelfFromRole = "You can not remove yourself from role {0}!";
-            public const string NotInRole = "{0} is not {1}.";
         }
     }
 }

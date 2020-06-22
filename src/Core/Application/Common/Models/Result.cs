@@ -5,23 +5,23 @@
 
     public class Result
     {
-        private Result(bool succeeded, IEnumerable<string> errors, bool isAccountConfirmationError = false)
+        private Result(bool succeeded, string error, ErrorType errorType = ErrorType.General)
         {
             this.Succeeded = succeeded;
-            this.Errors = errors.ToArray();
-            this.IsAccountConfirmationError = isAccountConfirmationError;
+            this.Error = error;
+            this.ErrorType = errorType;
         }
 
-        public bool Succeeded { get; set; }
-        
-        public bool IsAccountConfirmationError { get; }
+        public bool Succeeded { get; }
 
-        public string[] Errors { get; set; }
+        public ErrorType ErrorType { get; }
+
+        public string Error { get; }
 
         public static Result Success()
-            => new Result(true, new string[] { });
+            => new Result(true, string.Empty);
 
-        public static Result Failure(IEnumerable<string> errors, bool isAccountConfirmationError = false)
-            => new Result(false, errors, isAccountConfirmationError);
+        public static Result Failure(string error, ErrorType errorType = ErrorType.General)
+            => new Result(false, error, errorType);
     }
 }
