@@ -36,7 +36,6 @@
                 .AddHostedService<MigrateDatabaseHostedService>()
                 .AddInfrastructure(this.Configuration)
                 .AddApplication()
-                .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<ICache, Cache>()
                 .AddTransient<ICurrentUserService, CurrentUserService>()
                 .AddAppSettings(this.Configuration)
