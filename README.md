@@ -84,9 +84,9 @@ dotnet run
 and the project should be running now on https://localhost:5001
 
 2. In the /Presentation/SpaWeb folder, run in terminal:
-```
-npm start
-```
+* ```npm install```
+* ```npm start```
+
 the project should be running on http://localhost:3000
 
 3. Enjoy!!!
