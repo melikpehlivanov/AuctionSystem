@@ -73,10 +73,7 @@ Example:
   },
 ```
 
-## I suggest runing the SPA project since it has better UI.
-***
-
-**To run the SPA project:**
+**To run the project:**
 1. In the /Presentation/Api folder, run in terminal:
 ```
 dotnet run
@@ -90,14 +87,6 @@ and the project should be running now on https://localhost:5001
 the project should be running on http://localhost:3000
 
 3. Enjoy!!!
-
-**To run the MVC project:**
-1. In the /Presentation/MvcWeb folder, run in terminal:
-```
-dotnet run
-```
-2. Enjoy!!!
-***
 
 ### P.S If you're too lazy to setup and run this project, here's a short overview of the project.
 ### [Video:](https://youtu.be/5Zn2BC5QS10)
